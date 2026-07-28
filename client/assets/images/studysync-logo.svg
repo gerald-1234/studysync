@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title description">
+  <title id="title">StudySync logo</title>
+  <desc id="description">An open book joined by a central synchronisation line.</desc>
+  <rect width="128" height="128" rx="20" fill="#0b746b"/>
+  <path d="M24 34c15-2 28 2 40 12v51c-12-10-25-14-40-12V34Z" fill="#ffffff"/>
+  <path d="M104 34c-15-2-28 2-40 12v51c12-10 25-14 40-12V34Z" fill="#e6f5f2"/>
+  <path d="M64 46v51" fill="none" stroke="#0b746b" stroke-width="5" stroke-linecap="round"/>
+  <path d="M43 62h12m18 18h12" fill="none" stroke="#ad6811" stroke-width="6" stroke-linecap="round"/>
+  <path d="m52 56 6 6-6 6m24 6-6 6 6 6" fill="none" stroke="#ad6811" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

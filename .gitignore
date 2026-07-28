@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Logs
 logs
 *.log
@@ -66,10 +67,19 @@ web_modules/
 .yarn-integrity
 
 # dotenv environment variable files
+=======
+# Dependencies and runtime files
+node_modules/
+server/node_modules/
+*.log
+
+# Environment variables
+>>>>>>> c397064 (Initial commit)
 .env
 .env.*
 !.env.example
 
+<<<<<<< HEAD
 # parcel-bundler cache (https://parceljs.org/)
 .cache
 .parcel-cache
@@ -141,3 +151,13 @@ dist
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 .vite/
+=======
+# Local data and temporary files
+coverage/
+.tmp*
+*.tmp
+*.swp
+
+# Private project notes
+personal.md
+>>>>>>> c397064 (Initial commit)

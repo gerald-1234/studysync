@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Instructor Dashboard | StudySync</title>
+  <link rel="icon" href="../assets/images/studysync-logo.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../assets/css/global.css">
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to content</a>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="dashboard.html"><img src="../assets/images/studysync-logo.svg" alt="" width="34" height="34"><span>StudySync</span></a>
+      <nav class="nav-list" aria-label="Instructor navigation">
+        <a href="dashboard.html" aria-current="page"><i data-lucide="layout-dashboard"></i>My classes</a>
+      </nav>
+      <div class="sidebar-footer"><p class="user-name" data-user-name>Instructor</p><p class="role-name" data-user-role>instructor</p></div>
+    </aside>
+    <div class="main-shell">
+      <header class="topbar"><h1>Instructor dashboard</h1><button class="icon-button" type="button" title="Sign out" data-sign-out><i data-lucide="log-out"></i></button></header>
+      <main class="page-content" id="main-content">
+        <div class="page-heading"><div><h2>My classes</h2><p>Assigned subjects and registered students.</p></div></div>
+        <div class="term-strip"><i data-lucide="calendar-days"></i><span>Open term: <strong data-current-term>Loading...</strong></span></div>
+        <section class="metrics" aria-label="Instructor totals" style="grid-template-columns: repeat(2, minmax(0, 240px));">
+          <article class="metric"><span class="metric-label">Assigned subjects</span><strong class="metric-value" data-assigned-subjects>0</strong></article>
+          <article class="metric"><span class="metric-label">Enrolled students</span><strong class="metric-value" data-enrolled-students>0</strong></article>
+        </section>
+        <section class="panel" style="margin-bottom: 22px;">
+          <div class="panel-heading"><h3>Subject assignments</h3></div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Code</th><th>Subject</th><th>Term</th></tr></thead>
+              <tbody id="instructor-subjects-body"><tr><td class="empty-state" colspan="3">Loading subjects...</td></tr></tbody>
+            </table>
+          </div>
+        </section>
+        <div id="roster-container">
+          <p class="empty-state">Loading class lists...</p>
+        </div>
+      </main>
+    </div>
+  </div>
+  <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js" defer></script>
+  <script type="module" src="../assets/js/pages/instructor-dashboard.js"></script>
+</body>
+</html>

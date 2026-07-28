@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Subjects | StudySync</title>
+  <link rel="icon" href="../assets/images/studysync-logo.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../assets/css/global.css">
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to content</a>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="dashboard.html"><img src="../assets/images/studysync-logo.svg" alt="" width="34" height="34"><span>StudySync</span></a>
+      <nav class="nav-list" aria-label="Manager navigation">
+        <a href="dashboard.html"><i data-lucide="layout-dashboard"></i>Dashboard</a>
+        <a href="subjects.html" aria-current="page"><i data-lucide="library"></i>Subjects</a>
+        <a href="terms.html"><i data-lucide="calendar-range"></i>Academic terms</a>
+        <a href="instructors.html"><i data-lucide="presentation"></i>Instructors</a>
+        <a href="assignments.html"><i data-lucide="workflow"></i>Assignments</a>
+        <a href="reports.html"><i data-lucide="chart-no-axes-column"></i>Reports</a>
+      </nav>
+      <div class="sidebar-footer"><p class="user-name" data-user-name>Centre Manager</p><p class="role-name" data-user-role>manager</p></div>
+    </aside>
+    <div class="main-shell">
+      <header class="topbar"><h1>Subjects</h1><button class="icon-button" type="button" title="Sign out" data-sign-out><i data-lucide="log-out"></i></button></header>
+      <main class="page-content" id="main-content">
+        <div class="page-heading"><div><h2>Subject catalogue</h2><p>Maintain the subjects offered by the centre.</p></div></div>
+        <div class="work-grid">
+          <section class="panel">
+            <div class="panel-heading"><h3>Subject form</h3></div>
+            <div class="panel-body">
+              <form id="subject-form" data-edit-id="">
+                <div class="form-grid">
+                  <div class="field"><label for="subjectCode">Subject code</label><input id="subjectCode" name="subjectCode" placeholder="MTH" required></div>
+                  <div class="field"><label for="subjectName">Subject name</label><input id="subjectName" name="subjectName" required></div>
+                  <div class="field full"><label for="level">Level</label><input id="level" name="level" placeholder="Senior secondary"></div>
+                  <div class="field full"><label for="description">Description</label><textarea id="description" name="description"></textarea></div>
+                  <div class="field full">
+                    <label for="status">Status</label>
+                    <select id="status" name="status"><option value="active">Active</option><option value="inactive">Inactive</option></select>
+                  </div>
+                </div>
+                <div class="form-actions">
+                  <button class="button button-primary" type="submit"><i data-lucide="save"></i><span data-submit-label>Add subject</span></button>
+                  <button class="button button-secondary" type="button" data-reset-form><i data-lucide="rotate-ccw"></i>Clear</button>
+                </div>
+              </form>
+            </div>
+          </section>
+          <section class="panel">
+            <div class="panel-heading"><h3>Available subjects</h3></div>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>Code</th><th>Subject</th><th>Level</th><th>Status</th><th></th></tr></thead>
+                <tbody id="subjects-body"><tr><td class="empty-state" colspan="5">Loading subjects...</td></tr></tbody>
+              </table>
+            </div>
+          </section>
+        </div>
+      </main>
+    </div>
+  </div>
+  <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js" defer></script>
+  <script type="module" src="../assets/js/pages/subjects.js"></script>
+</body>
+</html>

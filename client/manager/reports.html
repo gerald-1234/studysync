@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Reports | StudySync</title>
+  <link rel="icon" href="../assets/images/studysync-logo.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../assets/css/global.css">
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to content</a>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="dashboard.html"><img src="../assets/images/studysync-logo.svg" alt="" width="34" height="34"><span>StudySync</span></a>
+      <nav class="nav-list" aria-label="Manager navigation">
+        <a href="dashboard.html"><i data-lucide="layout-dashboard"></i>Dashboard</a>
+        <a href="subjects.html"><i data-lucide="library"></i>Subjects</a>
+        <a href="terms.html"><i data-lucide="calendar-range"></i>Academic terms</a>
+        <a href="instructors.html"><i data-lucide="presentation"></i>Instructors</a>
+        <a href="assignments.html"><i data-lucide="workflow"></i>Assignments</a>
+        <a href="reports.html" aria-current="page"><i data-lucide="chart-no-axes-column"></i>Reports</a>
+      </nav>
+      <div class="sidebar-footer"><p class="user-name" data-user-name>Centre Manager</p><p class="role-name" data-user-role>manager</p></div>
+    </aside>
+    <div class="main-shell">
+      <header class="topbar"><h1>Reports</h1><button class="icon-button" type="button" title="Sign out" data-sign-out><i data-lucide="log-out"></i></button></header>
+      <main class="page-content" id="main-content">
+        <div class="page-heading">
+          <div><h2>Registration reports</h2><p>Compare subject enrolment and instructor allocation.</p></div>
+          <div class="field">
+            <label for="report-term">Academic term</label>
+            <select id="report-term"><option value="">Loading terms...</option></select>
+          </div>
+        </div>
+        <section class="panel" style="margin-bottom: 22px;">
+          <div class="panel-heading"><h3>Subject enrolment totals</h3></div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Term</th><th>Code</th><th>Subject</th><th>Students</th></tr></thead>
+              <tbody id="subject-report-body"><tr><td class="empty-state" colspan="4">Loading report...</td></tr></tbody>
+            </table>
+          </div>
+        </section>
+        <section class="panel">
+          <div class="panel-heading"><h3>Instructor assignments</h3></div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Term</th><th>Code</th><th>Subject</th><th>Instructor</th></tr></thead>
+              <tbody id="assignment-report-body"><tr><td class="empty-state" colspan="4">Loading report...</td></tr></tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+  <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js" defer></script>
+  <script type="module" src="../assets/js/pages/reports.js"></script>
+</body>
+</html>

@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="StudySync student course registration system">
+  <title>Sign in | StudySync</title>
+  <link rel="icon" href="/assets/images/studysync-logo.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/css/global.css">
+</head>
+<body class="login-page">
+  <main class="login-panel">
+    <a class="brand-mark" href="/index.html" aria-label="StudySync home">
+      <img src="/assets/images/studysync-logo.svg" alt="" width="40" height="40">
+      <span>StudySync</span>
+    </a>
+
+    <h1>Sign in</h1>
+    <p>Use your assigned account to continue.</p>
+
+    <form id="login-form">
+      <div class="field">
+        <label for="email">Email address</label>
+        <input id="email" name="email" type="email" autocomplete="username" required>
+      </div>
+      <div class="field" style="margin-top: 14px;">
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password" autocomplete="current-password" minlength="8" required>
+      </div>
+      <button class="button button-primary" type="submit" style="margin-top: 20px; width: 100%;">
+        <i data-lucide="log-in"></i>
+        Sign in
+      </button>
+    </form>
+  </main>
+
+  <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js" defer></script>
+  <script type="module" src="/assets/js/login.js"></script>
+</body>
+</html>

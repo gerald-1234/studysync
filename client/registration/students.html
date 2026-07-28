@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Students | StudySync</title>
+  <link rel="icon" href="../assets/images/studysync-logo.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../assets/css/global.css">
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to content</a>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="dashboard.html">
+        <img src="../assets/images/studysync-logo.svg" alt="" width="34" height="34">
+        <span>StudySync</span>
+      </a>
+      <nav class="nav-list" aria-label="Registration navigation">
+        <a href="dashboard.html"><i data-lucide="layout-dashboard"></i>Dashboard</a>
+        <a href="students.html" aria-current="page"><i data-lucide="contact"></i>Students</a>
+        <a href="enrolments.html"><i data-lucide="book-open-check"></i>Enrolments</a>
+      </nav>
+      <div class="sidebar-footer">
+        <p class="user-name" data-user-name>Registration Officer</p>
+        <p class="role-name" data-user-role>registration officer</p>
+      </div>
+    </aside>
+    <div class="main-shell">
+      <header class="topbar">
+        <h1>Students</h1>
+        <button class="icon-button" type="button" title="Sign out" data-sign-out><i data-lucide="log-out"></i></button>
+      </header>
+      <main class="page-content" id="main-content">
+        <div class="page-heading">
+          <div>
+            <h2>Student records</h2>
+            <p>Register new learners or update existing records.</p>
+          </div>
+        </div>
+        <div class="work-grid">
+          <section class="panel">
+            <div class="panel-heading"><h3>Student form</h3></div>
+            <div class="panel-body">
+              <form id="student-form" data-edit-id="">
+                <div class="form-grid">
+                  <div class="field full">
+                    <label for="registrationNumber">Registration number</label>
+                    <input id="registrationNumber" name="registrationNumber" placeholder="SS-2026-001" required>
+                  </div>
+                  <div class="field">
+                    <label for="firstName">First name</label>
+                    <input id="firstName" name="firstName" required>
+                  </div>
+                  <div class="field">
+                    <label for="lastName">Last name</label>
+                    <input id="lastName" name="lastName" required>
+                  </div>
+                  <div class="field">
+                    <label for="gender">Gender</label>
+                    <select id="gender" name="gender" required>
+                      <option value="">Select gender</option>
+                      <option>Female</option>
+                      <option>Male</option>
+                      <option>Other</option>
+                    </select>
+                  </div>
+                  <div class="field">
+                    <label for="phone">Phone number</label>
+                    <input id="phone" name="phone" inputmode="tel" required>
+                  </div>
+                  <div class="field">
+                    <label for="email">Email address</label>
+                    <input id="email" name="email" type="email">
+                  </div>
+                  <div class="field">
+                    <label for="guardianPhone">Guardian phone</label>
+                    <input id="guardianPhone" name="guardianPhone" inputmode="tel" required>
+                  </div>
+                  <div class="field full">
+                    <label for="status">Status</label>
+                    <select id="status" name="status" required>
+                      <option value="active">Active</option>
+                      <option value="inactive">Inactive</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-actions">
+                  <button class="button button-primary" type="submit"><i data-lucide="save"></i><span data-submit-label>Register student</span></button>
+                  <button class="button button-secondary" type="button" data-reset-form><i data-lucide="rotate-ccw"></i>Clear</button>
+                </div>
+              </form>
+            </div>
+          </section>
+          <section class="panel">
+            <div class="panel-heading"><h3>Student list</h3></div>
+            <div class="panel-body">
+              <form class="toolbar" id="student-search-form">
+                <input class="search-input" name="search" aria-label="Search students" placeholder="Search by name or registration number">
+                <button class="button button-secondary" type="submit"><i data-lucide="search"></i>Search</button>
+              </form>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr><th>Reg. number</th><th>Name</th><th>Phone</th><th>Guardian</th><th>Status</th><th></th></tr>
+                  </thead>
+                  <tbody id="students-body">
+                    <tr><td class="empty-state" colspan="6">Loading students...</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </section>
+        </div>
+      </main>
+    </div>
+  </div>
+  <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js" defer></script>
+  <script type="module" src="../assets/js/pages/students.js"></script>
+</body>
+</html>

@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Admin Dashboard | StudySync</title>
+  <link rel="icon" href="../assets/images/studysync-logo.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../assets/css/global.css">
+</head>
+<body data-role="admin">
+  <a class="skip-link" href="#main-content">Skip to content</a>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="dashboard.html">
+        <img src="../assets/images/studysync-logo.svg" alt="" width="34" height="34">
+        <span>StudySync</span>
+      </a>
+      <nav class="nav-list" aria-label="Admin navigation">
+        <a href="dashboard.html" aria-current="page"><i data-lucide="layout-dashboard"></i>Dashboard</a>
+        <a href="users.html"><i data-lucide="users"></i>User accounts</a>
+      </nav>
+      <div class="sidebar-footer">
+        <p class="user-name" data-user-name>Administrator</p>
+        <p class="role-name" data-user-role>admin</p>
+      </div>
+    </aside>
+    <div class="main-shell">
+      <header class="topbar">
+        <h1>Administration</h1>
+        <button class="icon-button" type="button" title="Sign out" data-sign-out>
+          <i data-lucide="log-out"></i>
+        </button>
+      </header>
+      <main class="page-content" id="main-content">
+        <div class="page-heading">
+          <div>
+            <h2>System overview</h2>
+            <p>Current registration totals and account access.</p>
+          </div>
+          <a class="button button-primary" href="users.html"><i data-lucide="user-plus"></i>Add user</a>
+        </div>
+        <div class="term-strip">
+          <i data-lucide="calendar-days"></i>
+          <span>Open term: <strong data-current-term>Loading...</strong></span>
+        </div>
+        <section class="metrics" aria-label="System totals">
+          <article class="metric"><span class="metric-label">Active students</span><strong class="metric-value" data-students>0</strong></article>
+          <article class="metric"><span class="metric-label">Active subjects</span><strong class="metric-value" data-subjects>0</strong></article>
+          <article class="metric"><span class="metric-label">Active instructors</span><strong class="metric-value" data-instructors>0</strong></article>
+          <article class="metric"><span class="metric-label">Current enrolments</span><strong class="metric-value" data-enrolments>0</strong></article>
+          <article class="metric"><span class="metric-label">Current assignments</span><strong class="metric-value" data-assignments>0</strong></article>
+        </section>
+        <section class="panel">
+          <div class="panel-heading"><h3>Administrator responsibilities</h3></div>
+          <div class="panel-body">
+            <p>Administrators create login accounts, assign roles, and deactivate accounts that should no longer access StudySync.</p>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+  <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js" defer></script>
+  <script type="module" src="../assets/js/pages/dashboard.js"></script>
+</body>
+</html>
