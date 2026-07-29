@@ -25,11 +25,11 @@ async function login(request, response) {
 
   const now = new Date();
   const currentlyLocked = user?.locked_until && new Date(user.locked_until) > now;
-  const validPassword = user && user.is_active && !currentlyLocked
+  const passwordMatches = user && user.is_active && !currentlyLocked
     ? await bcrypt.compare(password, user.password_hash)
     : false;
 
-  if (!validPassword) {
+  if (!passwordMatches) {
     if (user && !currentlyLocked) {
       const failedAttempts = user.failed_login_attempts + 1;
       const lockedUntil = failedAttempts >= MAX_FAILED_ATTEMPTS
