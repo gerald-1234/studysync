@@ -277,6 +277,7 @@ a {
 .panel {
   background: var(--surface);
   border: 1px solid var(--line);
+  min-width: 0;
 }
 
 .panel-heading {
@@ -394,6 +395,34 @@ a {
 .button-primary:hover {
   background: var(--teal-dark);
 }
+
+.button[aria-busy="true"],
+.icon-button[aria-busy="true"] {
+  cursor: wait;
+  opacity: 0.86;
+}
+
+.button-spinner {
+  animation: button-spin 0.75s linear infinite;
+  border: 2px solid currentColor;
+  border-radius: 50%;
+  border-right-color: transparent;
+  flex: 0 0 auto;
+  height: 15px;
+  width: 15px;
+}
+
+.icon-button .button-spinner {
+  height: 16px;
+  width: 16px;
+}
+
+@keyframes button-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 
 .button-secondary {
   background: var(--surface);

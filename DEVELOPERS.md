@@ -1,482 +1,366 @@
 # StudySync Developer Guide
 
-## 1. Goal
+## 1. Development Goal
 
-Build a small web application for a private tutoring centre. The application must let staff:
+StudySync should remain a small, understandable system. Its first version performs four connected activities:
 
-1. Register students.
-2. Add subjects and academic terms.
-3. Enrol students in subjects.
-4. Add instructors.
-5. Assign an instructor to each subject for a term.
-6. View simple reports.
+1. Create student records.
+2. Register students for subjects in an academic term.
+3. Assign instructors to subjects.
+4. Produce simple reports and instructor class lists.
 
-Keep the first version simple. Do not start with fees, attendance, results, SMS, or a mobile app.
+Do not add fees, results, attendance, timetables, SMS, or parent portals until the core system is complete and tested.
 
-## 2. Recommended Technology
+## 2. Final Technology Stack
 
-Use one Node.js project:
+- **Client:** HTML, CSS, and vanilla JavaScript.
+- **Server:** Node.js 20+, Express, CommonJS modules.
+- **Database:** Supabase PostgreSQL.
+- **Database access:** `@supabase/supabase-js` using a backend-only secret key.
+- **Authentication:** JWT bearer tokens and `bcryptjs` password hashing.
+- **Frontend hosting:** Vercel.
+- **Backend hosting:** Render.
 
-- Node.js 20 or newer
-- Express
-- SQLite with `better-sqlite3`
-- HTML, CSS, and vanilla JavaScript
-- `express-session` for login sessions
-- `bcrypt` for password hashing
-- `dotenv` for environment variables
+This stack is straightforward to defend:
 
-Why this choice:
+- HTML documents make every page visible in the repository.
+- Express routes show where each request is handled.
+- PostgreSQL tables match the report's ERD.
+- Render, Supabase, and Vercel each have one clear responsibility.
 
-- SQLite is a single database file, so no separate database server is required during development.
-- Express is small and easy to explain during a defence.
-- Vanilla JavaScript keeps the frontend understandable.
-- Session authentication is simpler than introducing JWT tokens for this project.
-
-Do not introduce microservices, Docker, Redis, message queues, complex state libraries, or multiple databases in the first version.
-
-## 3. Project Setup
-
-Run these commands after Node.js is installed:
-
-```powershell
-npm init -y
-npm install express better-sqlite3 bcrypt express-session dotenv
-npm install --save-dev nodemon
-```
-
-Add useful scripts to `package.json`:
-
-```json
-{
-  "scripts": {
-    "dev": "nodemon server/server.js",
-    "start": "node server/server.js",
-    "test": "node --test"
-  }
-}
-```
-
-Create `.env` from this example:
-
-```env
-PORT=3000
-SESSION_SECRET=replace-this-with-a-long-random-value
-DATABASE_PATH=./data/studysync.db
-```
-
-Never commit the real `.env` file. Commit an `.env.example` file instead.
-
-## 4. Suggested Folder Structure
+## 3. Application Flow
 
 ```text
-StudySync/
-  client/
-    index.html
-    login.html
+Browser on Vercel
+      |
+      | HTTPS + JWT
+      v
+Express API on Render
+      |
+      | Supabase secret key
+      v
+PostgreSQL database on Supabase
+```
+
+The browser must not query Supabase directly. Row Level Security is enabled without frontend policies, so only the backend secret client can access application tables.
+
+## 4. Folder Responsibilities
+
+### `client/`
+
+Static pages deployed to Vercel.
+
+```text
+client/
+  admin/
+    dashboard.html
+    users.html
+  registration/
+    dashboard.html
     students.html
-    subjects.html
     enrolments.html
+  manager/
+    dashboard.html
+    subjects.html
+    terms.html
     instructors.html
     assignments.html
     reports.html
-    assets/
-      css/
-        global.css
-        dashboard.css
-      js/
-        api.js
-        auth.js
-        students.js
-        subjects.js
-        enrolments.js
-        instructors.js
-        assignments.js
-        reports.js
-  server/
-    server.js
-    db.js
-    middleware/
-      requireAuth.js
-      requireRole.js
-    routes/
-      authRoutes.js
-      studentRoutes.js
-      subjectRoutes.js
-      termRoutes.js
-      instructorRoutes.js
-      enrolmentRoutes.js
-      assignmentRoutes.js
-      reportRoutes.js
-    services/
-      auditService.js
-  data/
-    studysync.db
-  scripts/
-    initDatabase.js
-    seedDemoData.js
-    generate_studysync_sad_report.py
-  test/
-    enrolment.test.js
-    assignment.test.js
-  .env.example
-  README.md
-  DEVELOPERS.md
+  instructor/
+    dashboard.html
+  assets/
+    css/global.css
+    images/studysync-logo.svg
+    js/
+      api.js
+      auth.js
+      config.js
+      login.js
+      ui.js
+      pages/
 ```
 
-The exact names can change, but keep one clear responsibility per file. Do not put every route, SQL query, and authentication rule in `server.js`.
+Every page has its own HTML document. Page scripts only:
 
-## 5. Roles and Permissions
+- Call API routes.
+- Fill tables, select controls, and checkboxes.
+- Submit forms.
+- Display status messages.
+- Enforce role routing in the browser.
 
-Use these four roles in the initial release:
+Backend middleware still performs the real permission check.
 
-| Action | Admin | Registration Officer | Centre Manager | Instructor |
-| --- | --- | --- | --- | --- |
-| Manage user accounts | Yes | No | No | No |
-| Register and update students | Yes | Yes | Yes | No |
-| Manage subjects and terms | Yes | No | Yes | No |
-| Enrol students | Yes | Yes | Yes | No |
-| Manage instructors | Yes | No | Yes | No |
-| Assign instructors | Yes | No | Yes | No |
-| View reports | Yes | Yes | Yes | Own class list only |
-| View audit log | Yes | No | No | No |
+### `server/`
 
-Important: hide actions in the user interface for roles that should not use them, but always enforce the same restriction in the backend. A hidden button is not security.
-
-## 6. Database Design
-
-Use SQLite foreign keys:
-
-```sql
-PRAGMA foreign_keys = ON;
-```
-
-Create the following tables.
-
-### 6.1 `user_accounts`
-
-```sql
-CREATE TABLE user_accounts (
-  id INTEGER PRIMARY KEY,
-  username TEXT NOT NULL UNIQUE,
-  password_hash TEXT NOT NULL,
-  role TEXT NOT NULL CHECK (role IN ('admin', 'registration_officer', 'manager', 'instructor')),
-  status TEXT NOT NULL DEFAULT 'active' CHECK (status IN ('active', 'inactive')),
-  last_login_at TEXT,
-  created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
-);
-```
-
-### 6.2 `students`
-
-```sql
-CREATE TABLE students (
-  id INTEGER PRIMARY KEY,
-  user_account_id INTEGER UNIQUE,
-  registration_number TEXT NOT NULL UNIQUE,
-  first_name TEXT NOT NULL,
-  last_name TEXT NOT NULL,
-  gender TEXT NOT NULL CHECK (gender IN ('Female', 'Male', 'Other')),
-  phone_number TEXT NOT NULL,
-  email_address TEXT,
-  guardian_phone TEXT NOT NULL,
-  registration_date TEXT NOT NULL DEFAULT CURRENT_DATE,
-  status TEXT NOT NULL DEFAULT 'active' CHECK (status IN ('active', 'inactive')),
-  FOREIGN KEY (user_account_id) REFERENCES user_accounts(id)
-);
-```
-
-### 6.3 `instructors`
-
-```sql
-CREATE TABLE instructors (
-  id INTEGER PRIMARY KEY,
-  user_account_id INTEGER UNIQUE,
-  staff_number TEXT NOT NULL UNIQUE,
-  first_name TEXT NOT NULL,
-  last_name TEXT NOT NULL,
-  phone_number TEXT NOT NULL,
-  email_address TEXT,
-  qualification TEXT,
-  status TEXT NOT NULL DEFAULT 'active' CHECK (status IN ('active', 'inactive')),
-  FOREIGN KEY (user_account_id) REFERENCES user_accounts(id)
-);
-```
-
-### 6.4 `subjects`
-
-```sql
-CREATE TABLE subjects (
-  id INTEGER PRIMARY KEY,
-  subject_code TEXT NOT NULL UNIQUE,
-  subject_name TEXT NOT NULL UNIQUE,
-  description TEXT,
-  level TEXT,
-  status TEXT NOT NULL DEFAULT 'active' CHECK (status IN ('active', 'inactive'))
-);
-```
-
-### 6.5 `academic_terms`
-
-```sql
-CREATE TABLE academic_terms (
-  id INTEGER PRIMARY KEY,
-  term_name TEXT NOT NULL,
-  academic_session TEXT NOT NULL,
-  start_date TEXT NOT NULL,
-  end_date TEXT NOT NULL,
-  status TEXT NOT NULL DEFAULT 'open' CHECK (status IN ('open', 'closed')),
-  UNIQUE (term_name, academic_session)
-);
-```
-
-### 6.6 `enrolments`
-
-```sql
-CREATE TABLE enrolments (
-  id INTEGER PRIMARY KEY,
-  student_id INTEGER NOT NULL,
-  subject_id INTEGER NOT NULL,
-  academic_term_id INTEGER NOT NULL,
-  enrolled_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  status TEXT NOT NULL DEFAULT 'active' CHECK (status IN ('active', 'cancelled')),
-  FOREIGN KEY (student_id) REFERENCES students(id),
-  FOREIGN KEY (subject_id) REFERENCES subjects(id),
-  FOREIGN KEY (academic_term_id) REFERENCES academic_terms(id),
-  UNIQUE (student_id, subject_id, academic_term_id)
-);
-```
-
-### 6.7 `instructor_assignments`
-
-```sql
-CREATE TABLE instructor_assignments (
-  id INTEGER PRIMARY KEY,
-  instructor_id INTEGER NOT NULL,
-  subject_id INTEGER NOT NULL,
-  academic_term_id INTEGER NOT NULL,
-  assigned_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  status TEXT NOT NULL DEFAULT 'active' CHECK (status IN ('active', 'cancelled')),
-  FOREIGN KEY (instructor_id) REFERENCES instructors(id),
-  FOREIGN KEY (subject_id) REFERENCES subjects(id),
-  FOREIGN KEY (academic_term_id) REFERENCES academic_terms(id)
-);
-
-CREATE UNIQUE INDEX one_active_assignment_per_subject_term
-ON instructor_assignments (subject_id, academic_term_id)
-WHERE status = 'active';
-```
-
-### 6.8 `audit_logs`
-
-```sql
-CREATE TABLE audit_logs (
-  id INTEGER PRIMARY KEY,
-  user_account_id INTEGER,
-  action TEXT NOT NULL,
-  entity_type TEXT NOT NULL,
-  entity_id INTEGER,
-  created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (user_account_id) REFERENCES user_accounts(id)
-);
-```
-
-Do not delete enrolments or assignments when staff correct a mistake. Change their status to `cancelled` so the system keeps an audit trail.
-
-## 7. Backend Routes
-
-Use REST-style JSON routes. Keep route handlers short; place repeated checks in middleware or small helper functions.
-
-| Method | Route | Purpose | Minimum Role |
-| --- | --- | --- | --- |
-| POST | `/api/auth/login` | Start a user session. | Public |
-| POST | `/api/auth/logout` | End a user session. | Logged-in user |
-| GET | `/api/auth/me` | Return current user and role. | Logged-in user |
-| GET | `/api/students` | List/search students. | Admin, officer, manager |
-| POST | `/api/students` | Create a student. | Admin, officer, manager |
-| GET | `/api/students/:id` | View one student. | Admin, officer, manager |
-| PATCH | `/api/students/:id` | Update one student. | Admin, officer, manager |
-| GET/POST/PATCH | `/api/subjects` | List, create, update subjects. | Manager or admin for changes |
-| GET/POST/PATCH | `/api/terms` | List, create, update terms. | Manager or admin for changes |
-| GET/POST/PATCH | `/api/instructors` | List, create, update instructors. | Manager or admin for changes |
-| GET/POST/PATCH | `/api/enrolments` | View, create, cancel enrolments. | Admin, officer, manager |
-| GET/POST/PATCH | `/api/assignments` | View, create, cancel assignments. | Manager or admin for changes |
-| GET | `/api/instructor/my-subjects` | Return current instructor's subjects and class lists. | Instructor |
-| GET | `/api/reports/subject-enrolment` | Return registration totals by subject. | Admin, officer, manager |
-| GET | `/api/reports/instructor-assignments` | Return instructor allocation list. | Admin, officer, manager |
-
-For every protected route:
-
-1. Check that a session exists.
-2. Check that the user has an allowed role.
-3. Validate request data.
-4. Run parameterised SQL only.
-5. Log significant write actions.
-6. Return JSON with a clear status code and message.
-
-## 8. Required Validation
-
-Validate on both the browser and server. Browser validation improves usability; server validation protects the database.
-
-| Area | Rules |
-| --- | --- |
-| Login | Username and password are required. |
-| Student | Registration number, first name, last name, gender, phone, and guardian phone are required. Registration number must be unique. |
-| Subject | Subject code and subject name are required and unique. |
-| Term | Start date must not be after end date. |
-| Enrolment | Student, subject, and term are required. Student and subject must be active; term must be open. |
-| Duplicate Enrolment | Reject the same student, subject, and term combination. |
-| Instructor Assignment | Instructor, subject, and term are required. Instructor and subject must be active. Reject a second active assignment for the same subject and term. |
-
-Example backend guard:
-
-```js
-if (!studentId || !subjectId || !termId) {
-  return res.status(400).json({ message: "Student, subject, and term are required." });
-}
-```
-
-Use parameter placeholders, never string concatenation:
-
-```js
-const student = db
-  .prepare("SELECT id FROM students WHERE registration_number = ?")
-  .get(registrationNumber);
-```
-
-## 9. Frontend Pages
-
-### 9.1 Login
-
-- Username or email field.
-- Password field.
-- Clear error message when login fails.
-- Redirect to the correct dashboard after login.
-
-### 9.2 Dashboard
-
-Show small, useful counts:
-
-- Active students.
-- Active subjects.
-- Current-term enrolments.
-- Current-term instructor assignments.
-
-Do not fill the dashboard with charts in the first version. Four clear totals and shortcuts to common tasks are enough.
-
-### 9.3 Student Management
-
-- Search by registration number, first name, or last name.
-- Table of students.
-- Add and edit student form.
-- Link from a student record to their enrolment history.
-
-### 9.4 Subject Enrolment
-
-- Search/select student.
-- Select academic term.
-- Display active subjects as checkboxes.
-- Save selected subjects.
-- Display existing enrolments and allow authorised cancellation.
-
-### 9.5 Instructor Assignment
-
-- Select an instructor.
-- Select a subject.
-- Select an academic term.
-- Save assignment.
-- Show the current assignment so staff do not create duplicates.
-
-### 9.6 Instructor Dashboard
-
-- Assigned subjects for the active term.
-- Student list for each assigned subject.
-- No controls for other instructors, accounts, subjects, or reports.
-
-### 9.7 Reports
-
-- Subject enrolment totals for a term.
-- Instructor-to-subject assignment list for a term.
-- Student registration list.
-- Export to CSV later if needed; do not make PDF export a first-release requirement.
-
-## 10. Implementation Order
-
-Build in this order. Finish and test one stage before moving to the next.
-
-1. Create the Express server, static file serving, SQLite connection, and database initialisation script.
-2. Create the first admin account with a hashed password.
-3. Build login, logout, session middleware, and role middleware.
-4. Build student and subject management.
-5. Build academic-term management.
-6. Build student enrolment and the duplicate-enrolment rule.
-7. Build instructor profiles and instructor assignments.
-8. Build the instructor dashboard and basic reports.
-9. Add audit logs, backups, and test cases.
-10. Add CSS polish and seed data for the project demonstration.
-
-## 11. Minimum Security Checklist
-
-- Hash passwords with `bcrypt`.
-- Keep `SESSION_SECRET` in `.env`.
-- Set session cookies to `httpOnly`; use `secure: true` when deployed with HTTPS.
-- Use parameterised SQL queries.
-- Validate every request in the backend.
-- Enforce roles in backend middleware.
-- Do not expose database files through the `client` folder.
-- Do not store real student data in Git or in screenshots used for the defence.
-- Back up the SQLite database file daily once the application is deployed.
-
-## 12. Test Checklist
-
-Before the defence, verify these scenarios:
-
-1. Admin can log in and create roles.
-2. Registration officer can create a student.
-3. Duplicate registration number is rejected.
-4. Manager can add a subject and an academic term.
-5. Registration officer can enrol a student in several subjects.
-6. The same student cannot be enrolled twice in the same subject and term.
-7. Manager can assign an instructor to a subject.
-8. A second active instructor assignment for that subject and term is rejected.
-9. Instructor sees only their own subjects and students.
-10. Subject enrolment report totals match the stored enrolments.
-11. A cancelled enrolment remains visible in the record history.
-12. A database backup can be restored to a separate test file.
-
-## 13. Demonstration Data
-
-Create safe sample data for the defence:
-
-- Academic term: `First Term`, session `2026/2027`.
-- Subjects: Mathematics, English Language, Physics, Chemistry.
-- Two instructors with distinct subjects.
-- Four to six fictional students.
-- Enrol each fictional student in two or three subjects.
-
-Use fictional names and phone numbers only.
-
-## 14. Defence Talking Points
-
-Keep the technical explanation direct:
-
-- **Why SQLite?** It is simple for a small centre and easy to deploy for the prototype. The schema can later move to MySQL or PostgreSQL without changing the system design.
-- **Why separate enrolments and assignments?** A student selecting a subject and a manager allocating a tutor are different business activities and must be tracked separately.
-- **How are duplicates prevented?** The backend validates the request, and the database has a unique constraint on student, subject, and term.
-- **How is data protected?** Login sessions, hashed passwords, role checks, parameterised SQL, audit logs, and backups.
-- **Why not include fees and attendance now?** Limiting the first version keeps the system reliable, testable, and easy for staff to learn. The database is ready for those modules later.
-
-## 15. Report Generation
-
-The file `scripts/generate_studysync_sad_report.py` creates the SAD report:
-
-```powershell
-python scripts\generate_studysync_sad_report.py
-```
-
-It writes the report to:
+Express API deployed to Render.
 
 ```text
-C:\Users\hp\Documents\StudySync_SAD_Report.docx
+server/
+  server.js
+  src/
+    app.js
+    config/supabase.js
+    controllers/
+    middleware/
+    routes/
+    scripts/createAdmin.js
+    utils/
+  test/
+  .env.example
+  package.json
 ```
 
-Replace the placeholder student name and registration number on the Word title page before submission.
+- **Routes** define URLs and allowed roles.
+- **Controllers** validate input and perform business operations.
+- **Middleware** checks JWTs and roles.
+- **Config** creates the backend-only Supabase client.
+- **Utilities** provide reusable validation and audit helpers.
+
+### `database/`
+
+- `schema.sql` is the complete schema for the Supabase SQL Editor.
+- `migrations/202607290001_initial_schema.sql` is the standalone initial migration.
+
+## 5. Environment Variables
+
+Create `server/.env` from `server/.env.example`.
+
+| Variable | Purpose |
+| --- | --- |
+| `NODE_ENV` | `development` locally and `production` on Render. |
+| `PORT` | Local server port; defaults to `5000`. |
+| `CLIENT_URL` | Comma-separated frontend origins allowed by CORS. |
+| `SUPABASE_URL` | Supabase project URL. |
+| `SUPABASE_SECRET_KEY` | Backend-only Supabase secret key. |
+| `JWT_SECRET` | Secret used to sign login tokens; minimum 32 characters. |
+| `JWT_EXPIRES_IN` | Token lifetime, normally `8h`. |
+| `ADMIN_FIRST_NAME` | Initial administrator first name. |
+| `ADMIN_LAST_NAME` | Initial administrator last name. |
+| `ADMIN_EMAIL` | Initial administrator email. |
+| `ADMIN_PASSWORD` | Initial administrator password. |
+
+Never commit `server/.env`.
+
+## 6. Database Tables
+
+| Table | Purpose |
+| --- | --- |
+| `users` | Login account, hashed password, role, lock status. |
+| `students` | Student identity and contact details. |
+| `instructors` | Instructor profile linked optionally to a user account. |
+| `subjects` | Subject code, name, level, and status. |
+| `academic_terms` | Term name, session, dates, and open/closed status. |
+| `enrolments` | Student-subject selection for a term. |
+| `instructor_assignments` | Instructor-subject allocation for a term. |
+| `audit_logs` | Important user activity. |
+
+Important constraints:
+
+- Student registration number is unique.
+- Subject code and name are unique.
+- A term name is unique within an academic session.
+- A student-subject-term combination is unique.
+- A subject has only one active instructor assignment per term.
+
+Cancelled enrolments and assignments are retained by status instead of being deleted.
+
+## 7. Role Permissions
+
+| Operation | Admin | Registration Officer | Manager | Instructor |
+| --- | --- | --- | --- | --- |
+| Manage login accounts | Yes | No | No | No |
+| Manage students | API permission | Yes | API permission | No |
+| Enrol students | API permission | Yes | API permission | No |
+| Manage subjects and terms | API permission | No | Yes | No |
+| Manage instructor profiles | API permission | No | Yes | No |
+| Assign instructors | API permission | No | Yes | No |
+| View management reports | API permission | No | Yes | No |
+| View own class list | No | No | No | Yes |
+
+The current HTML interface separates responsibilities clearly: administrators handle accounts, registration officers handle students, managers handle academic setup and reports, and instructors view classes.
+
+## 8. API Routes
+
+### Authentication
+
+| Method | Route | Purpose |
+| --- | --- | --- |
+| POST | `/api/auth/login` | Verify credentials and return a JWT. |
+| GET | `/api/auth/me` | Return the current active user. |
+| POST | `/api/auth/logout` | Add a logout audit entry. |
+
+### Core records
+
+| Method | Route | Purpose |
+| --- | --- | --- |
+| GET/POST | `/api/users` | List or create login accounts. |
+| PATCH | `/api/users/:id/status` | Activate or deactivate an account. |
+| GET/POST | `/api/students` | List or create students. |
+| GET/PATCH | `/api/students/:id` | View or update a student. |
+| GET/POST | `/api/subjects` | List or create subjects. |
+| PATCH | `/api/subjects/:id` | Update a subject. |
+| GET/POST | `/api/terms` | List or create academic terms. |
+| PATCH | `/api/terms/:id` | Update an academic term. |
+| GET/POST | `/api/instructors` | List or create instructor profiles. |
+| PATCH | `/api/instructors/:id` | Update an instructor profile. |
+
+### Registration and allocation
+
+| Method | Route | Purpose |
+| --- | --- | --- |
+| GET/POST | `/api/enrolments` | List or create subject enrolments. |
+| PATCH | `/api/enrolments/:id/cancel` | Cancel an enrolment. |
+| GET/POST | `/api/assignments` | List or create instructor assignments. |
+| PATCH | `/api/assignments/:id/cancel` | Cancel an assignment. |
+
+### Dashboards and reports
+
+| Method | Route | Purpose |
+| --- | --- | --- |
+| GET | `/api/dashboard/staff` | Registration and management totals. |
+| GET | `/api/dashboard/instructor` | Current instructor totals. |
+| GET | `/api/instructors/me/subjects` | Instructor subjects and class lists. |
+| GET | `/api/reports/subject-enrolments` | Subject enrolment totals. |
+| GET | `/api/reports/instructor-assignments` | Instructor allocation report. |
+| GET | `/api/reports/audit-logs` | Latest audit entries for administrators. |
+
+## 9. Authentication Design
+
+1. User enters email and password.
+2. Backend finds the account in `users`.
+3. `bcryptjs` compares the password with `password_hash`.
+4. Backend signs an eight-hour JWT containing user ID and role.
+5. Browser stores the token in `sessionStorage`.
+6. `api.js` sends the token in the `Authorization` header.
+7. `authMiddleware.js` verifies the token.
+8. `roleMiddleware.js` checks the required role.
+
+Five failed login attempts lock the account temporarily for fifteen minutes.
+
+## 10. Core Business Rules
+
+### Student enrolment
+
+Before saving:
+
+- Student must be active.
+- Academic term must be open.
+- Every selected subject must be active.
+- At least one subject must be selected.
+
+The database unique constraint prevents duplicate student-subject-term records. Re-saving a previously cancelled combination reactivates the existing record through `upsert`.
+
+### Instructor assignment
+
+Before saving:
+
+- Instructor must be active.
+- Subject must be active.
+- Academic term must be open.
+- No different active instructor may already be assigned to that subject and term.
+
+The database partial unique index provides a second protection layer.
+
+## 11. Local Development
+
+### Database
+
+Run `database/schema.sql` in Supabase SQL Editor.
+
+### Server
+
+```powershell
+Copy-Item server\.env.example server\.env
+Set-Location server
+npm install
+npm run create-admin
+npm run dev
+```
+
+### Client
+
+```powershell
+python -m http.server 5500 --directory client
+```
+
+Open `http://localhost:5500`.
+
+## 12. Deployment
+
+### Render
+
+The root `render.yaml` sets:
+
+- Service name: `studysync-api`
+- Root directory: `server`
+- Build command: `npm install`
+- Start command: `npm start`
+- Health check: `/api/health`
+
+Set these Render secrets:
+
+- `SUPABASE_URL`
+- `SUPABASE_SECRET_KEY`
+- `CLIENT_URL`
+
+Render generates `JWT_SECRET`.
+
+### Vercel
+
+The root `vercel.json` publishes `client/` and applies security headers.
+
+The expected API URL is configured in:
+
+```text
+client/assets/js/config.js
+```
+
+If the Render URL changes, also update the `connect-src` entries in:
+
+```text
+client/_headers
+vercel.json
+```
+
+## 13. Testing
+
+Backend:
+
+```powershell
+Set-Location server
+npm test
+```
+
+Current automated tests cover:
+
+- Required text validation.
+- Email normalisation.
+- Password length validation.
+- Role middleware denial.
+
+The browser verification covers login and core pages for all four roles at desktop and mobile sizes.
+
+Integration testing against Supabase requires valid values in `server/.env`.
+
+## 14. Defence Explanation
+
+Use these short explanations:
+
+- **Why separate HTML pages?** They make each role and workflow visible and easy to trace without a frontend framework.
+- **Why Supabase?** It provides a hosted PostgreSQL database while preserving the relational schema in the report.
+- **Why is Supabase not called from the frontend?** The secret key must remain private, and the Express API enforces business rules and roles.
+- **Why JWT?** The frontend and backend are deployed on different services, so bearer tokens keep authentication simple.
+- **How are duplicate enrolments prevented?** The controller validates data and PostgreSQL has a unique student-subject-term constraint.
+- **How is double instructor assignment prevented?** The controller checks existing assignments and PostgreSQL has a partial unique index.
+- **Why retain cancelled records?** Status changes preserve history and support auditability.
+- **Why exclude fees and results?** The first version stays focused, testable, and easy for centre staff to learn.
+
+## 15. Safe Demo Data
+
+- Term: `First Term`, session `2026/2027`.
+- Subjects: Mathematics, English Language, Physics, Chemistry.
+- Four to six fictional students.
+- Two fictional instructors.
+- Two or three subject enrolments per student.
+
+Do not use real student passwords, phone numbers, or personal data in the repository or defence screenshots.

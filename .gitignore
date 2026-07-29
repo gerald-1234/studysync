@@ -157,6 +157,7 @@ coverage/
 .tmp*
 *.tmp
 *.swp
+.wrangler/
 
 # Private project notes
 personal.md

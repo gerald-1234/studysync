@@ -1,100 +1,206 @@
 # StudySync
 
-StudySync is a proposed Student Course Registration System for a small private tutoring centre. It replaces paper-based registration with one simple web application for storing student records, registering students for subjects, and tracking the instructors assigned to teach those subjects.
+StudySync is a beginner-friendly Student Course Registration System for a small private tutoring centre. It manages student records, subject enrolment, academic terms, instructors, and instructor-to-subject assignments.
 
-The accompanying Software Analysis and Design report is generated as:
+The implementation is intentionally limited to the core workflow required by the Software Analysis and Design report, making it practical to explain and defend as a student project.
 
-`C:\Users\hp\Documents\StudySync_SAD_Report.docx`
+## Architecture
 
-## Project Purpose
+| Part | Technology | Deployment |
+| --- | --- | --- |
+| Frontend | Separate HTML pages, CSS, vanilla JavaScript | Vercel |
+| Backend | Node.js, Express, JWT authentication | Render |
+| Database | PostgreSQL through Supabase | Supabase |
 
-The system solves common problems in a manual tutoring-centre workflow:
-
-- Student records are hard to find and can be duplicated.
-- Subject selections are recorded in different books or spreadsheets.
-- Instructor assignments are not easy to confirm.
-- Management must count enrolments manually before planning classes.
-
-StudySync stores this information in one database so staff can search records, register subjects correctly, assign instructors, and create simple reports.
-
-## Core Features
-
-- Secure login with role-based access.
-- Student registration and profile updates.
-- Subject creation and status management.
-- Academic-term setup.
-- Student subject enrolment.
-- Duplicate-enrolment prevention.
-- Instructor profile management.
-- Instructor-to-subject assignment for a term.
-- Instructor dashboard with assigned subjects and student lists.
-- Reports for students, subject enrolment, and instructor assignments.
+The frontend never receives the Supabase secret key. Every database request passes through the Express API.
 
 ## User Roles
 
-| Role | Main Responsibilities |
+| Role | Core Responsibility |
 | --- | --- |
-| System Administrator | Creates user accounts, assigns roles, resets passwords, manages backups. |
-| Registration Officer | Registers students, updates profiles, and enrols students in subjects. |
-| Centre Manager | Manages subjects and terms, assigns instructors, and views reports. |
-| Instructor | Views assigned subjects and the students enrolled in them. |
-| Student | Optionally views their registered subjects in a later self-service version. |
+| Administrator | Creates accounts, assigns roles, and deactivates accounts. |
+| Registration Officer | Registers students and enrols them in subjects. |
+| Centre Manager | Manages subjects, academic terms, instructors, assignments, and reports. |
+| Instructor | Views assigned subjects and class lists. |
 
-## Scope
+## Core Features
 
-The first version focuses only on student registration, subject enrolment, instructor assignment, and reporting.
+- Secure email and password login.
+- Role-based page routing and API permissions.
+- Student registration and profile updates.
+- Subject and academic-term management.
+- Student enrolment in one or more subjects.
+- Duplicate-enrolment prevention.
+- Instructor profile and login-account linking.
+- One active instructor assignment per subject and term.
+- Subject enrolment and instructor-assignment reports.
+- Instructor class lists.
+- Audit logging for important changes.
 
-It does **not** include fees, attendance, examination results, timetable generation, online lessons, parent messaging, payroll, or SMS. These are future enhancements after the core workflow is stable.
+Fees, attendance, results, timetables, SMS, online lessons, and parent portals are intentionally outside the first version.
 
-## Recommended Beginner-Friendly Stack
+## Repository Structure
 
-- **Frontend:** HTML, CSS, and vanilla JavaScript.
-- **Backend:** Node.js with Express.
-- **Database:** SQLite during development, because it is simple and requires no separate database server.
-- **Authentication:** Express sessions and `bcrypt` password hashing.
+```text
+StudySync/
+  client/
+    admin/
+    registration/
+    manager/
+    instructor/
+    assets/
+    index.html
+  database/
+    migrations/
+    schema.sql
+  server/
+    src/
+      config/
+      controllers/
+      middleware/
+      routes/
+      scripts/
+      utils/
+    test/
+    .env.example
+    package.json
+    server.js
+  render.yaml
+  vercel.json
+  README.md
+  DEVELOPERS.md
+```
 
-This stack is small enough for a school project while still demonstrating a real client-server application and relational database.
+Each role has real HTML pages in its own folder. JavaScript handles API calls and fills existing tables and form controls; it does not generate the page structure.
 
-## Key Data Records
+## Local Setup
 
-| Record | Purpose |
-| --- | --- |
-| User Account | Login credentials and user role. |
-| Student | Learner profile and contact details. |
-| Instructor | Tutor profile and contact details. |
-| Subject | A subject offered by the centre, such as Mathematics. |
-| Academic Term | The term or session for registrations and assignments. |
-| Enrolment | A student's selection of one subject in one term. |
-| Instructor Assignment | The instructor responsible for one subject in one term. |
+### 1. Create the Supabase database
 
-## Main Rules
+1. Create a Supabase project.
+2. Open the Supabase SQL Editor.
+3. Run [`database/schema.sql`](database/schema.sql).
+4. Copy the project URL and backend secret key.
 
-- A student must have a unique registration number.
-- A student can take many subjects.
-- A student cannot be enrolled in the same subject twice in the same term.
-- Only active subjects can be selected during registration.
-- Only active instructors can be assigned to teach a subject.
-- One subject has one active instructor assignment per term in the first version.
-- Instructors can view only their own assigned subjects and student lists.
+Row Level Security is enabled without browser policies because the frontend must use the Express API.
 
-## Expected Pages
+### 2. Configure the server
 
-1. Login
-2. Role dashboard
-3. Student list and student registration form
-4. Subject management
-5. Academic-term management
-6. Student subject enrolment
-7. Instructor management
-8. Instructor assignment
-9. Instructor dashboard
-10. Reports
+From the project root:
+
+```powershell
+Copy-Item server\.env.example server\.env
+```
+
+Fill in `server/.env`:
+
+```env
+NODE_ENV=development
+PORT=5000
+CLIENT_URL=http://localhost:5500,http://127.0.0.1:5500
+SUPABASE_URL=https://your-project.supabase.co
+SUPABASE_SECRET_KEY=your-supabase-secret-key
+JWT_SECRET=replace-this-with-at-least-32-random-characters
+JWT_EXPIRES_IN=8h
+ADMIN_FIRST_NAME=System
+ADMIN_LAST_NAME=Administrator
+ADMIN_EMAIL=admin@studysync.local
+ADMIN_PASSWORD=ChangeMe123
+```
+
+Never place `SUPABASE_SECRET_KEY` in `client/`.
+
+### 3. Install and start the API
+
+```powershell
+Set-Location server
+npm install
+npm run create-admin
+npm run dev
+```
+
+The API runs at `http://localhost:5000`. Its health endpoint is:
+
+```text
+http://localhost:5000/api/health
+```
+
+### 4. Start the frontend
+
+From another terminal in the project root:
+
+```powershell
+python -m http.server 5500 --directory client
+```
+
+Open:
+
+```text
+http://localhost:5500
+```
+
+## Recommended Demo Order
+
+1. Sign in as the administrator and create registration officer, manager, and instructor accounts.
+2. Sign in as the manager and create an academic term and subjects.
+3. Create an instructor profile and link the instructor account.
+4. Sign in as the registration officer and register students.
+5. Enrol the students in subjects.
+6. Sign in as the manager and assign instructors.
+7. Open the reports page.
+8. Sign in as an instructor and show the class list.
+
+Use fictional student information during the defence.
+
+## Deployment
+
+### Render backend
+
+1. Push the project to GitHub.
+2. Create a Render Blueprint from the repository.
+3. Render reads [`render.yaml`](render.yaml).
+4. Add `SUPABASE_URL`, `SUPABASE_SECRET_KEY`, and `CLIENT_URL`.
+5. Confirm that `/api/health` returns a successful response.
+
+The expected production API address is:
+
+```text
+https://studysync-api.onrender.com/api
+```
+
+If Render gives the service a different address, update:
+
+- `client/assets/js/config.js`
+- `client/_headers`
+- `vercel.json`
+
+### Vercel frontend
+
+1. Import the same GitHub repository into Vercel.
+2. Keep the repository root as the project root.
+3. Vercel reads [`vercel.json`](vercel.json) and publishes `client/`.
+4. Copy the Vercel URL into Render's `CLIENT_URL`.
+
+## Verification
+
+Backend:
+
+```powershell
+Set-Location server
+npm test
+```
+
+The current test suite checks input validation and role permission behaviour.
+
+The UI has also been checked with Playwright at desktop and mobile sizes for:
+
+- Administrator login and account management.
+- Registration officer student management.
+- Manager assignments and reports.
+- Instructor subject and class-list view.
 
 ## Documentation
 
-- [DEVELOPERS.md](DEVELOPERS.md) contains the recommended folder structure, database schema, routes, build order, security rules, and testing checklist.
-- `scripts/generate_studysync_sad_report.py` generates the Word report in the Documents folder.
-
-## Project Status
-
-This repository currently contains the system specification and implementation guide. The website should be built by following the stages in `DEVELOPERS.md`.
+- [`DEVELOPERS.md`](DEVELOPERS.md) contains the detailed implementation and defence guide.
+- `C:\Users\hp\Documents\StudySync_SAD_Report.docx` contains the SAD report.
+- [`scripts/generate_studysync_sad_report.py`](scripts/generate_studysync_sad_report.py) regenerates the report.

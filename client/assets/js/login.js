@@ -7,8 +7,6 @@ const form = document.querySelector("#login-form");
 
 form?.addEventListener("submit", async (event) => {
   event.preventDefault();
-  const submitButton = form.querySelector("button[type='submit']");
-  submitButton.disabled = true;
 
   try {
     const data = await api("/auth/login", {
@@ -17,14 +15,13 @@ form?.addEventListener("submit", async (event) => {
         email: form.email.value.trim(),
         password: form.password.value,
       }),
+      loadingText: "Signing in...",
     });
     sessionStorage.setItem(TOKEN_KEY, data.token);
     sessionStorage.setItem(USER_KEY, JSON.stringify(data.user));
     window.location.assign(homeForRole(data.user.role));
   } catch (error) {
     showToast(error.message, "error");
-  } finally {
-    submitButton.disabled = false;
   }
 });
 

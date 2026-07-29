@@ -1,0 +1,9 @@
+name = "studysync"
+compatibility_date = "2026-07-29"
+
+[assets]
+directory = "./client"
+# Keep the clean, extensionless URLs used by the separate HTML pages.
+html_handling = "auto-trailing-slash"
+# Return a normal 404 response when no matching page or asset exists.
+not_found_handling = "404-page"
