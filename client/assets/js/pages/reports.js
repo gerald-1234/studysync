@@ -17,7 +17,7 @@ function renderCourseReport(rows) {
       <tr>
         <td>${escapeHtml(row.semester)}</td>
         <td>${escapeHtml(row.courseCode)}</td>
-        <td>${escapeHtml(row.courseName)}</td>
+        <td>${escapeHtml(row.courseTitle)}</td>
         <td>${escapeHtml(row.enrolmentCount)}</td>
       </tr>
     `).join("")
@@ -30,7 +30,7 @@ function renderAssignmentReport(rows) {
       <tr>
         <td>${escapeHtml(`${row.semesters.semester_name} ${row.semesters.academic_session}`)}</td>
         <td>${escapeHtml(row.courses.course_code)}</td>
-        <td>${escapeHtml(row.courses.course_name)}</td>
+        <td>${escapeHtml(row.courses.course_title)}</td>
         <td>${escapeHtml(`${row.instructors.first_name} ${row.instructors.last_name}`)}</td>
       </tr>
     `).join("")

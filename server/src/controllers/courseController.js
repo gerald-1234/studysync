@@ -10,7 +10,7 @@ const {
 function coursePayload(body) {
   return {
     course_code: requiredText(body.courseCode, "Course code").toUpperCase(),
-    course_name: requiredText(body.courseName, "Course name"),
+    course_title: requiredText(body.courseTitle, "Course title"),
     description: optionalText(body.description),
     level: optionalText(body.level),
     status: body.status === "inactive" ? "inactive" : "active",
@@ -18,7 +18,7 @@ function coursePayload(body) {
 }
 
 async function listCourses(request, response) {
-  let query = supabase.from("courses").select("*").order("course_name");
+  let query = supabase.from("courses").select("*").order("course_title");
   if (request.query.activeOnly === "true") {
     query = query.eq("status", "active");
   }

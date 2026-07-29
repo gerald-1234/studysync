@@ -17,7 +17,7 @@ function renderCourses() {
     ? courses.map((course) => `
       <tr>
         <td>${escapeHtml(course.course_code)}</td>
-        <td>${escapeHtml(course.course_name)}</td>
+        <td>${escapeHtml(course.course_title)}</td>
         <td>${escapeHtml(course.level || "-")}</td>
         <td>${statusBadge(course.status)}</td>
         <td>
@@ -40,7 +40,7 @@ async function loadCourses() {
 function fillForm(course) {
   form.dataset.editId = course.id;
   form.courseCode.value = course.course_code;
-  form.courseName.value = course.course_name;
+  form.courseTitle.value = course.course_title;
   form.level.value = course.level || "";
   form.description.value = course.description || "";
   form.status.value = course.status;
@@ -57,7 +57,7 @@ form.addEventListener("submit", async (event) => {
   try {
     await send(editId ? `/courses/${editId}` : "/courses", editId ? "PATCH" : "POST", {
       courseCode: form.courseCode.value,
-      courseName: form.courseName.value,
+      courseTitle: form.courseTitle.value,
       level: form.level.value,
       description: form.description.value,
       status: form.status.value,

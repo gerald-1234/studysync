@@ -12,7 +12,7 @@ async function listEnrolments(request, response) {
     .select(`
       id, status, enrolled_at,
       students(id, registration_number, first_name, last_name),
-      courses(id, course_code, course_name),
+      courses(id, course_code, course_title),
       semesters(id, semester_name, academic_session)
     `)
     .order("enrolled_at", { ascending: false });

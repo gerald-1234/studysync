@@ -20,6 +20,8 @@ function studentPayload(body) {
     gender,
     phone: requiredText(body.phone, "Phone number"),
     email: optionalText(body.email),
+    faculty: requiredText(body.faculty, "Faculty"),
+    department: optionalText(body.department),
     emergency_contact_phone: requiredText(body.emergencyContactPhone, "Emergency contact phone"),
     status: body.status === "inactive" ? "inactive" : "active",
   };
@@ -37,7 +39,7 @@ async function listStudents(request, response) {
   if (search) {
     const safeSearch = search.replace(/[,%().]/g, "");
     query = query.or(
-      `registration_number.ilike.%${safeSearch}%,first_name.ilike.%${safeSearch}%,last_name.ilike.%${safeSearch}%`,
+      `registration_number.ilike.%${safeSearch}%,first_name.ilike.%${safeSearch}%,last_name.ilike.%${safeSearch}%,faculty.ilike.%${safeSearch}%,department.ilike.%${safeSearch}%`,
     );
   }
 
@@ -88,7 +90,7 @@ async function updateStudent(request, response) {
 async function getStudentEnrolments(request, response) {
   const { data, error } = await supabase
     .from("enrolments")
-    .select("id, status, enrolled_at, courses(course_code, course_name), semesters(semester_name, academic_session)")
+    .select("id, status, enrolled_at, courses(course_code, course_title), semesters(semester_name, academic_session)")
     .eq("student_id", request.params.id)
     .order("enrolled_at", { ascending: false });
   throwIfSupabaseError(error);

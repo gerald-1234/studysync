@@ -45,7 +45,7 @@
                 <div class="form-grid">
                   <div class="field full">
                     <label for="registrationNumber">Registration number</label>
-                    <input id="registrationNumber" name="registrationNumber" placeholder="SS-2026-001" required>
+                    <input id="registrationNumber" name="registrationNumber" placeholder="FUTO/2026/001" required>
                   </div>
                   <div class="field">
                     <label for="firstName">First name</label>
@@ -73,6 +73,14 @@
                     <input id="email" name="email" type="email">
                   </div>
                   <div class="field">
+                    <label for="faculty">Faculty</label>
+                    <input id="faculty" name="faculty" placeholder="Faculty of Engineering" required>
+                  </div>
+                  <div class="field">
+                    <label for="department">Department</label>
+                    <input id="department" name="department" placeholder="Computer Engineering">
+                  </div>
+                  <div class="field">
                     <label for="emergencyContactPhone">Emergency contact phone</label>
                     <input id="emergencyContactPhone" name="emergencyContactPhone" inputmode="tel" required>
                   </div>
@@ -95,16 +103,16 @@
             <div class="panel-heading"><h3>Student list</h3></div>
             <div class="panel-body">
               <form class="toolbar" id="student-search-form">
-                <input class="search-input" name="search" aria-label="Search students" placeholder="Search by name or registration number">
+                <input class="search-input" name="search" aria-label="Search students" placeholder="Search by name, registration number, faculty, or department">
                 <button class="button button-secondary" type="submit"><i data-lucide="search"></i>Search</button>
               </form>
               <div class="table-wrap">
                 <table>
                   <thead>
-                    <tr><th>Reg. number</th><th>Name</th><th>Phone</th><th>Emergency contact</th><th>Status</th><th></th></tr>
+                    <tr><th>Reg. number</th><th>Name</th><th>Faculty / Department</th><th>Phone</th><th>Emergency contact</th><th>Status</th><th></th></tr>
                   </thead>
                   <tbody id="students-body">
-                    <tr><td class="empty-state" colspan="6">Loading students...</td></tr>
+                    <tr><td class="empty-state" colspan="7">Loading students...</td></tr>
                   </tbody>
                 </table>
               </div>

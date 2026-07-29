@@ -77,12 +77,13 @@ Each role has real HTML pages in its own folder. JavaScript handles API calls an
 
 ### 1. Create the Supabase database
 
-1. Create a Supabase project.
+1. Create or open the Supabase project.
 2. Open the Supabase SQL Editor.
-3. Run [`database/schema.sql`](database/schema.sql).
-4. Copy the project URL and backend secret key.
+3. For a fresh empty project, run [`database/schema.sql`](database/schema.sql).
+4. For the existing legacy project with `subjects` and `academic_terms`, run [`database/migrations/202607290002_course_title_and_student_profile.sql`](database/migrations/202607290002_course_title_and_student_profile.sql) instead.
+5. Copy the project URL and backend secret key.
 
-Row Level Security is enabled without browser policies because the frontend must use the Express API.
+Row Level Security is enabled without browser policies because the frontend must use the Express API. The legacy migration preserves existing UUIDs, enrolments, assignments, student contact numbers, courses, and semesters while renaming them to the final code contract.
 
 ### 2. Configure the server
 
@@ -142,7 +143,7 @@ http://localhost:5500
 ## Recommended Demo Order
 
 1. Sign in as the administrator and create registration officer, manager, and instructor accounts.
-2. Sign in as the manager and create an semester and courses.
+2. Sign in as the manager and create a semester and courses.
 3. Create an instructor profile and link the instructor account.
 4. Sign in as the registration officer and register students.
 5. Enrol the students in courses.
@@ -165,7 +166,7 @@ Use fictional student information during the defence.
 The expected production API address is:
 
 ```text
-https://studysync-api.onrender.com/api
+https://studysync-api-z0vp.onrender.com/api
 ```
 
 If Render gives the service a different address, update:

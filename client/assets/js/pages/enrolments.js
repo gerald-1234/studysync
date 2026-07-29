@@ -19,7 +19,7 @@ function renderCourseChecks(courses) {
     ? courses.map((course) => `
       <label>
         <input type="checkbox" name="courseIds" value="${course.id}">
-        <span>${escapeHtml(course.course_code)} - ${escapeHtml(course.course_name)}</span>
+        <span>${escapeHtml(course.course_code)} - ${escapeHtml(course.course_title)}</span>
       </label>
     `).join("")
     : '<p class="empty-state">No active courses.</p>';
@@ -31,7 +31,7 @@ function renderEnrolments(enrolments) {
       <tr>
         <td>${escapeHtml(enrolment.students.registration_number)}</td>
         <td>${escapeHtml(`${enrolment.students.first_name} ${enrolment.students.last_name}`)}</td>
-        <td>${escapeHtml(enrolment.courses.course_name)}</td>
+        <td>${escapeHtml(enrolment.courses.course_title)}</td>
         <td>${escapeHtml(`${enrolment.semesters.semester_name} ${enrolment.semesters.academic_session}`)}</td>
         <td>${statusBadge(enrolment.status)}</td>
         <td>

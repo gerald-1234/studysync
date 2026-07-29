@@ -16,7 +16,7 @@ function renderAssignments(assignments) {
     ? assignments.map((assignment) => `
       <tr>
         <td>${escapeHtml(assignment.courses.course_code)}</td>
-        <td>${escapeHtml(assignment.courses.course_name)}</td>
+        <td>${escapeHtml(assignment.courses.course_title)}</td>
         <td>${escapeHtml(`${assignment.instructors.first_name} ${assignment.instructors.last_name}`)}</td>
         <td>${escapeHtml(`${assignment.semesters.semester_name} ${assignment.semesters.academic_session}`)}</td>
         <td>${statusBadge(assignment.status)}</td>
@@ -50,7 +50,7 @@ async function loadReferenceData() {
     form.courseId,
     courseData.courses,
     "Select course",
-    (course) => `${course.course_code} - ${course.course_name}`,
+    (course) => `${course.course_code} - ${course.course_title}`,
   );
   populateSelect(
     form.semesterId,

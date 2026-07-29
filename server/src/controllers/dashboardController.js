@@ -66,7 +66,7 @@ async function instructorDashboard(request, response) {
   const currentSemester = await getCurrentSemester();
   let query = supabase
     .from("instructor_assignments")
-    .select("id, course_id, semester_id, courses(course_code, course_name), semesters(semester_name, academic_session)")
+    .select("id, course_id, semester_id, courses(course_code, course_title), semesters(semester_name, academic_session)")
     .eq("instructor_id", instructor.id)
     .eq("status", "active");
   if (currentSemester) {

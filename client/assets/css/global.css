@@ -480,6 +480,13 @@ td {
   font-size: 13px;
 }
 
+.table-subtext {
+  color: var(--muted);
+  display: block;
+  font-size: 11px;
+  margin-top: 3px;
+}
+
 tbody tr:hover {
   background: #fbfcfc;
 }

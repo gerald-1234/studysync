@@ -4,7 +4,7 @@ const { throwIfSupabaseError } = require("../utils/helpers");
 async function courseEnrolmentReport(request, response) {
   let query = supabase
     .from("enrolments")
-    .select("course_id, courses(course_code, course_name), semesters(id, semester_name, academic_session)")
+    .select("course_id, courses(course_code, course_title), semesters(id, semester_name, academic_session)")
     .eq("status", "active");
 
   if (request.query.semesterId) {
@@ -21,7 +21,7 @@ async function courseEnrolmentReport(request, response) {
       groups.set(key, {
         semester: `${enrolment.semesters.semester_name} ${enrolment.semesters.academic_session}`,
         courseCode: enrolment.courses.course_code,
-        courseName: enrolment.courses.course_name,
+        courseTitle: enrolment.courses.course_title,
         enrolmentCount: 0,
       });
     }
@@ -29,7 +29,7 @@ async function courseEnrolmentReport(request, response) {
   }
 
   const report = [...groups.values()].sort((left, right) =>
-    left.courseName.localeCompare(right.courseName),
+    left.courseTitle.localeCompare(right.courseTitle),
   );
   return response.json({ report });
 }
@@ -40,7 +40,7 @@ async function instructorAssignmentReport(request, response) {
     .select(`
       id, status,
       instructors(staff_number, first_name, last_name),
-      courses(course_code, course_name),
+      courses(course_code, course_title),
       semesters(semester_name, academic_session)
     `)
     .eq("status", "active")

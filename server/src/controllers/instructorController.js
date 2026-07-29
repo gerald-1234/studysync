@@ -95,7 +95,7 @@ async function myCourses(request, response) {
     .from("instructor_assignments")
     .select(`
       id, course_id, semester_id,
-      courses(id, course_code, course_name),
+      courses(id, course_code, course_title),
       semesters(id, semester_name, academic_session)
     `)
     .eq("instructor_id", instructor.id)

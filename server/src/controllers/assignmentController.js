@@ -12,7 +12,7 @@ async function listAssignments(request, response) {
     .select(`
       id, status, assigned_at,
       instructors(id, staff_number, first_name, last_name),
-      courses(id, course_code, course_name),
+      courses(id, course_code, course_title),
       semesters(id, semester_name, academic_session)
     `)
     .order("assigned_at", { ascending: false });

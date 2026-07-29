@@ -5,7 +5,7 @@
 StudySync should remain a small, understandable system. Its first version performs four connected activities:
 
 1. Create student records.
-2. Register students for courses in an semester.
+2. Register students for courses in a semester.
 3. Assign instructors to courses.
 4. Produce simple reports and instructor class lists.
 
@@ -118,8 +118,9 @@ server/
 
 ### `database/`
 
-- `schema.sql` is the complete schema for the Supabase SQL Editor.
+- `schema.sql` is the complete final schema for a fresh Supabase project.
 - `migrations/202607290001_initial_schema.sql` is the standalone initial migration.
+- `migrations/202607290002_course_title_and_student_profile.sql` upgrades the original `subjects` and `academic_terms` database without losing its rows.
 
 ## 5. Environment Variables
 
@@ -146,9 +147,9 @@ Never commit `server/.env`.
 | Table | Purpose |
 | --- | --- |
 | `users` | Login account, hashed password, role, lock status. |
-| `students` | Student identity and contact details. |
+| `students` | Student identity, faculty, optional department, and contact details. |
 | `instructors` | Instructor profile linked optionally to a user account. |
-| `courses` | Course code, name, level, and status. |
+| `courses` | Course code, course title, level, and status. |
 | `semesters` | Semester name, session, dates, and open/closed status. |
 | `enrolments` | Student-course selection for a semester. |
 | `instructor_assignments` | Instructor-course allocation for a semester. |
@@ -157,7 +158,7 @@ Never commit `server/.env`.
 Important constraints:
 
 - Student registration number is unique.
-- Course code and name are unique.
+- Course code and course title are unique.
 - A semester name is unique within an academic session.
 - A student-course-semester combination is unique.
 - A course has only one active instructor assignment per semester.
@@ -200,7 +201,7 @@ The current HTML interface separates responsibilities clearly: administrators ha
 | GET/POST | `/api/courses` | List or create courses. |
 | PATCH | `/api/courses/:id` | Update a course. |
 | GET/POST | `/api/semesters` | List or create semesters. |
-| PATCH | `/api/semesters/:id` | Update an semester. |
+| PATCH | `/api/semesters/:id` | Update a semester. |
 | GET/POST | `/api/instructors` | List or create instructor profiles. |
 | PATCH | `/api/instructors/:id` | Update an instructor profile. |
 
@@ -265,7 +266,7 @@ The database partial unique index provides a second protection layer.
 
 ### Database
 
-Run `database/schema.sql` in Supabase SQL Editor.
+For a fresh Supabase project, run `database/schema.sql`. For the connected legacy project, run `database/migrations/202607290002_course_title_and_student_profile.sql` instead. The upgrade migration has been tested against the original schema with sample data and is safe to run more than once.
 
 ### Server
 

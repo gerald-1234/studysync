@@ -12,10 +12,20 @@ export function homeForRole(role) {
   return ROLE_HOME[role] || "/index.html";
 }
 
-export function signOut() {
-  sessionStorage.removeItem(TOKEN_KEY);
-  sessionStorage.removeItem(USER_KEY);
-  window.location.assign("/index.html");
+export async function signOut() {
+  try {
+    await api("/auth/logout", {
+      method: "POST",
+      body: JSON.stringify({}),
+      loadingText: "Signing out...",
+    });
+  } catch {
+    // Local sign-out must still work if the API is temporarily unavailable.
+  } finally {
+    sessionStorage.removeItem(TOKEN_KEY);
+    sessionStorage.removeItem(USER_KEY);
+    window.location.assign("/index.html");
+  }
 }
 
 export async function requireUser(roles) {

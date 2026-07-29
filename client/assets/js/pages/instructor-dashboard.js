@@ -10,7 +10,7 @@ function renderAssignments(assignments) {
     ? assignments.map((assignment) => `
       <tr>
         <td>${escapeHtml(assignment.courses.course_code)}</td>
-        <td>${escapeHtml(assignment.courses.course_name)}</td>
+        <td>${escapeHtml(assignment.courses.course_title)}</td>
         <td>${escapeHtml(`${assignment.semesters.semester_name} ${assignment.semesters.academic_session}`)}</td>
       </tr>
     `).join("")
@@ -22,7 +22,7 @@ function renderRosters(assignments) {
     ? assignments.map((assignment) => `
       <section class="panel">
         <div class="panel-heading">
-          <h3>${escapeHtml(assignment.courses.course_code)} - ${escapeHtml(assignment.courses.course_name)}</h3>
+          <h3>${escapeHtml(assignment.courses.course_code)} - ${escapeHtml(assignment.courses.course_title)}</h3>
           <span class="status status-active">${assignment.students.length} student(s)</span>
         </div>
         <div class="table-wrap">

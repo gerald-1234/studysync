@@ -32,9 +32,9 @@
             <div class="panel-body">
               <form id="course-form" data-edit-id="">
                 <div class="form-grid">
-                  <div class="field"><label for="courseCode">Course code</label><input id="courseCode" name="courseCode" placeholder="MTH" required></div>
-                  <div class="field"><label for="courseName">Course name</label><input id="courseName" name="courseName" required></div>
-                  <div class="field full"><label for="level">Level</label><input id="level" name="level" placeholder="Senior secondary"></div>
+                  <div class="field"><label for="courseCode">Course code</label><input id="courseCode" name="courseCode" placeholder="CSC 101" required></div>
+                  <div class="field"><label for="courseTitle">Course title</label><input id="courseTitle" name="courseTitle" required></div>
+                  <div class="field full"><label for="level">Level</label><input id="level" name="level" placeholder="100 Level"></div>
                   <div class="field full"><label for="description">Description</label><textarea id="description" name="description"></textarea></div>
                   <div class="field full">
                     <label for="status">Status</label>
@@ -52,7 +52,7 @@
             <div class="panel-heading"><h3>Available courses</h3></div>
             <div class="table-wrap">
               <table>
-                <thead><tr><th>Code</th><th>Course</th><th>Level</th><th>Status</th><th></th></tr></thead>
+                <thead><tr><th>Course code</th><th>Course title</th><th>Level</th><th>Status</th><th></th></tr></thead>
                 <tbody id="courses-body"><tr><td class="empty-state" colspan="5">Loading courses...</td></tr></tbody>
               </table>
             </div>

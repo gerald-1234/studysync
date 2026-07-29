@@ -57,7 +57,7 @@ create table if not exists public.instructors (
 create table if not exists public.courses (
   id uuid primary key default gen_random_uuid(),
   course_code varchar(20) unique not null,
-  course_name varchar(120) unique not null,
+  course_title varchar(120) unique not null,
   description text,
   level varchar(50),
   status varchar(20) not null default 'active' check (

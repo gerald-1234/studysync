@@ -21,6 +21,8 @@ function fillForm(student) {
   form.gender.value = student.gender;
   form.phone.value = student.phone;
   form.email.value = student.email || "";
+  form.faculty.value = student.faculty;
+  form.department.value = student.department || "";
   form.emergencyContactPhone.value = student.emergency_contact_phone;
   form.status.value = student.status;
   form.querySelector("[data-submit-label]").textContent = "Update student";
@@ -37,6 +39,10 @@ function renderStudents() {
       <tr>
         <td>${escapeHtml(student.registration_number)}</td>
         <td>${escapeHtml(`${student.first_name} ${student.last_name}`)}</td>
+        <td>
+          ${escapeHtml(student.faculty)}
+          <span class="table-subtext">${escapeHtml(student.department || "Department not provided")}</span>
+        </td>
         <td>${escapeHtml(student.phone)}</td>
         <td>${escapeHtml(student.emergency_contact_phone)}</td>
         <td>${statusBadge(student.status)}</td>
@@ -47,7 +53,7 @@ function renderStudents() {
         </td>
       </tr>
     `).join("")
-    : tableEmpty(6);
+    : tableEmpty(7);
   window.lucide?.createIcons();
 }
 
@@ -69,6 +75,8 @@ form.addEventListener("submit", async (event) => {
       gender: form.gender.value,
       phone: form.phone.value,
       email: form.email.value,
+      faculty: form.faculty.value,
+      department: form.department.value,
       emergencyContactPhone: form.emergencyContactPhone.value,
       status: form.status.value,
     });
