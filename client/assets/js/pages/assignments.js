@@ -15,10 +15,10 @@ function renderAssignments(assignments) {
   tableBody.innerHTML = assignments.length
     ? assignments.map((assignment) => `
       <tr>
-        <td>${escapeHtml(assignment.subjects.subject_code)}</td>
-        <td>${escapeHtml(assignment.subjects.subject_name)}</td>
+        <td>${escapeHtml(assignment.courses.course_code)}</td>
+        <td>${escapeHtml(assignment.courses.course_name)}</td>
         <td>${escapeHtml(`${assignment.instructors.first_name} ${assignment.instructors.last_name}`)}</td>
-        <td>${escapeHtml(`${assignment.academic_terms.term_name} ${assignment.academic_terms.academic_session}`)}</td>
+        <td>${escapeHtml(`${assignment.semesters.semester_name} ${assignment.semesters.academic_session}`)}</td>
         <td>${statusBadge(assignment.status)}</td>
         <td>
           ${assignment.status === "active" ? `
@@ -35,10 +35,10 @@ function renderAssignments(assignments) {
 }
 
 async function loadReferenceData() {
-  const [instructorData, subjectData, termData] = await Promise.all([
+  const [instructorData, courseData, semesterData] = await Promise.all([
     api("/instructors?activeOnly=true"),
-    api("/subjects?activeOnly=true"),
-    api("/terms"),
+    api("/courses?activeOnly=true"),
+    api("/semesters"),
   ]);
   populateSelect(
     form.instructorId,
@@ -47,22 +47,22 @@ async function loadReferenceData() {
     (instructor) => `${instructor.staff_number} - ${instructor.first_name} ${instructor.last_name}`,
   );
   populateSelect(
-    form.subjectId,
-    subjectData.subjects,
-    "Select subject",
-    (subject) => `${subject.subject_code} - ${subject.subject_name}`,
+    form.courseId,
+    courseData.courses,
+    "Select course",
+    (course) => `${course.course_code} - ${course.course_name}`,
   );
   populateSelect(
-    form.termId,
-    termData.terms.filter((term) => term.status === "open"),
-    "Select open term",
-    (term) => `${term.term_name} ${term.academic_session}`,
+    form.semesterId,
+    semesterData.semesters.filter((semester) => semester.status === "open"),
+    "Select open semester",
+    (semester) => `${semester.semester_name} ${semester.academic_session}`,
   );
 }
 
 async function loadAssignments() {
-  const termId = form.termId.value;
-  const data = await api(`/assignments${termId ? `?termId=${encodeURIComponent(termId)}` : ""}`);
+  const semesterId = form.semesterId.value;
+  const data = await api(`/assignments${semesterId ? `?semesterId=${encodeURIComponent(semesterId)}` : ""}`);
   renderAssignments(data.assignments);
 }
 
@@ -71,8 +71,8 @@ form.addEventListener("submit", async (event) => {
   try {
     await send("/assignments", "POST", {
       instructorId: form.instructorId.value,
-      subjectId: form.subjectId.value,
-      termId: form.termId.value,
+      courseId: form.courseId.value,
+      semesterId: form.semesterId.value,
     });
     showToast("Instructor assigned.");
     await loadAssignments();
@@ -81,7 +81,7 @@ form.addEventListener("submit", async (event) => {
   }
 });
 
-form.termId.addEventListener("change", () => {
+form.semesterId.addEventListener("change", () => {
   loadAssignments().catch((error) => showToast(error.message, "error"));
 });
 

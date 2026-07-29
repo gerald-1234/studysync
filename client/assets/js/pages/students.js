@@ -21,7 +21,7 @@ function fillForm(student) {
   form.gender.value = student.gender;
   form.phone.value = student.phone;
   form.email.value = student.email || "";
-  form.guardianPhone.value = student.guardian_phone;
+  form.emergencyContactPhone.value = student.emergency_contact_phone;
   form.status.value = student.status;
   form.querySelector("[data-submit-label]").textContent = "Update student";
   form.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -38,7 +38,7 @@ function renderStudents() {
         <td>${escapeHtml(student.registration_number)}</td>
         <td>${escapeHtml(`${student.first_name} ${student.last_name}`)}</td>
         <td>${escapeHtml(student.phone)}</td>
-        <td>${escapeHtml(student.guardian_phone)}</td>
+        <td>${escapeHtml(student.emergency_contact_phone)}</td>
         <td>${statusBadge(student.status)}</td>
         <td>
           <button class="icon-button" type="button" title="Edit student" data-edit-student="${student.id}">
@@ -69,7 +69,7 @@ form.addEventListener("submit", async (event) => {
       gender: form.gender.value,
       phone: form.phone.value,
       email: form.email.value,
-      guardianPhone: form.guardianPhone.value,
+      emergencyContactPhone: form.emergencyContactPhone.value,
       status: form.status.value,
     });
     form.reset();

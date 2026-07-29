@@ -7,17 +7,17 @@ import {
   tableEmpty,
 } from "../ui.js";
 
-const termSelect = document.querySelector("#report-term");
-const enrolmentBody = document.querySelector("#subject-report-body");
+const semesterSelect = document.querySelector("#report-semester");
+const enrolmentBody = document.querySelector("#course-report-body");
 const assignmentBody = document.querySelector("#assignment-report-body");
 
-function renderSubjectReport(rows) {
+function renderCourseReport(rows) {
   enrolmentBody.innerHTML = rows.length
     ? rows.map((row) => `
       <tr>
-        <td>${escapeHtml(row.term)}</td>
-        <td>${escapeHtml(row.subjectCode)}</td>
-        <td>${escapeHtml(row.subjectName)}</td>
+        <td>${escapeHtml(row.semester)}</td>
+        <td>${escapeHtml(row.courseCode)}</td>
+        <td>${escapeHtml(row.courseName)}</td>
         <td>${escapeHtml(row.enrolmentCount)}</td>
       </tr>
     `).join("")
@@ -28,9 +28,9 @@ function renderAssignmentReport(rows) {
   assignmentBody.innerHTML = rows.length
     ? rows.map((row) => `
       <tr>
-        <td>${escapeHtml(`${row.academic_terms.term_name} ${row.academic_terms.academic_session}`)}</td>
-        <td>${escapeHtml(row.subjects.subject_code)}</td>
-        <td>${escapeHtml(row.subjects.subject_name)}</td>
+        <td>${escapeHtml(`${row.semesters.semester_name} ${row.semesters.academic_session}`)}</td>
+        <td>${escapeHtml(row.courses.course_code)}</td>
+        <td>${escapeHtml(row.courses.course_name)}</td>
         <td>${escapeHtml(`${row.instructors.first_name} ${row.instructors.last_name}`)}</td>
       </tr>
     `).join("")
@@ -38,28 +38,28 @@ function renderAssignmentReport(rows) {
 }
 
 async function loadReports() {
-  const suffix = termSelect.value ? `?termId=${encodeURIComponent(termSelect.value)}` : "";
-  const [subjectData, assignmentData] = await Promise.all([
-    api(`/reports/subject-enrolments${suffix}`),
+  const suffix = semesterSelect.value ? `?semesterId=${encodeURIComponent(semesterSelect.value)}` : "";
+  const [courseData, assignmentData] = await Promise.all([
+    api(`/reports/course-enrolments${suffix}`),
     api(`/reports/instructor-assignments${suffix}`),
   ]);
-  renderSubjectReport(subjectData.report);
+  renderCourseReport(courseData.report);
   renderAssignmentReport(assignmentData.report);
 }
 
-termSelect.addEventListener("change", () => {
+semesterSelect.addEventListener("change", () => {
   loadReports().catch((error) => showToast(error.message, "error"));
 });
 
 async function start() {
   try {
     await requireUser(["manager"]);
-    const termData = await api("/terms");
+    const semesterData = await api("/semesters");
     populateSelect(
-      termSelect,
-      termData.terms,
-      "All academic terms",
-      (term) => `${term.term_name} ${term.academic_session}`,
+      semesterSelect,
+      semesterData.semesters,
+      "All semesters",
+      (semester) => `${semester.semester_name} ${semester.academic_session}`,
     );
     await loadReports();
   } catch (error) {

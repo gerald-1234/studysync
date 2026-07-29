@@ -10,11 +10,11 @@ async function loadDashboard() {
     const data = await api("/dashboard/staff");
     const counts = data.counts;
 
-    document.querySelector("[data-current-term]").textContent = data.currentTerm
-      ? `${data.currentTerm.term_name} ${data.currentTerm.academic_session}`
-      : "No open academic term";
+    document.querySelector("[data-current-semester]").textContent = data.currentSemester
+      ? `${data.currentSemester.semester_name} ${data.currentSemester.academic_session}`
+      : "No open semester";
     document.querySelector("[data-students]").textContent = counts.activeStudents;
-    document.querySelector("[data-subjects]").textContent = counts.activeSubjects;
+    document.querySelector("[data-courses]").textContent = counts.activeCourses;
     document.querySelector("[data-instructors]").textContent = counts.activeInstructors;
     document.querySelector("[data-enrolments]").textContent = counts.currentEnrolments;
     document.querySelector("[data-assignments]").textContent = counts.currentAssignments;

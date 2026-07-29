@@ -1,14 +1,14 @@
 const supabase = require("../config/supabase");
 const { throwIfSupabaseError } = require("../utils/helpers");
 
-async function subjectEnrolmentReport(request, response) {
+async function courseEnrolmentReport(request, response) {
   let query = supabase
     .from("enrolments")
-    .select("subject_id, subjects(subject_code, subject_name), academic_terms(id, term_name, academic_session)")
+    .select("course_id, courses(course_code, course_name), semesters(id, semester_name, academic_session)")
     .eq("status", "active");
 
-  if (request.query.termId) {
-    query = query.eq("academic_term_id", request.query.termId);
+  if (request.query.semesterId) {
+    query = query.eq("semester_id", request.query.semesterId);
   }
 
   const { data, error } = await query;
@@ -16,12 +16,12 @@ async function subjectEnrolmentReport(request, response) {
 
   const groups = new Map();
   for (const enrolment of data) {
-    const key = `${enrolment.academic_terms.id}:${enrolment.subject_id}`;
+    const key = `${enrolment.semesters.id}:${enrolment.course_id}`;
     if (!groups.has(key)) {
       groups.set(key, {
-        term: `${enrolment.academic_terms.term_name} ${enrolment.academic_terms.academic_session}`,
-        subjectCode: enrolment.subjects.subject_code,
-        subjectName: enrolment.subjects.subject_name,
+        semester: `${enrolment.semesters.semester_name} ${enrolment.semesters.academic_session}`,
+        courseCode: enrolment.courses.course_code,
+        courseName: enrolment.courses.course_name,
         enrolmentCount: 0,
       });
     }
@@ -29,7 +29,7 @@ async function subjectEnrolmentReport(request, response) {
   }
 
   const report = [...groups.values()].sort((left, right) =>
-    left.subjectName.localeCompare(right.subjectName),
+    left.courseName.localeCompare(right.courseName),
   );
   return response.json({ report });
 }
@@ -40,14 +40,14 @@ async function instructorAssignmentReport(request, response) {
     .select(`
       id, status,
       instructors(staff_number, first_name, last_name),
-      subjects(subject_code, subject_name),
-      academic_terms(term_name, academic_session)
+      courses(course_code, course_name),
+      semesters(semester_name, academic_session)
     `)
     .eq("status", "active")
     .order("assigned_at", { ascending: false });
 
-  if (request.query.termId) {
-    query = query.eq("academic_term_id", request.query.termId);
+  if (request.query.semesterId) {
+    query = query.eq("semester_id", request.query.semesterId);
   }
 
   const { data, error } = await query;
@@ -68,5 +68,5 @@ async function auditLogReport(_request, response) {
 module.exports = {
   auditLogReport,
   instructorAssignmentReport,
-  subjectEnrolmentReport,
+  courseEnrolmentReport,
 };

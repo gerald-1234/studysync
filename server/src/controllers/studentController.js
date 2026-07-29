@@ -20,7 +20,7 @@ function studentPayload(body) {
     gender,
     phone: requiredText(body.phone, "Phone number"),
     email: optionalText(body.email),
-    guardian_phone: requiredText(body.guardianPhone, "Guardian phone"),
+    emergency_contact_phone: requiredText(body.emergencyContactPhone, "Emergency contact phone"),
     status: body.status === "inactive" ? "inactive" : "active",
   };
 }
@@ -88,7 +88,7 @@ async function updateStudent(request, response) {
 async function getStudentEnrolments(request, response) {
   const { data, error } = await supabase
     .from("enrolments")
-    .select("id, status, enrolled_at, subjects(subject_code, subject_name), academic_terms(term_name, academic_session)")
+    .select("id, status, enrolled_at, courses(course_code, course_name), semesters(semester_name, academic_session)")
     .eq("student_id", request.params.id)
     .order("enrolled_at", { ascending: false });
   throwIfSupabaseError(error);

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Subject Enrolments | StudySync</title>
+  <title>Course Enrolments | StudySync</title>
   <link rel="icon" href="../assets/images/studysync-logo.svg" type="image/svg+xml">
   <link rel="stylesheet" href="../assets/css/global.css">
 </head>
@@ -27,14 +27,14 @@
     </aside>
     <div class="main-shell">
       <header class="topbar">
-        <h1>Subject enrolments</h1>
+        <h1>Course enrolments</h1>
         <button class="icon-button" type="button" title="Sign out" data-sign-out><i data-lucide="log-out"></i></button>
       </header>
       <main class="page-content" id="main-content">
         <div class="page-heading">
           <div>
-            <h2>Register subjects</h2>
-            <p>Select a student, open term, and one or more active subjects.</p>
+            <h2>Register courses</h2>
+            <p>Select a student, open semester, and one or more active courses.</p>
           </div>
         </div>
         <div class="work-grid">
@@ -47,12 +47,12 @@
                   <select id="studentId" name="studentId" required><option value="">Loading students...</option></select>
                 </div>
                 <div class="field" style="margin-top: 14px;">
-                  <label for="termId">Academic term</label>
-                  <select id="termId" name="termId" required><option value="">Loading terms...</option></select>
+                  <label for="semesterId">Semester</label>
+                  <select id="semesterId" name="semesterId" required><option value="">Loading semesters...</option></select>
                 </div>
                 <div class="field" style="margin-top: 14px;">
-                  <label>Subjects</label>
-                  <div class="check-list" id="subject-check-list"><p class="empty-state">Loading subjects...</p></div>
+                  <label>Courses</label>
+                  <div class="check-list" id="course-check-list"><p class="empty-state">Loading courses...</p></div>
                 </div>
                 <div class="form-actions">
                   <button class="button button-primary" type="submit"><i data-lucide="save"></i>Save enrolments</button>
@@ -65,7 +65,7 @@
             <div class="table-wrap">
               <table>
                 <thead>
-                  <tr><th>Reg. number</th><th>Student</th><th>Subject</th><th>Term</th><th>Status</th><th>Action</th></tr>
+                  <tr><th>Reg. number</th><th>Student</th><th>Course</th><th>Semester</th><th>Status</th><th>Action</th></tr>
                 </thead>
                 <tbody id="enrolments-body">
                   <tr><td class="empty-state" colspan="6">Loading enrolments...</td></tr>

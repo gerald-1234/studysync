@@ -20,18 +20,18 @@
     <div class="main-shell">
       <header class="topbar"><h1>Instructor dashboard</h1><button class="icon-button" type="button" title="Sign out" data-sign-out><i data-lucide="log-out"></i></button></header>
       <main class="page-content" id="main-content">
-        <div class="page-heading"><div><h2>My classes</h2><p>Assigned subjects and registered students.</p></div></div>
-        <div class="term-strip"><i data-lucide="calendar-days"></i><span>Open term: <strong data-current-term>Loading...</strong></span></div>
+        <div class="page-heading"><div><h2>My classes</h2><p>Assigned courses and registered students.</p></div></div>
+        <div class="semester-strip"><i data-lucide="calendar-days"></i><span>Open semester: <strong data-current-semester>Loading...</strong></span></div>
         <section class="metrics" aria-label="Instructor totals" style="grid-template-columns: repeat(2, minmax(0, 240px));">
-          <article class="metric"><span class="metric-label">Assigned subjects</span><strong class="metric-value" data-assigned-subjects>0</strong></article>
+          <article class="metric"><span class="metric-label">Assigned courses</span><strong class="metric-value" data-assigned-courses>0</strong></article>
           <article class="metric"><span class="metric-label">Enrolled students</span><strong class="metric-value" data-enrolled-students>0</strong></article>
         </section>
         <section class="panel" style="margin-bottom: 22px;">
-          <div class="panel-heading"><h3>Subject assignments</h3></div>
+          <div class="panel-heading"><h3>Course assignments</h3></div>
           <div class="table-wrap">
             <table>
-              <thead><tr><th>Code</th><th>Subject</th><th>Term</th></tr></thead>
-              <tbody id="instructor-subjects-body"><tr><td class="empty-state" colspan="3">Loading subjects...</td></tr></tbody>
+              <thead><tr><th>Code</th><th>Course</th><th>Semester</th></tr></thead>
+              <tbody id="instructor-courses-body"><tr><td class="empty-state" colspan="3">Loading courses...</td></tr></tbody>
             </table>
           </div>
         </section>

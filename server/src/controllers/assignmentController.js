@@ -12,13 +12,13 @@ async function listAssignments(request, response) {
     .select(`
       id, status, assigned_at,
       instructors(id, staff_number, first_name, last_name),
-      subjects(id, subject_code, subject_name),
-      academic_terms(id, term_name, academic_session)
+      courses(id, course_code, course_name),
+      semesters(id, semester_name, academic_session)
     `)
     .order("assigned_at", { ascending: false });
 
-  if (request.query.termId) {
-    query = query.eq("academic_term_id", request.query.termId);
+  if (request.query.semesterId) {
+    query = query.eq("semester_id", request.query.semesterId);
   }
 
   const { data, error } = await query;
@@ -28,42 +28,42 @@ async function listAssignments(request, response) {
 
 async function createAssignment(request, response) {
   const instructorId = requiredId(request.body.instructorId, "Instructor");
-  const subjectId = requiredId(request.body.subjectId, "Subject");
-  const termId = requiredId(request.body.termId, "Academic term");
+  const courseId = requiredId(request.body.courseId, "Course");
+  const semesterId = requiredId(request.body.semesterId, "Semester");
 
-  const [{ data: instructor, error: instructorError }, { data: subject, error: subjectError }, { data: term, error: termError }] =
+  const [{ data: instructor, error: instructorError }, { data: course, error: courseError }, { data: semester, error: semesterError }] =
     await Promise.all([
       supabase.from("instructors").select("id, status").eq("id", instructorId).maybeSingle(),
-      supabase.from("subjects").select("id, status").eq("id", subjectId).maybeSingle(),
-      supabase.from("academic_terms").select("id, status").eq("id", termId).maybeSingle(),
+      supabase.from("courses").select("id, status").eq("id", courseId).maybeSingle(),
+      supabase.from("semesters").select("id, status").eq("id", semesterId).maybeSingle(),
     ]);
 
   throwIfSupabaseError(instructorError);
-  throwIfSupabaseError(subjectError);
-  throwIfSupabaseError(termError);
+  throwIfSupabaseError(courseError);
+  throwIfSupabaseError(semesterError);
 
   if (!instructor || instructor.status !== "active") {
     throw createHttpError("Select an active instructor.");
   }
-  if (!subject || subject.status !== "active") {
-    throw createHttpError("Select an active subject.");
+  if (!course || course.status !== "active") {
+    throw createHttpError("Select an active course.");
   }
-  if (!term || term.status !== "open") {
-    throw createHttpError("Select an open academic term.");
+  if (!semester || semester.status !== "open") {
+    throw createHttpError("Select an open semester.");
   }
 
   const { data: existing, error: existingError } = await supabase
     .from("instructor_assignments")
     .select("*")
-    .eq("subject_id", subjectId)
-    .eq("academic_term_id", termId)
+    .eq("course_id", courseId)
+    .eq("semester_id", semesterId)
     .eq("status", "active")
     .maybeSingle();
   throwIfSupabaseError(existingError);
 
   if (existing && existing.instructor_id !== instructorId) {
     throw createHttpError(
-      "This subject already has an active instructor assignment for the selected term.",
+      "This course already has an active instructor assignment for the selected semester.",
       409,
     );
   }
@@ -75,8 +75,8 @@ async function createAssignment(request, response) {
     .from("instructor_assignments")
     .insert({
       instructor_id: instructorId,
-      subject_id: subjectId,
-      academic_term_id: termId,
+      course_id: courseId,
+      semester_id: semesterId,
       status: "active",
     })
     .select()

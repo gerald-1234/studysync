@@ -6,9 +6,9 @@ const reportController = require("../controllers/reportController");
 const staffRoles = ["admin", "registration_officer", "manager"];
 
 router.get(
-  "/subject-enrolments",
+  "/course-enrolments",
   allowRoles(...staffRoles),
-  asyncHandler(reportController.subjectEnrolmentReport),
+  asyncHandler(reportController.courseEnrolmentReport),
 );
 router.get(
   "/instructor-assignments",

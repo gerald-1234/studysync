@@ -12,8 +12,8 @@ const enrolmentRoutes = require("./routes/enrolmentRoutes");
 const instructorRoutes = require("./routes/instructorRoutes");
 const reportRoutes = require("./routes/reportRoutes");
 const studentRoutes = require("./routes/studentRoutes");
-const subjectRoutes = require("./routes/subjectRoutes");
-const termRoutes = require("./routes/termRoutes");
+const courseRoutes = require("./routes/courseRoutes");
+const semesterRoutes = require("./routes/semesterRoutes");
 const userRoutes = require("./routes/userRoutes");
 
 const app = express();
@@ -52,8 +52,8 @@ app.get("/api/health", (_request, response) => {
 app.use("/api/auth", authRoutes);
 app.use("/api/users", authenticate, userRoutes);
 app.use("/api/students", authenticate, studentRoutes);
-app.use("/api/subjects", authenticate, subjectRoutes);
-app.use("/api/terms", authenticate, termRoutes);
+app.use("/api/courses", authenticate, courseRoutes);
+app.use("/api/semesters", authenticate, semesterRoutes);
 app.use("/api/instructors", authenticate, instructorRoutes);
 app.use("/api/enrolments", authenticate, enrolmentRoutes);
 app.use("/api/assignments", authenticate, assignmentRoutes);

@@ -254,7 +254,7 @@ a {
   line-height: 1;
 }
 
-.term-strip {
+.semester-strip {
   align-items: center;
   background: var(--teal-soft);
   border-left: 4px solid var(--teal);
@@ -264,7 +264,7 @@ a {
   padding: 13px 15px;
 }
 
-.term-strip strong {
+.semester-strip strong {
   color: var(--teal-dark);
 }
 

@@ -78,7 +78,7 @@ async function updateInstructor(request, response) {
   return response.json({ instructor: data });
 }
 
-async function mySubjects(request, response) {
+async function myCourses(request, response) {
   const { data: instructor, error: instructorError } = await supabase
     .from("instructors")
     .select("id, first_name, last_name")
@@ -94,16 +94,16 @@ async function mySubjects(request, response) {
   let assignmentsQuery = supabase
     .from("instructor_assignments")
     .select(`
-      id, subject_id, academic_term_id,
-      subjects(id, subject_code, subject_name),
-      academic_terms(id, term_name, academic_session)
+      id, course_id, semester_id,
+      courses(id, course_code, course_name),
+      semesters(id, semester_name, academic_session)
     `)
     .eq("instructor_id", instructor.id)
     .eq("status", "active")
     .order("assigned_at", { ascending: false });
 
-  if (request.query.termId) {
-    assignmentsQuery = assignmentsQuery.eq("academic_term_id", request.query.termId);
+  if (request.query.semesterId) {
+    assignmentsQuery = assignmentsQuery.eq("semester_id", request.query.semesterId);
   }
 
   const { data: assignments, error: assignmentError } = await assignmentsQuery;
@@ -114,8 +114,8 @@ async function mySubjects(request, response) {
     const { data: enrolments, error: enrolmentError } = await supabase
       .from("enrolments")
       .select("students(registration_number, first_name, last_name)")
-      .eq("subject_id", assignment.subject_id)
-      .eq("academic_term_id", assignment.academic_term_id)
+      .eq("course_id", assignment.course_id)
+      .eq("semester_id", assignment.semester_id)
       .eq("status", "active")
       .order("enrolled_at");
     throwIfSupabaseError(enrolmentError);
@@ -131,6 +131,6 @@ async function mySubjects(request, response) {
 module.exports = {
   createInstructor,
   listInstructors,
-  mySubjects,
+  myCourses,
   updateInstructor,
 };

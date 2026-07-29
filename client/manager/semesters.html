@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Academic Terms | StudySync</title>
+  <title>Semesters | StudySync</title>
   <link rel="icon" href="../assets/images/studysync-logo.svg" type="image/svg+xml">
   <link rel="stylesheet" href="../assets/css/global.css">
 </head>
@@ -14,25 +14,25 @@
       <a class="brand" href="dashboard.html"><img src="../assets/images/studysync-logo.svg" alt="" width="34" height="34"><span>StudySync</span></a>
       <nav class="nav-list" aria-label="Manager navigation">
         <a href="dashboard.html"><i data-lucide="layout-dashboard"></i>Dashboard</a>
-        <a href="subjects.html"><i data-lucide="library"></i>Subjects</a>
-        <a href="terms.html" aria-current="page"><i data-lucide="calendar-range"></i>Academic terms</a>
+        <a href="courses.html"><i data-lucide="library"></i>Courses</a>
+        <a href="semesters.html" aria-current="page"><i data-lucide="calendar-range"></i>Semesters</a>
         <a href="instructors.html"><i data-lucide="presentation"></i>Instructors</a>
         <a href="assignments.html"><i data-lucide="workflow"></i>Assignments</a>
         <a href="reports.html"><i data-lucide="chart-no-axes-column"></i>Reports</a>
       </nav>
-      <div class="sidebar-footer"><p class="user-name" data-user-name>Centre Manager</p><p class="role-name" data-user-role>manager</p></div>
+      <div class="sidebar-footer"><p class="user-name" data-user-name>Tutorial Centre Manager</p><p class="role-name" data-user-role>manager</p></div>
     </aside>
     <div class="main-shell">
-      <header class="topbar"><h1>Academic terms</h1><button class="icon-button" type="button" title="Sign out" data-sign-out><i data-lucide="log-out"></i></button></header>
+      <header class="topbar"><h1>Semesters</h1><button class="icon-button" type="button" title="Sign out" data-sign-out><i data-lucide="log-out"></i></button></header>
       <main class="page-content" id="main-content">
-        <div class="page-heading"><div><h2>Term setup</h2><p>Open or close the periods used for registration.</p></div></div>
+        <div class="page-heading"><div><h2>Semester setup</h2><p>Open or close the periods used for registration.</p></div></div>
         <div class="work-grid">
           <section class="panel">
-            <div class="panel-heading"><h3>Academic term form</h3></div>
+            <div class="panel-heading"><h3>Semester form</h3></div>
             <div class="panel-body">
-              <form id="term-form" data-edit-id="">
+              <form id="semester-form" data-edit-id="">
                 <div class="form-grid">
-                  <div class="field"><label for="termName">Term name</label><input id="termName" name="termName" placeholder="First Term" required></div>
+                  <div class="field"><label for="semesterName">Semester name</label><input id="semesterName" name="semesterName" placeholder="First Semester" required></div>
                   <div class="field"><label for="academicSession">Academic session</label><input id="academicSession" name="academicSession" placeholder="2026/2027" required></div>
                   <div class="field"><label for="startDate">Start date</label><input id="startDate" name="startDate" type="date" required></div>
                   <div class="field"><label for="endDate">End date</label><input id="endDate" name="endDate" type="date" required></div>
@@ -42,18 +42,18 @@
                   </div>
                 </div>
                 <div class="form-actions">
-                  <button class="button button-primary" type="submit"><i data-lucide="save"></i><span data-submit-label>Add term</span></button>
+                  <button class="button button-primary" type="submit"><i data-lucide="save"></i><span data-submit-label>Add semester</span></button>
                   <button class="button button-secondary" type="button" data-reset-form><i data-lucide="rotate-ccw"></i>Clear</button>
                 </div>
               </form>
             </div>
           </section>
           <section class="panel">
-            <div class="panel-heading"><h3>Academic terms</h3></div>
+            <div class="panel-heading"><h3>Semesters</h3></div>
             <div class="table-wrap">
               <table>
-                <thead><tr><th>Term</th><th>Session</th><th>Starts</th><th>Ends</th><th>Status</th><th></th></tr></thead>
-                <tbody id="terms-body"><tr><td class="empty-state" colspan="6">Loading terms...</td></tr></tbody>
+                <thead><tr><th>Semester</th><th>Session</th><th>Starts</th><th>Ends</th><th>Status</th><th></th></tr></thead>
+                <tbody id="semesters-body"><tr><td class="empty-state" colspan="6">Loading semesters...</td></tr></tbody>
               </table>
             </div>
           </section>
@@ -62,6 +62,6 @@
     </div>
   </div>
   <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js" defer></script>
-  <script type="module" src="../assets/js/pages/terms.js"></script>
+  <script type="module" src="../assets/js/pages/semesters.js"></script>
 </body>
 </html>

@@ -337,62 +337,62 @@ def chapter_one(doc):
     add_heading(doc, "1.0 Introduction", 2)
     add_body(
         doc,
-        "Private tutoring centres support students who need additional instruction in subjects such as Mathematics, English Language, the sciences, and examination preparation. As a centre expands, it must keep accurate details of students, the subjects each student has selected, and the instructors responsible for teaching those subjects. When this information is stored in notebooks, paper forms, or separate spreadsheets, staff spend unnecessary time searching for records and checking who has been assigned to each class."
+        "university tutorial centres support students who need additional instruction in courses such as Mathematics, English Language, the sciences, and examination preparation. As a centre expands, it must keep accurate details of students, the courses each student has selected, and the instructors responsible for teaching those courses. When this information is stored in notebooks, paper forms, or separate spreadsheets, staff spend unnecessary time searching for records and checking who has been assigned to each class."
     )
     add_body(
         doc,
-        "StudySync is proposed as a simple computerised Student Course Registration System for a small private tutoring centre. It will centralise student registration, subject management, course enrolment, and instructor assignment. This report documents the analysis and design of the proposed system and provides a practical blueprint for later implementation."
+        "StudySync is proposed as a simple computerised Student Course Registration System for a university tutorial centre. It will centralise student registration, course management, course enrolment, and instructor assignment. This report documents the analysis and design of the proposed system and provides a practical blueprint for later implementation."
     )
 
     add_heading(doc, "1.1 Background of the Study", 2)
     add_body(
         doc,
-        "Tutoring centres often begin with small paper-based processes because they are familiar and inexpensive. However, as student numbers and available subjects increase, manual records become difficult to maintain. A registration officer may record a student in one book, keep subject choices on a paper form, and check instructor assignments in another file. This arrangement makes it easy to lose information, register a learner twice for the same subject, or assign an instructor without seeing the number of students already enrolled."
+        "university tutorial centres often begin with small paper-based processes because they are familiar and inexpensive. However, as student numbers and available courses increase, manual records become difficult to maintain. A registration officer may record a student in one book, keep course choices on a paper form, and check instructor assignments in another file. This arrangement makes it easy to lose information, register a learner twice for the same course, or assign an instructor without seeing the number of students already enrolled."
     )
     add_body(
         doc,
-        "A web-based registration system gives the centre one reliable source of information. It enables authorised users to find a student quickly, record subject choices consistently, view instructor allocations, and produce simple reports for planning. The proposed design focuses on the core activities the centre performs every term and deliberately avoids advanced modules that would make a first version harder to operate or defend."
+        "A web-based registration system gives the centre one reliable source of information. It enables authorised users to find a student quickly, record course choices consistently, view instructor allocations, and produce simple reports for planning. The proposed design focuses on the core activities the centre performs every semester and deliberately avoids advanced modules that would make a first version harder to operate or defend."
     )
 
     add_heading(doc, "1.2 Problem Statement", 2)
     add_body(doc, "The current manual approach creates the following recurring problems:")
     for item in [
         "Student details can be duplicated, misplaced, or difficult to retrieve when they are kept in paper files or independent spreadsheets.",
-        "Staff cannot easily confirm the subjects a student has registered for in a particular term.",
-        "Instructor assignments are not centrally visible, making it difficult to know which instructor teaches each subject.",
-        "A student may accidentally be recorded more than once for the same subject and term.",
-        "Management cannot generate reliable totals for subject enrolment, instructor workload, or active students without manual counting.",
+        "Staff cannot easily confirm the courses a student has registered for in a particular semester.",
+        "Instructor assignments are not centrally visible, making it difficult to know which instructor teaches each course.",
+        "A student may accidentally be recorded more than once for the same course and semester.",
+        "Management cannot generate reliable totals for course enrolment, instructor workload, or active students without manual counting.",
         "Paper records are vulnerable to loss, damage, and unauthorised viewing.",
         "Registration staff spend time repeating administrative work instead of serving students and parents promptly.",
     ]:
         add_bullet(doc, item)
     add_body(
         doc,
-        "These issues reduce the centre's efficiency, create uncertainty in instructor planning, and make it harder to give students timely confirmation of their selected subjects."
+        "These issues reduce the centre's efficiency, create uncertainty in instructor planning, and make it harder to give students timely confirmation of their selected courses."
     )
 
     add_heading(doc, "1.3 Aim of the Project", 2)
     add_body(
         doc,
-        "The aim of this project is to analyse and design a simple, secure, and easy-to-use Student Course Registration System that enables a private tutoring centre to register students, enrol them in subjects, and track instructor assignments electronically."
+        "The aim of this project is to analyse and design a simple, secure, and easy-to-use Student Course Registration System that enables a university tutorial centre to register students, enrol them in courses, and track instructor assignments electronically."
     )
 
     add_heading(doc, "1.4 Project Objectives", 2)
     add_body(doc, "General Objective", bold_prefix="General Objective")
     add_body(
         doc,
-        "To produce a complete system analysis and design for StudySync that improves the accuracy, speed, and visibility of the tutoring centre's student registration process."
+        "To produce a complete system analysis and design for StudySync that improves the accuracy, speed, and visibility of the university tutorial centre's student registration process."
     )
     add_body(doc, "Specific Objectives", bold_prefix="Specific Objectives")
     for item in [
-        "Design a centralised database for student, instructor, subject, and enrolment information.",
+        "Design a centralised database for student, instructor, course, and enrolment information.",
         "Provide a secure login system with simple role-based access.",
         "Allow registration staff to create and update student profiles.",
-        "Allow authorised staff to create and manage available subjects.",
-        "Enable students to be enrolled in one or more subjects for an academic term.",
-        "Prevent duplicate enrolment of the same student in the same subject and term.",
-        "Enable managers to assign an instructor to a subject for a term.",
-        "Provide instructors with a view of their assigned subjects and enrolled students.",
+        "Allow authorised staff to create and manage available courses.",
+        "Enable students to be enrolled in one or more courses for an semester.",
+        "Prevent duplicate enrolment of the same student in the same course and semester.",
+        "Enable managers to assign an instructor to a course for a semester.",
+        "Provide instructors with a view of their assigned courses and enrolled students.",
         "Generate simple enrolment and instructor-assignment reports for management.",
     ]:
         add_bullet(doc, item)
@@ -408,10 +408,10 @@ def chapter_one(doc):
         [
             ["User Management", "Login, logout, password reset, role-based access for administrator, registration officer, instructor, and manager."],
             ["Student Management", "Student registration, profile update, search, status management, and registration number generation."],
-            ["Subject Management", "Create, update, activate, or deactivate subjects offered by the centre."],
-            ["Course Registration", "Select subjects for a student, record the academic term, prevent duplicate enrolment, and view enrolment history."],
-            ["Instructor Management", "Store instructor profiles and assign an instructor to each active subject for a term."],
-            ["Reporting", "Student list, subject enrolment totals, instructor assignment list, and student registration summary."],
+            ["Course Management", "Create, update, activate, or deactivate courses offered by the centre."],
+            ["Course Registration", "Select courses for a student, record the semester, prevent duplicate enrolment, and view enrolment history."],
+            ["Instructor Management", "Store instructor profiles and assign an instructor to each active course for a semester."],
+            ["Reporting", "Student list, course enrolment totals, instructor assignment list, and student registration summary."],
         ],
         widths=[3.2, 12.8],
     )
@@ -427,8 +427,8 @@ def chapter_one(doc):
         ["Item", "Detail"],
         [
             ["Project Title", "StudySync Student Course Registration System"],
-            ["Project Sponsor", "Management of the private tutoring centre"],
-            ["Problem Addressed", "Manual student registration, unclear subject selections, and poorly tracked instructor assignments."],
+            ["Project Sponsor", "Management of the university tutorial centre"],
+            ["Problem Addressed", "Manual student registration, unclear course selections, and poorly tracked instructor assignments."],
             ["Project Team", "Software Analysis and Design student project team"],
             ["Phase 1", "Project initiation: problem identification, stakeholder analysis, and feasibility study."],
             ["Phase 2", "Requirements analysis: user stories, functional and non-functional requirements, and DFDs."],
@@ -448,10 +448,10 @@ def chapter_one(doc):
         doc,
         ["Stakeholder", "Role", "Primary Interest"],
         [
-            ["Centre Manager", "Project sponsor and decision maker", "Accurate registration records, clear instructor allocation, and reports for planning."],
-            ["Registration Officer", "Primary system user", "Quick student registration, subject enrolment, and reliable search."],
-            ["Student", "End user / beneficiary", "Correct registration, confirmation of selected subjects, and access to own subject list."],
-            ["Instructor", "System user", "Clear view of assigned subjects and the students enrolled in them."],
+            ["Tutorial Centre Manager", "Project sponsor and decision maker", "Accurate registration records, clear instructor allocation, and reports for planning."],
+            ["Registration Officer", "Primary system user", "Quick student registration, course enrolment, and reliable search."],
+            ["Student", "End user / beneficiary", "Correct registration, confirmation of selected courses, and access to own course list."],
+            ["Instructor", "System user", "Clear view of assigned courses and the students enrolled in them."],
             ["System Administrator", "Technical support user", "Account management, access control, backups, and audit review."],
             ["Project Team", "Analysis and design team", "A clear, testable, and implementable system specification."],
         ],
@@ -467,8 +467,8 @@ def chapter_one(doc):
         doc,
         "Figure 1.1: Stakeholder Interaction Overview",
         [
-            ["[Student]", "Registration details and subject choices", "[STUDYSYNC]", "Registration confirmation and enrolled subjects", "[Registration Officer]"],
-            ["[Instructor]", "Assigned subjects and class list", "[STUDYSYNC]", "Instructor profile and availability", "[Centre Manager]"],
+            ["[Student]", "Registration details and course choices", "[STUDYSYNC]", "Registration confirmation and enrolled courses", "[Registration Officer]"],
+            ["[Instructor]", "Assigned courses and class list", "[STUDYSYNC]", "Instructor profile and availability", "[Tutorial Centre Manager]"],
             ["[System Administrator]", "Accounts, roles, and backup controls", "[STUDYSYNC]", "Reports and audit information", ""],
         ],
         column_widths=[2.6, 3.8, 3.4, 3.8, 2.6],
@@ -477,7 +477,7 @@ def chapter_one(doc):
     add_heading(doc, "1.9 Feasibility Study", 2)
     add_body(
         doc,
-        "A feasibility study was performed to confirm that StudySync can be built and adopted by a small tutoring centre. The study considers technical, economic, and operational feasibility."
+        "A feasibility study was performed to confirm that StudySync can be built and adopted by a small university tutorial centre. The study considers technical, economic, and operational feasibility."
     )
 
     add_heading(doc, "1.9.1 Technical Feasibility", 3)
@@ -492,7 +492,7 @@ def chapter_one(doc):
             ["Hardware", "One administrator computer, registration desk computer, optional instructor access devices, router, UPS, and backup storage."],
             ["Software", "Windows or Linux, modern browser, Node.js or PHP backend, MySQL or PostgreSQL database, Git, and antivirus software."],
             ["Network", "Reliable local network or internet connection, HTTPS hosting, and a basic firewall."],
-            ["People", "One administrator, registration officer, centre manager, instructors, and a small development team."],
+            ["People", "One administrator, registration officer, tutorial centre manager, instructors, and a small development team."],
         ],
         widths=[4.0, 12.0],
     )
@@ -524,7 +524,7 @@ def chapter_one(doc):
     add_heading(doc, "1.9.3 Operational Feasibility", 3)
     add_body(
         doc,
-        "StudySync is operationally feasible because it follows the centre's existing workflow: register a student, choose subjects, assign instructors, and review reports. Short role-based training will be sufficient because each user sees only the functions needed for that role. The centre should introduce the system at the beginning of a term, run it alongside paper records briefly, and use staff feedback to correct small usability issues before full adoption."
+        "StudySync is operationally feasible because it follows the centre's existing workflow: register a student, choose courses, assign instructors, and review reports. Short role-based training will be sufficient because each user sees only the functions needed for that role. The centre should introduce the system at the beginning of a semester, run it alongside paper records briefly, and use staff feedback to correct small usability issues before full adoption."
     )
 
     add_heading(doc, "1.10 Chapter Summary", 2)
@@ -542,13 +542,13 @@ def chapter_two(doc):
     add_heading(doc, "2.0 Introduction", 2)
     add_body(
         doc,
-        "Requirements analysis identifies what StudySync must do and the quality standards it must meet before implementation begins. The requirements in this chapter were derived from the typical workflow of a small tutoring centre: students are registered, subjects are selected for a term, instructors are assigned to subjects, and management checks registration totals."
+        "Requirements analysis identifies what StudySync must do and the quality standards it must meet before implementation begins. The requirements in this chapter were derived from the typical workflow of a small university tutorial centre: students are registered, courses are selected for a semester, instructors are assigned to courses, and management checks registration totals."
     )
 
     add_heading(doc, "2.1 Requirements Gathering Methodology", 2)
     add_body(
         doc,
-        "Four simple techniques were used to identify requirements. Interviews with a centre manager and registration officer reveal daily operational needs. Observation of the current registration process identifies repeated manual steps and possible errors. Existing registration forms show the data the system must capture. Finally, short scenarios were used to express how students, instructors, and staff should interact with the proposed system."
+        "Four simple techniques were used to identify requirements. Interviews with a tutorial centre manager and registration officer reveal daily operational needs. Observation of the current registration process identifies repeated manual steps and possible errors. Existing registration forms show the data the system must capture. Finally, short scenarios were used to express how students, instructors, and staff should interact with the proposed system."
     )
 
     add_heading(doc, "2.2 Stakeholder Requirements", 2)
@@ -556,10 +556,10 @@ def chapter_two(doc):
         doc,
         ["Stakeholder", "Primary Requirements"],
         [
-            ["Student", "Be registered once, select available subjects, view selected subjects, and receive a clear registration confirmation."],
-            ["Registration Officer", "Create and update student profiles, search quickly, select subjects, and correct enrolment errors where authorised."],
-            ["Instructor", "View assigned subjects and the list of students registered in each subject."],
-            ["Centre Manager", "Create subjects, assign instructors, view enrolment totals, and monitor instructor allocations."],
+            ["Student", "Be registered once, select available courses, view selected courses, and receive a clear registration confirmation."],
+            ["Registration Officer", "Create and update student profiles, search quickly, select courses, and correct enrolment errors where authorised."],
+            ["Instructor", "View assigned courses and the list of students registered in each course."],
+            ["Tutorial Centre Manager", "Create courses, assign instructors, view enrolment totals, and monitor instructor allocations."],
             ["System Administrator", "Create user accounts, assign roles, reset passwords, back up data, and review important user activity."],
         ],
         widths=[4.0, 12.0],
@@ -576,15 +576,15 @@ def chapter_two(doc):
         [
             ["CURRENT MANUAL PROCESS", "", "PROPOSED STUDYSYNC PROCESS"],
             ["Student fills paper form", "->", "Registration officer opens student profile"],
-            ["Staff writes subject choices in register", "->", "Officer selects active subjects for the term"],
-            ["Manager checks separate instructor list", "->", "Manager assigns instructor to subject in system"],
+            ["Staff writes course choices in register", "->", "Officer selects active courses for the semester"],
+            ["Manager checks separate instructor list", "->", "Manager assigns instructor to course in system"],
             ["Totals counted manually", "->", "Reports generated from central database"],
         ],
         column_widths=[6.8, 1.2, 8.0],
     )
     add_body(
         doc,
-        "The proposed process gives the centre one searchable record of each student, instant confirmation of selected subjects, visible instructor allocation, and reports that do not depend on manual counting."
+        "The proposed process gives the centre one searchable record of each student, instant confirmation of selected courses, visible instructor allocation, and reports that do not depend on manual counting."
     )
 
     add_heading(doc, "2.4 User Stories", 2)
@@ -593,14 +593,14 @@ def chapter_two(doc):
         "The following user stories express the expected system behaviour from the perspective of each stakeholder group. They are used to derive the functional requirements in Section 2.5."
     )
     for story in [
-        "As a student, I want my registration details stored once so that the centre can identify me correctly each term.",
-        "As a student, I want to see the subjects selected for me so that I can confirm my registration is correct.",
+        "As a student, I want my registration details stored once so that the centre can identify me correctly each semester.",
+        "As a student, I want to see the courses selected for me so that I can confirm my registration is correct.",
         "As a registration officer, I want to search for a student before creating a record so that duplicate profiles are avoided.",
-        "As a registration officer, I want to enrol a student in available subjects for a selected term so that their choices are recorded accurately.",
-        "As an instructor, I want to view my assigned subjects so that I know what I am responsible for teaching.",
-        "As an instructor, I want to view the students enrolled in my assigned subjects so that I can prepare for class.",
-        "As a centre manager, I want to assign an instructor to a subject so that every active subject has a clear teaching responsibility.",
-        "As a centre manager, I want enrolment reports by subject so that I can plan class sizes and resources.",
+        "As a registration officer, I want to enrol a student in available courses for a selected semester so that their choices are recorded accurately.",
+        "As an instructor, I want to view my assigned courses so that I know what I am responsible for teaching.",
+        "As an instructor, I want to view the students enrolled in my assigned courses so that I can prepare for class.",
+        "As a tutorial centre manager, I want to assign an instructor to a course so that every active course has a clear teaching responsibility.",
+        "As a tutorial centre manager, I want enrolment reports by course so that I can plan class sizes and resources.",
         "As a system administrator, I want to assign user roles so that users only access functions relevant to their work.",
     ]:
         add_bullet(doc, story)
@@ -615,15 +615,15 @@ def chapter_two(doc):
             ["FR-03", "The system shall create and update student profiles."],
             ["FR-04", "The system shall generate or store a unique registration number for each student."],
             ["FR-05", "The system shall allow authorised users to search and view student records."],
-            ["FR-06", "The system shall create, update, activate, and deactivate subjects."],
+            ["FR-06", "The system shall create, update, activate, and deactivate courses."],
             ["FR-07", "The system shall create and manage instructor profiles."],
-            ["FR-08", "The system shall define academic terms used for registration."],
-            ["FR-09", "The system shall enrol a student in one or more active subjects for a term."],
-            ["FR-10", "The system shall prevent the same student from being enrolled twice in the same subject and term."],
+            ["FR-08", "The system shall define semesters used for registration."],
+            ["FR-09", "The system shall enrol a student in one or more active courses for a semester."],
+            ["FR-10", "The system shall prevent the same student from being enrolled twice in the same course and semester."],
             ["FR-11", "The system shall allow an authorised manager to cancel or change an enrolment while preserving the record."],
-            ["FR-12", "The system shall assign one active instructor to a subject for a term."],
-            ["FR-13", "The system shall allow instructors to view their assigned subjects and enrolled students."],
-            ["FR-14", "The system shall generate student, subject enrolment, and instructor assignment reports."],
+            ["FR-12", "The system shall assign one active instructor to a course for a semester."],
+            ["FR-13", "The system shall allow instructors to view their assigned courses and enrolled students."],
+            ["FR-14", "The system shall generate student, course enrolment, and instructor assignment reports."],
             ["FR-15", "The system shall enforce role-based permissions."],
             ["FR-16", "The system shall record important actions such as account creation, enrolment, and assignment changes in an audit log."],
             ["FR-17", "The system shall perform regular database backups."],
@@ -650,12 +650,12 @@ def chapter_two(doc):
     add_heading(doc, "2.7 Business Rules", 2)
     for rule in [
         "Every student must have a unique registration number before enrolment can be completed.",
-        "Only active subjects may be selected for a new enrolment.",
-        "A student may enrol in many subjects, but only once per subject within the same academic term.",
-        "Every enrolment must reference exactly one student, one subject, and one academic term.",
-        "Only an active instructor may be assigned to a subject.",
-        "A subject may have only one active instructor assignment for a particular academic term in this first version.",
-        "Instructors can view only their own assigned subjects and the students enrolled in those subjects.",
+        "Only active courses may be selected for a new enrolment.",
+        "A student may enrol in many courses, but only once per course within the same semester.",
+        "Every enrolment must reference exactly one student, one course, and one semester.",
+        "Only an active instructor may be assigned to a course.",
+        "A course may have only one active instructor assignment for a particular semester in this first version.",
+        "Instructors can view only their own assigned courses and the students enrolled in those courses.",
         "Cancelled enrolments and assignments remain in the database with a status for audit purposes.",
         "Only administrators may manage user accounts and roles.",
     ]:
@@ -671,7 +671,7 @@ def chapter_two(doc):
         ["User Need", "Functional Requirements", "System Module"],
         [
             ["Accurate student registration", "FR-03, FR-04, FR-05", "Student Management"],
-            ["Subject selection by term", "FR-06, FR-08, FR-09, FR-10", "Course Registration"],
+            ["Course selection by semester", "FR-06, FR-08, FR-09, FR-10", "Course Registration"],
             ["Correction of registration", "FR-11", "Course Registration"],
             ["Instructor allocation", "FR-07, FR-12", "Instructor Assignment"],
             ["Instructor class list", "FR-13", "Instructor Dashboard"],
@@ -691,8 +691,8 @@ def chapter_two(doc):
         doc,
         "Figure 2.2: Context Diagram for StudySync",
         [
-            ["[Student]", "Registration details / selected subjects", "[STUDYSYNC STUDENT COURSE REGISTRATION SYSTEM]", "Confirmation / subject list", "[Registration Officer]"],
-            ["[Instructor]", "View request", "[STUDYSYNC STUDENT COURSE REGISTRATION SYSTEM]", "Assigned subjects / class list", "[Centre Manager]"],
+            ["[Student]", "Registration details / selected courses", "[STUDYSYNC STUDENT COURSE REGISTRATION SYSTEM]", "Confirmation / course list", "[Registration Officer]"],
+            ["[Instructor]", "View request", "[STUDYSYNC STUDENT COURSE REGISTRATION SYSTEM]", "Assigned courses / class list", "[Tutorial Centre Manager]"],
             ["", "", "[STUDYSYNC STUDENT COURSE REGISTRATION SYSTEM]", "Reports / allocation status", ""],
         ],
         column_widths=[2.5, 3.7, 4.3, 3.7, 2.5],
@@ -703,9 +703,9 @@ def chapter_two(doc):
         [
             ["[Registration Officer]", "1.0 Manage Student Profiles", "D1 Student Data", ""],
             ["[System Administrator]", "2.0 Manage User Accounts", "D2 User Accounts", ""],
-            ["[Centre Manager]", "3.0 Manage Subjects and Assignments", "D3 Subjects / D4 Instructor Assignments", "[Instructor]"],
-            ["[Student / Registration Officer]", "4.0 Process Subject Enrolment", "D5 Enrolments / D6 Academic Terms", ""],
-            ["[Centre Manager]", "5.0 Generate Reports", "D1-D6", "[Centre Manager]"],
+            ["[Tutorial Centre Manager]", "3.0 Manage Courses and Assignments", "D3 Courses / D4 Instructor Assignments", "[Instructor]"],
+            ["[Student / Registration Officer]", "4.0 Process Course Enrolment", "D5 Enrolments / D6 Semesters", ""],
+            ["[Tutorial Centre Manager]", "5.0 Generate Reports", "D1-D6", "[Tutorial Centre Manager]"],
         ],
         column_widths=[3.4, 4.6, 5.2, 2.8],
     )
@@ -725,13 +725,13 @@ def chapter_three(doc):
     add_heading(doc, "3.0 Introduction", 2)
     add_body(
         doc,
-        "Data modelling defines how StudySync stores and relates information. A properly structured database reduces duplication, protects data integrity, and makes common tasks such as finding a student's subjects or an instructor's class list easier to perform. This chapter identifies the main entities, their attributes and relationships, and normalises the design to Third Normal Form (3NF)."
+        "Data modelling defines how StudySync stores and relates information. A properly structured database reduces duplication, protects data integrity, and makes common tasks such as finding a student's courses or an instructor's class list easier to perform. This chapter identifies the main entities, their attributes and relationships, and normalises the design to Third Normal Form (3NF)."
     )
 
     add_heading(doc, "3.1 Data Modelling Objectives", 2)
     for objective in [
-        "Store each student, instructor, subject, and term only once in the appropriate table.",
-        "Record student subject selections without duplicating student or subject details.",
+        "Store each student, instructor, course, and semester only once in the appropriate table.",
+        "Record student course selections without duplicating student or course details.",
         "Record instructor assignments separately from enrolments because the two activities are different.",
         "Enforce valid relationships through primary keys, foreign keys, and unique constraints.",
         "Support reports on enrolment numbers and instructor workload.",
@@ -742,19 +742,19 @@ def chapter_three(doc):
     add_heading(doc, "3.2 Core Entities", 2)
     add_body(
         doc,
-        "Seven core entities were identified from the requirements. The design uses the word subject for the tutoring unit a student selects; in practical use, a subject may be Mathematics, English Language, Biology, or another course offered by the centre."
+        "Seven core entities were identified from the requirements. The design uses the word course for the tutoring unit a student selects; in practical use, a course may be Mathematics, English Language, Biology, or another course offered by the centre."
     )
     add_table(
         doc,
         ["Entity", "Description"],
         [
             ["User_Account", "Login credentials and role assigned to an authorised system user."],
-            ["Student", "Personal and registration information for a learner enrolled at the tutoring centre."],
-            ["Instructor", "Professional and contact information for a tutor who may teach one or more subjects."],
-            ["Subject", "A subject offered by the centre, such as Mathematics or Physics."],
-            ["Academic_Term", "The term or session during which enrolments and teaching assignments are valid."],
-            ["Enrolment", "A student's registration for one subject in one academic term."],
-            ["Instructor_Assignment", "The allocation of one instructor to one subject in one academic term."],
+            ["Student", "Personal and registration information for a learner enrolled at the university tutorial centre."],
+            ["Instructor", "Professional and contact information for a tutor who may teach one or more courses."],
+            ["Course", "A course offered by the centre, such as Mathematics or Physics."],
+            ["Semester", "The semester or session during which enrolments and teaching assignments are valid."],
+            ["Enrolment", "A student's registration for one course in one semester."],
+            ["Instructor_Assignment", "The allocation of one instructor to one course in one semester."],
         ],
         widths=[4.0, 12.0],
     )
@@ -765,10 +765,10 @@ def chapter_three(doc):
         ["Entity", "Key Attributes"],
         [
             ["USER_ACCOUNT", "UserID (PK), Username, PasswordHash, Role, AccountStatus, LastLogin, CreatedAt"],
-            ["STUDENT", "StudentID (PK), UserID (FK, optional), RegistrationNumber, FirstName, LastName, Gender, PhoneNumber, EmailAddress, GuardianPhone, RegistrationDate, StudentStatus"],
+            ["STUDENT", "StudentID (PK), UserID (FK, optional), RegistrationNumber, FirstName, LastName, Gender, PhoneNumber, EmailAddress, Emergency contactPhone, RegistrationDate, StudentStatus"],
             ["INSTRUCTOR", "InstructorID (PK), UserID (FK, optional), StaffNumber, FirstName, LastName, PhoneNumber, EmailAddress, Qualification, InstructorStatus"],
             ["SUBJECT", "SubjectID (PK), SubjectCode, SubjectName, Description, Level, SubjectStatus"],
-            ["ACADEMIC_TERM", "TermID (PK), TermName, AcademicSession, StartDate, EndDate, TermStatus"],
+            ["SEMESTER", "TermID (PK), TermName, AcademicSession, StartDate, EndDate, TermStatus"],
             ["ENROLMENT", "EnrolmentID (PK), StudentID (FK), SubjectID (FK), TermID (FK), EnrolmentDate, EnrolmentStatus"],
             ["INSTRUCTOR_ASSIGNMENT", "AssignmentID (PK), InstructorID (FK), SubjectID (FK), TermID (FK), AssignedDate, AssignmentStatus"],
         ],
@@ -781,12 +781,12 @@ def chapter_three(doc):
         doc,
         ["Relationship", "Cardinality", "Business Rule"],
         [
-            ["Student to Enrolment", "1 : M", "One student may have many enrolment records over different subjects and terms."],
-            ["Subject to Enrolment", "1 : M", "One subject may be selected by many students."],
-            ["Academic_Term to Enrolment", "1 : M", "One term may contain many student enrolments."],
-            ["Instructor to Instructor_Assignment", "1 : M", "One instructor may teach several subjects or terms."],
-            ["Subject to Instructor_Assignment", "1 : M", "A subject can have assignments over different terms; only one may be active per term in this version."],
-            ["Academic_Term to Instructor_Assignment", "1 : M", "One term may contain many instructor assignments."],
+            ["Student to Enrolment", "1 : M", "One student may have many enrolment records over different courses and semesters."],
+            ["Course to Enrolment", "1 : M", "One course may be selected by many students."],
+            ["Semester to Enrolment", "1 : M", "One semester may contain many student enrolments."],
+            ["Instructor to Instructor_Assignment", "1 : M", "One instructor may teach several courses or semesters."],
+            ["Course to Instructor_Assignment", "1 : M", "A course can have assignments over different semesters; only one may be active per semester in this version."],
+            ["Semester to Instructor_Assignment", "1 : M", "One semester may contain many instructor assignments."],
             ["User_Account to Student / Instructor", "1 : 0..1", "A login account may be linked to a student or instructor profile where self-service access is enabled."],
         ],
         widths=[4.5, 2.5, 9.0],
@@ -795,16 +795,16 @@ def chapter_three(doc):
     add_heading(doc, "3.5 Entity-Relationship Diagram", 2)
     add_body(
         doc,
-        "Figure 3.1 presents the logical relationships among the entities. The Enrolment entity resolves the many-to-many relationship between Student and Subject, while Instructor_Assignment records who teaches each subject in a term."
+        "Figure 3.1 presents the logical relationships among the entities. The Enrolment entity resolves the many-to-many relationship between Student and Course, while Instructor_Assignment records who teaches each course in a semester."
     )
     add_diagram(
         doc,
         "Figure 3.1: Entity-Relationship Diagram for StudySync",
         [
             ["[STUDENT]", "1 ----<", "[ENROLMENT]", ">---- 1", "[SUBJECT]"],
-            ["[ACADEMIC_TERM]", "1 ----<", "[ENROLMENT]", "", ""],
+            ["[SEMESTER]", "1 ----<", "[ENROLMENT]", "", ""],
             ["[INSTRUCTOR]", "1 ----<", "[INSTRUCTOR_ASSIGNMENT]", ">---- 1", "[SUBJECT]"],
-            ["[ACADEMIC_TERM]", "1 ----<", "[INSTRUCTOR_ASSIGNMENT]", "", ""],
+            ["[SEMESTER]", "1 ----<", "[INSTRUCTOR_ASSIGNMENT]", "", ""],
             ["[USER_ACCOUNT]", "0..1 ----", "[STUDENT / INSTRUCTOR]", "", ""],
         ],
         column_widths=[3.0, 2.1, 4.3, 2.1, 3.0],
@@ -813,37 +813,37 @@ def chapter_three(doc):
     add_heading(doc, "3.6 Database Normalisation", 2)
     add_body(
         doc,
-        "The database is normalised to Third Normal Form (3NF) to reduce redundancy and prevent update, insertion, and deletion anomalies. The following example begins with an unnormalised record that combines student, subject, and instructor information in one table."
+        "The database is normalised to Third Normal Form (3NF) to reduce redundancy and prevent update, insertion, and deletion anomalies. The following example begins with an unnormalised record that combines student, course, and instructor information in one table."
     )
 
     add_heading(doc, "3.6.1 Unnormalised Form (UNF)", 3)
     add_table(
         doc,
-        ["StudentNo", "StudentName", "Term", "SelectedSubjects", "AssignedInstructors", "Phone"],
+        ["StudentNo", "StudentName", "Semester", "SelectedSubjects", "AssignedInstructors", "Phone"],
         [
-            ["SS001", "Ada Okafor", "First Term 2026/2027", "Mathematics, English Language", "Mr. Obi, Mrs. Nwosu", "08030000001"],
-            ["SS002", "Emeka James", "First Term 2026/2027", "Mathematics, Physics", "Mr. Obi, Mr. Bello", "08030000002"],
+            ["SS001", "Ada Okafor", "First Semester 2026/2027", "Mathematics, English Language", "Mr. Obi, Mrs. Nwosu", "08030000001"],
+            ["SS002", "Emeka James", "First Semester 2026/2027", "Mathematics, Physics", "Mr. Obi, Mr. Bello", "08030000002"],
         ],
         widths=[2.0, 3.0, 3.6, 3.8, 3.8, 2.0],
         font_size=8.5,
     )
     add_body(
         doc,
-        "This form contains repeating groups because several subjects and instructors are stored in single fields. It also repeats student details and makes accurate searching or reporting difficult."
+        "This form contains repeating groups because several courses and instructors are stored in single fields. It also repeats student details and makes accurate searching or reporting difficult."
     )
 
     add_heading(doc, "3.6.2 First Normal Form (1NF)", 3)
     add_body(
         doc,
-        "To reach First Normal Form, every field must contain one atomic value. The repeating subject and instructor lists are split into individual rows. Each enrolment row now contains one student, one subject, one instructor reference, and one term."
+        "To reach First Normal Form, every field must contain one atomic value. The repeating course and instructor lists are split into individual rows. Each enrolment row now contains one student, one course, one instructor reference, and one semester."
     )
     add_table(
         doc,
-        ["EnrolmentID", "StudentNo", "StudentName", "Subject", "Term", "Instructor"],
+        ["EnrolmentID", "StudentNo", "StudentName", "Course", "Semester", "Instructor"],
         [
-            ["E001", "SS001", "Ada Okafor", "Mathematics", "First Term 2026/2027", "Mr. Obi"],
-            ["E002", "SS001", "Ada Okafor", "English Language", "First Term 2026/2027", "Mrs. Nwosu"],
-            ["E003", "SS002", "Emeka James", "Mathematics", "First Term 2026/2027", "Mr. Obi"],
+            ["E001", "SS001", "Ada Okafor", "Mathematics", "First Semester 2026/2027", "Mr. Obi"],
+            ["E002", "SS001", "Ada Okafor", "English Language", "First Semester 2026/2027", "Mrs. Nwosu"],
+            ["E003", "SS002", "Emeka James", "Mathematics", "First Semester 2026/2027", "Mr. Obi"],
         ],
         widths=[2.0, 2.0, 3.0, 3.3, 3.6, 2.4],
         font_size=8.5,
@@ -852,13 +852,13 @@ def chapter_three(doc):
     add_heading(doc, "3.6.3 Second Normal Form (2NF)", 3)
     add_body(
         doc,
-        "In the 1NF table, student name and phone depend on the student, while instructor name depends on the instructor. These attributes do not depend on the enrolment itself. The design is therefore decomposed into STUDENT, INSTRUCTOR, SUBJECT, ACADEMIC_TERM, ENROLMENT, and INSTRUCTOR_ASSIGNMENT. Student and instructor details are now stored once and referenced by keys."
+        "In the 1NF table, student name and phone depend on the student, while instructor name depends on the instructor. These attributes do not depend on the enrolment itself. The design is therefore decomposed into STUDENT, INSTRUCTOR, SUBJECT, SEMESTER, ENROLMENT, and INSTRUCTOR_ASSIGNMENT. Student and instructor details are now stored once and referenced by keys."
     )
 
     add_heading(doc, "3.6.4 Third Normal Form (3NF)", 3)
     add_body(
         doc,
-        "To reach Third Normal Form, transitive dependencies are removed. For example, subject name and subject level are stored only in SUBJECT, and term name and dates are stored only in ACADEMIC_TERM. The final tables listed in Section 3.3 ensure that every non-key attribute depends on the key, the whole key, and nothing but the key."
+        "To reach Third Normal Form, transitive dependencies are removed. For example, course name and course level are stored only in SUBJECT, and semester name and dates are stored only in SEMESTER. The final tables listed in Section 3.3 ensure that every non-key attribute depends on the key, the whole key, and nothing but the key."
     )
 
     add_heading(doc, "3.7 Final Logical Schema", 2)
@@ -870,7 +870,7 @@ def chapter_three(doc):
             ["STUDENT", "StudentID (PK), RegistrationNumber, UserID (FK), contact details"],
             ["INSTRUCTOR", "InstructorID (PK), StaffNumber, UserID (FK), contact details"],
             ["SUBJECT", "SubjectID (PK), SubjectCode, SubjectName, Status"],
-            ["ACADEMIC_TERM", "TermID (PK), TermName, Session, dates, Status"],
+            ["SEMESTER", "TermID (PK), TermName, Session, dates, Status"],
             ["ENROLMENT", "EnrolmentID (PK), StudentID (FK), SubjectID (FK), TermID (FK), Status"],
             ["INSTRUCTOR_ASSIGNMENT", "AssignmentID (PK), InstructorID (FK), SubjectID (FK), TermID (FK), Status"],
         ],
@@ -881,9 +881,9 @@ def chapter_three(doc):
     for benefit in [
         "Student and instructor information is stored once, reducing duplicate data.",
         "Primary and foreign keys preserve valid relationships between records.",
-        "A unique enrolment constraint prevents duplicate subject registration for the same term.",
+        "A unique enrolment constraint prevents duplicate course registration for the same semester.",
         "Instructor assignments are separated from enrolments, making workload reports simpler.",
-        "Historical term records can be kept without overwriting the current term.",
+        "Historical semester records can be kept without overwriting the current semester.",
         "The schema can be extended later with attendance, payment, and result tables.",
     ]:
         add_bullet(doc, benefit)
@@ -903,7 +903,7 @@ def chapter_four(doc):
     add_heading(doc, "4.0 Introduction", 2)
     add_body(
         doc,
-        "This chapter converts the requirements and data model into an implementation blueprint. It describes the interface screens, final database schema, application architecture, and security controls required for StudySync. The design favours simple forms, clear roles, and a small number of modules so that it remains suitable for a private tutoring centre and straightforward to defend."
+        "This chapter converts the requirements and data model into an implementation blueprint. It describes the interface screens, final database schema, application architecture, and security controls required for StudySync. The design favours simple forms, clear roles, and a small number of modules so that it remains suitable for a university tutorial centre and straightforward to defend."
     )
 
     add_heading(doc, "4.1 Design Principles", 2)
@@ -913,7 +913,7 @@ def chapter_four(doc):
         [
             ["Simplicity", "Users see only the fields and actions needed for their role; forms avoid unnecessary information."],
             ["Consistency", "The same navigation, button labels, validation style, and table layout are used across all modules."],
-            ["Accuracy", "Required fields, unique registration numbers, controlled subject lists, and duplicate checks reduce data-entry errors."],
+            ["Accuracy", "Required fields, unique registration numbers, controlled course lists, and duplicate checks reduce data-entry errors."],
             ["Security", "Authentication, role-based permissions, password hashing, audit logs, and backups protect system data."],
             ["Maintainability", "The application separates interface, business logic, and database layers so changes remain localised."],
             ["Scalability", "Tables and modules can support future features such as attendance, payments, and results without replacing the core design."],
@@ -924,7 +924,7 @@ def chapter_four(doc):
     add_heading(doc, "4.2 User Interface Design", 2)
     add_body(
         doc,
-        "StudySync uses role-based dashboards. An administrator manages accounts, a registration officer registers students and subjects, a manager assigns instructors and reads reports, and an instructor sees only allocated subjects and enrolled students."
+        "StudySync uses role-based dashboards. An administrator manages accounts, a registration officer registers students and courses, a manager assigns instructors and reads reports, and an instructor sees only allocated courses and enrolled students."
     )
     add_diagram(
         doc,
@@ -969,25 +969,25 @@ def chapter_four(doc):
             ["Gender", "Required selection from a controlled list."],
             ["Phone Number", "Required; numeric format with reasonable length validation."],
             ["Email Address", "Optional, but must use a valid email format when supplied."],
-            ["Guardian Phone", "Required for centre contact and follow-up."],
+            ["Emergency contact Phone", "Required for centre contact and follow-up."],
             ["Student Status", "Required; Active or Inactive."],
         ],
         widths=[4.5, 11.5],
     )
 
-    add_heading(doc, "4.2.3 Subject Enrolment Screen", 3)
+    add_heading(doc, "4.2.3 Course Enrolment Screen", 3)
     add_body(
         doc,
-        "The enrolment screen first identifies the student, then shows active subjects for the selected term. The registration officer selects one or more subjects and saves them. The system validates each selection before creating enrolment records."
+        "The enrolment screen first identifies the student, then shows active courses for the selected semester. The registration officer selects one or more courses and saves them. The system validates each selection before creating enrolment records."
     )
     add_table(
         doc,
         ["Field / Action", "Validation Rule"],
         [
             ["Student", "Required; student must exist and have Active status."],
-            ["Academic Term", "Required; only an active or open term can receive new enrolments."],
-            ["Subject Selection", "At least one active subject must be selected."],
-            ["Duplicate Check", "The same student cannot be enrolled in the same subject twice in the selected term."],
+            ["Semester", "Required; only an active or open semester can receive new enrolments."],
+            ["Course Selection", "At least one active course must be selected."],
+            ["Duplicate Check", "The same student cannot be enrolled in the same course twice in the selected semester."],
             ["Save Enrolment", "System stores enrolment date and Active status, then displays confirmation."],
         ],
         widths=[4.5, 11.5],
@@ -996,17 +996,17 @@ def chapter_four(doc):
     add_heading(doc, "4.2.4 Instructor Assignment and Reports", 3)
     add_body(
         doc,
-        "The manager's assignment screen lists active instructors, active subjects, and the selected academic term. Once an assignment is saved, the selected instructor sees the subject and its registered students on the instructor dashboard. The report screen provides simple filters for term, subject, instructor, and student status."
+        "The manager's assignment screen lists active instructors, active courses, and the selected semester. Once an assignment is saved, the selected instructor sees the course and its registered students on the instructor dashboard. The report screen provides simple filters for semester, course, instructor, and student status."
     )
     add_table(
         doc,
         ["Report", "Purpose"],
         [
             ["Student Registration List", "Shows registered students and contact information, filtered by status or date."],
-            ["Subject Enrolment Report", "Shows total students registered in each subject for a selected term."],
-            ["Instructor Assignment Report", "Shows the instructor assigned to each subject for a selected term."],
-            ["Instructor Class List", "Shows students enrolled in a selected subject assigned to the logged-in instructor."],
-            ["Term Registration Summary", "Shows totals for active students, subjects, enrolments, and instructor assignments."],
+            ["Course Enrolment Report", "Shows total students registered in each course for a selected semester."],
+            ["Instructor Assignment Report", "Shows the instructor assigned to each course for a selected semester."],
+            ["Instructor Class List", "Shows students enrolled in a selected course assigned to the logged-in instructor."],
+            ["Semester Registration Summary", "Shows totals for active students, courses, enrolments, and instructor assignments."],
         ],
         widths=[5.0, 11.0],
     )
@@ -1021,10 +1021,10 @@ def chapter_four(doc):
         ["Table", "Key Columns (Type)"],
         [
             ["USER_ACCOUNT", "UserID INT (PK); Username VARCHAR(50) UNIQUE; PasswordHash VARCHAR(255); Role VARCHAR(30); AccountStatus VARCHAR(20); LastLogin DATETIME; CreatedAt DATETIME."],
-            ["STUDENT", "StudentID INT (PK); UserID INT (FK, NULL); RegistrationNumber VARCHAR(30) UNIQUE; FirstName, LastName VARCHAR(50); Gender VARCHAR(15); PhoneNumber VARCHAR(20); EmailAddress VARCHAR(100); GuardianPhone VARCHAR(20); RegistrationDate DATE; StudentStatus VARCHAR(20)."],
+            ["STUDENT", "StudentID INT (PK); UserID INT (FK, NULL); RegistrationNumber VARCHAR(30) UNIQUE; FirstName, LastName VARCHAR(50); Gender VARCHAR(15); PhoneNumber VARCHAR(20); EmailAddress VARCHAR(100); Emergency contactPhone VARCHAR(20); RegistrationDate DATE; StudentStatus VARCHAR(20)."],
             ["INSTRUCTOR", "InstructorID INT (PK); UserID INT (FK, NULL); StaffNumber VARCHAR(30) UNIQUE; FirstName, LastName VARCHAR(50); PhoneNumber VARCHAR(20); EmailAddress VARCHAR(100); Qualification VARCHAR(100); InstructorStatus VARCHAR(20)."],
             ["SUBJECT", "SubjectID INT (PK); SubjectCode VARCHAR(20) UNIQUE; SubjectName VARCHAR(100); Description TEXT; Level VARCHAR(30); SubjectStatus VARCHAR(20)."],
-            ["ACADEMIC_TERM", "TermID INT (PK); TermName VARCHAR(50); AcademicSession VARCHAR(20); StartDate DATE; EndDate DATE; TermStatus VARCHAR(20)."],
+            ["SEMESTER", "TermID INT (PK); TermName VARCHAR(50); AcademicSession VARCHAR(20); StartDate DATE; EndDate DATE; TermStatus VARCHAR(20)."],
             ["ENROLMENT", "EnrolmentID INT (PK); StudentID, SubjectID, TermID INT (FK); EnrolmentDate DATE; EnrolmentStatus VARCHAR(20); UNIQUE(StudentID, SubjectID, TermID)."],
             ["INSTRUCTOR_ASSIGNMENT", "AssignmentID INT (PK); InstructorID, SubjectID, TermID INT (FK); AssignedDate DATE; AssignmentStatus VARCHAR(20); UNIQUE(SubjectID, TermID, AssignmentStatus) for active assignment."],
         ],
@@ -1042,7 +1042,7 @@ def chapter_four(doc):
         "Figure 4.2: Three-Tier Architecture for StudySync",
         [
             ["PRESENTATION LAYER", "APPLICATION LAYER", "DATA LAYER"],
-            ["Web browser for administrator, registration officer, manager, and instructor", "Web application: authentication, student management, enrolment, assignment, reporting", "Relational database: users, students, instructors, subjects, terms, enrolments, assignments"],
+            ["Web browser for administrator, registration officer, manager, and instructor", "Web application: authentication, student management, enrolment, assignment, reporting", "Relational database: users, students, instructors, courses, semesters, enrolments, assignments"],
             ["HTTPS requests", "Business rules and validation", "Backups and controlled access"],
         ],
         column_widths=[5.3, 5.3, 5.4],
@@ -1064,7 +1064,7 @@ def chapter_four(doc):
     add_heading(doc, "4.6 Design Justification", 2)
     add_body(
         doc,
-        "The proposed design is intentionally modular but not complex. It uses only the tables and screens required to manage registration and instructor allocation. Separating enrolment from instructor assignment reflects the centre's real workflow: a student choosing a subject is different from a manager deciding who will teach it. Role-specific dashboards reduce unnecessary options, while the three-tier architecture and 3NF database leave room for later features without forcing a redesign of the core system."
+        "The proposed design is intentionally modular but not complex. It uses only the tables and screens required to manage registration and instructor allocation. Separating enrolment from instructor assignment reflects the centre's real workflow: a student choosing a course is different from a manager deciding who will teach it. Role-specific dashboards reduce unnecessary options, while the three-tier architecture and 3NF database leave room for later features without forcing a redesign of the core system."
     )
 
     add_heading(doc, "4.7 Chapter Summary", 2)
@@ -1082,7 +1082,7 @@ def chapter_five(doc):
     add_heading(doc, "5.0 Introduction", 2)
     add_body(
         doc,
-        "This final chapter brings together the work from Chapters One to Four. It summarises the complete StudySync specification, proposes a small phased implementation and testing approach, assesses likely risks, and explains the expected benefits to the tutoring centre."
+        "This final chapter brings together the work from Chapters One to Four. It summarises the complete StudySync specification, proposes a small phased implementation and testing approach, assesses likely risks, and explains the expected benefits to the university tutorial centre."
     )
 
     add_heading(doc, "5.1 Complete System Specification", 2)
@@ -1092,12 +1092,12 @@ def chapter_five(doc):
         [
             ["Authentication and User Management", "Logs users in, assigns roles, resets passwords, manages account status, and records key account actions."],
             ["Student Management", "Creates, searches, updates, and deactivates student profiles."],
-            ["Subject Management", "Creates and maintains the list of subjects offered by the centre."],
-            ["Academic Term Management", "Defines the term or session used when recording enrolments and assignments."],
-            ["Course Registration", "Registers students for active subjects, prevents duplicates, and preserves enrolment status."],
+            ["Course Management", "Creates and maintains the list of courses offered by the centre."],
+            ["Semester Management", "Defines the semester or session used when recording enrolments and assignments."],
+            ["Course Registration", "Registers students for active courses, prevents duplicates, and preserves enrolment status."],
             ["Instructor Management", "Maintains instructor profiles and teaching status."],
-            ["Instructor Assignment", "Assigns instructors to subjects for a selected term and provides class lists."],
-            ["Reporting", "Provides student, subject enrolment, assignment, and term summary reports."],
+            ["Instructor Assignment", "Assigns instructors to courses for a selected semester and provides class lists."],
+            ["Reporting", "Provides student, course enrolment, assignment, and semester summary reports."],
             ["Audit and Backup", "Logs significant system changes and protects records through scheduled backups."],
         ],
         widths=[4.5, 11.5],
@@ -1108,10 +1108,10 @@ def chapter_five(doc):
         doc,
         ["Role", "Key Functions"],
         [
-            ["Student", "View own selected subjects when student access is enabled; receive registration confirmation from staff."],
-            ["Registration Officer", "Register students, update profiles, search records, select subjects, and view registration confirmation."],
-            ["Instructor", "View assigned subjects and the students enrolled in each assigned subject."],
-            ["Centre Manager", "Manage subjects and terms, assign instructors, review reports, and supervise the registration process."],
+            ["Student", "View own selected courses when student access is enabled; receive registration confirmation from staff."],
+            ["Registration Officer", "Register students, update profiles, search records, select courses, and view registration confirmation."],
+            ["Instructor", "View assigned courses and the students enrolled in each assigned course."],
+            ["Tutorial Centre Manager", "Manage courses and semesters, assign instructors, review reports, and supervise the registration process."],
             ["System Administrator", "Create accounts, assign roles, reset passwords, back up data, and review audit information."],
         ],
         widths=[4.0, 12.0],
@@ -1127,8 +1127,8 @@ def chapter_five(doc):
         ["Phase", "Focus"],
         [
             ["1. Environment Setup", "Choose hosting, create the database, configure backups, and create initial administrator accounts."],
-            ["2. Core Development", "Implement login, student profiles, subjects, terms, enrolments, instructor assignments, and reports."],
-            ["3. Data Preparation", "Clean existing student records, agree on subject codes, and enter active instructors and current term data."],
+            ["2. Core Development", "Implement login, student profiles, courses, semesters, enrolments, instructor assignments, and reports."],
+            ["3. Data Preparation", "Clean existing student records, agree on course codes, and enter active instructors and current semester data."],
             ["4. Pilot Use", "Allow the registration officer and manager to use the system for a small group of students and collect feedback."],
             ["5. Staff Training", "Train each role on login, relevant screens, basic security, and handling validation messages."],
             ["6. Full Deployment", "Use StudySync as the official registration record, monitor issues, and maintain regular backups."],
@@ -1146,7 +1146,7 @@ def chapter_five(doc):
         ["Test Type", "Purpose"],
         [
             ["Unit Testing", "Verify individual functions such as registration number validation, login, and duplicate enrolment checks."],
-            ["Integration Testing", "Confirm that student records, subject selection, instructor assignments, and reports exchange data correctly."],
+            ["Integration Testing", "Confirm that student records, course selection, instructor assignments, and reports exchange data correctly."],
             ["System Testing", "Validate the complete workflow using the deployed application and database."],
             ["User Acceptance Testing", "Allow registration officers, instructors, and managers to confirm that the system meets their day-to-day needs."],
             ["Security Testing", "Check role restrictions, password handling, session expiry, and access to protected pages."],
@@ -1161,12 +1161,12 @@ def chapter_five(doc):
         [
             ["Register a new student with valid mandatory details", "A student profile is created with a unique registration number."],
             ["Search for an existing student before new registration", "The matching profile appears and no duplicate profile is created."],
-            ["Enrol a student in an available subject for an active term", "An Active enrolment is saved and appears in the student's subject list."],
-            ["Attempt to enrol the same student in the same subject and term again", "The system rejects the request with a clear duplicate-enrolment message."],
-            ["Assign an active instructor to a subject for a term", "The assignment is saved and appears on the instructor dashboard."],
-            ["Attempt to create a second active instructor assignment for the same subject and term", "The system rejects or requires replacement of the current active assignment."],
-            ["Log in with an instructor account", "The user can view only assigned subjects and enrolled students, not manager or admin screens."],
-            ["Generate the subject enrolment report", "The report shows the correct total registrations by subject for the selected term."],
+            ["Enrol a student in an available course for an active semester", "An Active enrolment is saved and appears in the student's course list."],
+            ["Attempt to enrol the same student in the same course and semester again", "The system rejects the request with a clear duplicate-enrolment message."],
+            ["Assign an active instructor to a course for a semester", "The assignment is saved and appears on the instructor dashboard."],
+            ["Attempt to create a second active instructor assignment for the same course and semester", "The system rejects or requires replacement of the current active assignment."],
+            ["Log in with an instructor account", "The user can view only assigned courses and enrolled students, not manager or admin screens."],
+            ["Generate the course enrolment report", "The report shows the correct total registrations by course for the selected semester."],
         ],
         widths=[8.0, 8.0],
     )
@@ -1202,9 +1202,9 @@ def chapter_five(doc):
         ["Area", "Expected Benefit"],
         [
             ["Administrative", "Faster registration, fewer paper files, easier record retrieval, and less manual counting."],
-            ["Teaching", "Instructors see their assigned subjects and student lists before classes begin."],
+            ["Teaching", "Instructors see their assigned courses and student lists before classes begin."],
             ["Management", "Reliable enrolment and assignment reports support class planning and workload decisions."],
-            ["Student Experience", "Students receive clearer confirmation of selected subjects and fewer registration mistakes."],
+            ["Student Experience", "Students receive clearer confirmation of selected courses and fewer registration mistakes."],
             ["Data Quality", "Central storage, validation, and duplicate checks improve accuracy and accountability."],
         ],
         widths=[4.0, 12.0],
@@ -1213,7 +1213,7 @@ def chapter_five(doc):
     add_heading(doc, "5.8 Future Enhancements", 2)
     for enhancement in [
         "Tuition-fee invoicing, payment tracking, and receipt generation.",
-        "Attendance recording by subject and instructor.",
+        "Attendance recording by course and instructor.",
         "Assessment scores, progress reports, and result portals.",
         "Parent or guardian portal with controlled access to student information.",
         "Email or SMS notifications for registration, timetable changes, and payment reminders.",
@@ -1224,9 +1224,9 @@ def chapter_five(doc):
 
     add_heading(doc, "5.9 Recommendations", 2)
     for recommendation in [
-        "The tutoring centre should adopt StudySync for student registration and instructor assignment before adding more complex modules.",
+        "The university tutorial centre should adopt StudySync for student registration and instructor assignment before adding more complex modules.",
         "All users should receive training focused on the screens and responsibilities relevant to their roles.",
-        "The centre should agree on subject codes, registration-number format, and term naming before data entry begins.",
+        "The centre should agree on course codes, registration-number format, and semester naming before data entry begins.",
         "Existing paper records should be reviewed for completeness before migration into the system.",
         "Daily backups should be monitored and restoration should be tested at scheduled intervals.",
         "Future enhancements should follow the modular design in this report rather than changing core records without analysis.",
@@ -1236,11 +1236,11 @@ def chapter_five(doc):
     add_heading(doc, "5.10 Conclusion", 2)
     add_body(
         doc,
-        "This report has completed the analysis and design of the StudySync Student Course Registration System for a small private tutoring centre. It began by identifying weaknesses in manual registration and instructor allocation, then translated those problems into clear requirements, data models, process diagrams, interface designs, a database schema, and an implementation plan."
+        "This report has completed the analysis and design of the StudySync Student Course Registration System for a university tutorial centre. It began by identifying weaknesses in manual registration and instructor allocation, then translated those problems into clear requirements, data models, process diagrams, interface designs, a database schema, and an implementation plan."
     )
     add_body(
         doc,
-        "The feasibility study shows that StudySync can be built with common, affordable web technologies and introduced through short role-based training. Its normalised database prevents common registration errors, its role-based design protects information, and its modular architecture supports later additions without making the first version unnecessarily complex. On this basis, StudySync is recommended for development as the centre's central system for student subject registration and instructor assignment."
+        "The feasibility study shows that StudySync can be built with common, affordable web technologies and introduced through short role-based training. Its normalised database prevents common registration errors, its role-based design protects information, and its modular architecture supports later additions without making the first version unnecessarily complex. On this basis, StudySync is recommended for development as the centre's central system for student course registration and instructor assignment."
     )
 
     add_heading(doc, "REFERENCES", 1)
@@ -1256,12 +1256,12 @@ def chapter_five(doc):
     add_heading(doc, "A. System Glossary", 2)
     add_table(
         doc,
-        ["Term", "Meaning"],
+        ["Semester", "Meaning"],
         [
-            ["StudySync", "The proposed Student Course Registration System for the tutoring centre."],
-            ["Academic Term", "A defined period, such as First Term 2026/2027, during which registrations and assignments apply."],
-            ["Enrolment", "A record showing that a student has selected one subject in one academic term."],
-            ["Instructor Assignment", "A record showing that an instructor is responsible for a subject in a selected academic term."],
+            ["StudySync", "The proposed Student Course Registration System for the university tutorial centre."],
+            ["Semester", "A defined period, such as First Semester 2026/2027, during which registrations and assignments apply."],
+            ["Enrolment", "A record showing that a student has selected one course in one semester."],
+            ["Instructor Assignment", "A record showing that an instructor is responsible for a course in a selected semester."],
             ["DFD", "Data Flow Diagram; a diagram showing how data moves between external users, processes, and data stores."],
             ["ERD", "Entity-Relationship Diagram; a diagram showing database entities and their relationships."],
             ["PK / FK", "Primary Key / Foreign Key; identifiers used to uniquely identify and relate database records."],
@@ -1277,7 +1277,7 @@ def build_report():
     doc = Document()
     configure_document(doc)
     doc.core_properties.title = "StudySync Student Course Registration System"
-    doc.core_properties.subject = "Software Analysis and Design Report"
+    doc.core_properties.course = "Software Analysis and Design Report"
     doc.core_properties.author = "StudySync Project Team"
     doc.core_properties.keywords = "StudySync, student course registration, software analysis and design"
     doc.core_properties.comments = "Beginner-friendly SAD report prepared for academic defence."

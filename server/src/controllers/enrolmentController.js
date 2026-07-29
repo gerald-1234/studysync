@@ -12,16 +12,16 @@ async function listEnrolments(request, response) {
     .select(`
       id, status, enrolled_at,
       students(id, registration_number, first_name, last_name),
-      subjects(id, subject_code, subject_name),
-      academic_terms(id, term_name, academic_session)
+      courses(id, course_code, course_name),
+      semesters(id, semester_name, academic_session)
     `)
     .order("enrolled_at", { ascending: false });
 
   if (request.query.studentId) {
     query = query.eq("student_id", request.query.studentId);
   }
-  if (request.query.termId) {
-    query = query.eq("academic_term_id", request.query.termId);
+  if (request.query.semesterId) {
+    query = query.eq("semester_id", request.query.semesterId);
   }
 
   const { data, error } = await query.limit(300);
@@ -31,11 +31,11 @@ async function listEnrolments(request, response) {
 
 async function createEnrolments(request, response) {
   const studentId = requiredId(request.body.studentId, "Student");
-  const termId = requiredId(request.body.termId, "Academic term");
-  const subjectIds = [...new Set(request.body.subjectIds || [])].filter(Boolean);
+  const semesterId = requiredId(request.body.semesterId, "Semester");
+  const courseIds = [...new Set(request.body.courseIds || [])].filter(Boolean);
 
-  if (!subjectIds.length) {
-    throw createHttpError("Select at least one subject.");
+  if (!courseIds.length) {
+    throw createHttpError("Select at least one course.");
   }
 
   const { data: student, error: studentError } = await supabase
@@ -48,43 +48,43 @@ async function createEnrolments(request, response) {
     throw createHttpError("Select an active student.");
   }
 
-  const { data: term, error: termError } = await supabase
-    .from("academic_terms")
+  const { data: semester, error: semesterError } = await supabase
+    .from("semesters")
     .select("id, status")
-    .eq("id", termId)
+    .eq("id", semesterId)
     .maybeSingle();
-  throwIfSupabaseError(termError);
-  if (!term || term.status !== "open") {
-    throw createHttpError("Select an open academic term.");
+  throwIfSupabaseError(semesterError);
+  if (!semester || semester.status !== "open") {
+    throw createHttpError("Select an open semester.");
   }
 
-  const { data: subjects, error: subjectError } = await supabase
-    .from("subjects")
+  const { data: courses, error: courseError } = await supabase
+    .from("courses")
     .select("id")
-    .in("id", subjectIds)
+    .in("id", courseIds)
     .eq("status", "active");
-  throwIfSupabaseError(subjectError);
-  if (subjects.length !== subjectIds.length) {
-    throw createHttpError("All selected subjects must be active.");
+  throwIfSupabaseError(courseError);
+  if (courses.length !== courseIds.length) {
+    throw createHttpError("All selected courses must be active.");
   }
 
-  const rows = subjectIds.map((subjectId) => ({
+  const rows = courseIds.map((courseId) => ({
     student_id: studentId,
-    subject_id: subjectId,
-    academic_term_id: termId,
+    course_id: courseId,
+    semester_id: semesterId,
     status: "active",
     enrolled_at: new Date().toISOString(),
   }));
   const { data, error } = await supabase
     .from("enrolments")
-    .upsert(rows, { onConflict: "student_id,subject_id,academic_term_id" })
+    .upsert(rows, { onConflict: "student_id,course_id,semester_id" })
     .select();
   throwIfSupabaseError(error);
 
   await writeAuditLog(
     request.user.id,
     "CREATE_ENROLMENT",
-    `Registered student ${studentId} for ${data.length} subject(s) in term ${termId}.`,
+    `Registered student ${studentId} for ${data.length} course(s) in semester ${semesterId}.`,
   );
   return response.status(201).json({ enrolments: data });
 }

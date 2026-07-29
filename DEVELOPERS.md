@@ -5,8 +5,8 @@
 StudySync should remain a small, understandable system. Its first version performs four connected activities:
 
 1. Create student records.
-2. Register students for subjects in an academic term.
-3. Assign instructors to subjects.
+2. Register students for courses in an semester.
+3. Assign instructors to courses.
 4. Produce simple reports and instructor class lists.
 
 Do not add fees, results, attendance, timetables, SMS, or parent portals until the core system is complete and tested.
@@ -61,8 +61,8 @@ client/
     enrolments.html
   manager/
     dashboard.html
-    subjects.html
-    terms.html
+    courses.html
+    semesters.html
     instructors.html
     assignments.html
     reports.html
@@ -148,19 +148,19 @@ Never commit `server/.env`.
 | `users` | Login account, hashed password, role, lock status. |
 | `students` | Student identity and contact details. |
 | `instructors` | Instructor profile linked optionally to a user account. |
-| `subjects` | Subject code, name, level, and status. |
-| `academic_terms` | Term name, session, dates, and open/closed status. |
-| `enrolments` | Student-subject selection for a term. |
-| `instructor_assignments` | Instructor-subject allocation for a term. |
+| `courses` | Course code, name, level, and status. |
+| `semesters` | Semester name, session, dates, and open/closed status. |
+| `enrolments` | Student-course selection for a semester. |
+| `instructor_assignments` | Instructor-course allocation for a semester. |
 | `audit_logs` | Important user activity. |
 
 Important constraints:
 
 - Student registration number is unique.
-- Subject code and name are unique.
-- A term name is unique within an academic session.
-- A student-subject-term combination is unique.
-- A subject has only one active instructor assignment per term.
+- Course code and name are unique.
+- A semester name is unique within an academic session.
+- A student-course-semester combination is unique.
+- A course has only one active instructor assignment per semester.
 
 Cancelled enrolments and assignments are retained by status instead of being deleted.
 
@@ -171,7 +171,7 @@ Cancelled enrolments and assignments are retained by status instead of being del
 | Manage login accounts | Yes | No | No | No |
 | Manage students | API permission | Yes | API permission | No |
 | Enrol students | API permission | Yes | API permission | No |
-| Manage subjects and terms | API permission | No | Yes | No |
+| Manage courses and semesters | API permission | No | Yes | No |
 | Manage instructor profiles | API permission | No | Yes | No |
 | Assign instructors | API permission | No | Yes | No |
 | View management reports | API permission | No | Yes | No |
@@ -197,10 +197,10 @@ The current HTML interface separates responsibilities clearly: administrators ha
 | PATCH | `/api/users/:id/status` | Activate or deactivate an account. |
 | GET/POST | `/api/students` | List or create students. |
 | GET/PATCH | `/api/students/:id` | View or update a student. |
-| GET/POST | `/api/subjects` | List or create subjects. |
-| PATCH | `/api/subjects/:id` | Update a subject. |
-| GET/POST | `/api/terms` | List or create academic terms. |
-| PATCH | `/api/terms/:id` | Update an academic term. |
+| GET/POST | `/api/courses` | List or create courses. |
+| PATCH | `/api/courses/:id` | Update a course. |
+| GET/POST | `/api/semesters` | List or create semesters. |
+| PATCH | `/api/semesters/:id` | Update an semester. |
 | GET/POST | `/api/instructors` | List or create instructor profiles. |
 | PATCH | `/api/instructors/:id` | Update an instructor profile. |
 
@@ -208,7 +208,7 @@ The current HTML interface separates responsibilities clearly: administrators ha
 
 | Method | Route | Purpose |
 | --- | --- | --- |
-| GET/POST | `/api/enrolments` | List or create subject enrolments. |
+| GET/POST | `/api/enrolments` | List or create course enrolments. |
 | PATCH | `/api/enrolments/:id/cancel` | Cancel an enrolment. |
 | GET/POST | `/api/assignments` | List or create instructor assignments. |
 | PATCH | `/api/assignments/:id/cancel` | Cancel an assignment. |
@@ -219,8 +219,8 @@ The current HTML interface separates responsibilities clearly: administrators ha
 | --- | --- | --- |
 | GET | `/api/dashboard/staff` | Registration and management totals. |
 | GET | `/api/dashboard/instructor` | Current instructor totals. |
-| GET | `/api/instructors/me/subjects` | Instructor subjects and class lists. |
-| GET | `/api/reports/subject-enrolments` | Subject enrolment totals. |
+| GET | `/api/instructors/me/courses` | Instructor courses and class lists. |
+| GET | `/api/reports/course-enrolments` | Course enrolment totals. |
 | GET | `/api/reports/instructor-assignments` | Instructor allocation report. |
 | GET | `/api/reports/audit-logs` | Latest audit entries for administrators. |
 
@@ -244,20 +244,20 @@ Five failed login attempts lock the account temporarily for fifteen minutes.
 Before saving:
 
 - Student must be active.
-- Academic term must be open.
-- Every selected subject must be active.
-- At least one subject must be selected.
+- Semester must be open.
+- Every selected course must be active.
+- At least one course must be selected.
 
-The database unique constraint prevents duplicate student-subject-term records. Re-saving a previously cancelled combination reactivates the existing record through `upsert`.
+The database unique constraint prevents duplicate student-course-semester records. Re-saving a previously cancelled combination reactivates the existing record through `upsert`.
 
 ### Instructor assignment
 
 Before saving:
 
 - Instructor must be active.
-- Subject must be active.
-- Academic term must be open.
-- No different active instructor may already be assigned to that subject and term.
+- Course must be active.
+- Semester must be open.
+- No different active instructor may already be assigned to that course and semester.
 
 The database partial unique index provides a second protection layer.
 
@@ -350,17 +350,17 @@ Use these short explanations:
 - **Why Supabase?** It provides a hosted PostgreSQL database while preserving the relational schema in the report.
 - **Why is Supabase not called from the frontend?** The secret key must remain private, and the Express API enforces business rules and roles.
 - **Why JWT?** The frontend and backend are deployed on different services, so bearer tokens keep authentication simple.
-- **How are duplicate enrolments prevented?** The controller validates data and PostgreSQL has a unique student-subject-term constraint.
+- **How are duplicate enrolments prevented?** The controller validates data and PostgreSQL has a unique student-course-semester constraint.
 - **How is double instructor assignment prevented?** The controller checks existing assignments and PostgreSQL has a partial unique index.
 - **Why retain cancelled records?** Status changes preserve history and support auditability.
 - **Why exclude fees and results?** The first version stays focused, testable, and easy for centre staff to learn.
 
 ## 15. Safe Demo Data
 
-- Term: `First Term`, session `2026/2027`.
-- Subjects: Mathematics, English Language, Physics, Chemistry.
+- Semester: `First Semester`, session `2026/2027`.
+- Courses: Mathematics, English Language, Physics, Chemistry.
 - Four to six fictional students.
 - Two fictional instructors.
-- Two or three subject enrolments per student.
+- Two or three course enrolments per student.
 
 Do not use real student passwords, phone numbers, or personal data in the repository or defence screenshots.

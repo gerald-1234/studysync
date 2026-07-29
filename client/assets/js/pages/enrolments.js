@@ -10,19 +10,19 @@ import {
 
 const form = document.querySelector("#enrolment-form");
 const studentSelect = form.studentId;
-const termSelect = form.termId;
-const subjectList = document.querySelector("#subject-check-list");
+const semesterSelect = form.semesterId;
+const courseList = document.querySelector("#course-check-list");
 const tableBody = document.querySelector("#enrolments-body");
 
-function renderSubjectChecks(subjects) {
-  subjectList.innerHTML = subjects.length
-    ? subjects.map((subject) => `
+function renderCourseChecks(courses) {
+  courseList.innerHTML = courses.length
+    ? courses.map((course) => `
       <label>
-        <input type="checkbox" name="subjectIds" value="${subject.id}">
-        <span>${escapeHtml(subject.subject_code)} - ${escapeHtml(subject.subject_name)}</span>
+        <input type="checkbox" name="courseIds" value="${course.id}">
+        <span>${escapeHtml(course.course_code)} - ${escapeHtml(course.course_name)}</span>
       </label>
     `).join("")
-    : '<p class="empty-state">No active subjects.</p>';
+    : '<p class="empty-state">No active courses.</p>';
 }
 
 function renderEnrolments(enrolments) {
@@ -31,8 +31,8 @@ function renderEnrolments(enrolments) {
       <tr>
         <td>${escapeHtml(enrolment.students.registration_number)}</td>
         <td>${escapeHtml(`${enrolment.students.first_name} ${enrolment.students.last_name}`)}</td>
-        <td>${escapeHtml(enrolment.subjects.subject_name)}</td>
-        <td>${escapeHtml(`${enrolment.academic_terms.term_name} ${enrolment.academic_terms.academic_session}`)}</td>
+        <td>${escapeHtml(enrolment.courses.course_name)}</td>
+        <td>${escapeHtml(`${enrolment.semesters.semester_name} ${enrolment.semesters.academic_session}`)}</td>
         <td>${statusBadge(enrolment.status)}</td>
         <td>
           ${enrolment.status === "active" ? `
@@ -49,10 +49,10 @@ function renderEnrolments(enrolments) {
 }
 
 async function loadReferenceData() {
-  const [studentData, subjectData, termData] = await Promise.all([
+  const [studentData, courseData, semesterData] = await Promise.all([
     api("/students"),
-    api("/subjects?activeOnly=true"),
-    api("/terms"),
+    api("/courses?activeOnly=true"),
+    api("/semesters"),
   ]);
   populateSelect(
     studentSelect,
@@ -61,33 +61,33 @@ async function loadReferenceData() {
     (student) => `${student.registration_number} - ${student.first_name} ${student.last_name}`,
   );
   populateSelect(
-    termSelect,
-    termData.terms.filter((term) => term.status === "open"),
-    "Select open term",
-    (term) => `${term.term_name} ${term.academic_session}`,
+    semesterSelect,
+    semesterData.semesters.filter((semester) => semester.status === "open"),
+    "Select open semester",
+    (semester) => `${semester.semester_name} ${semester.academic_session}`,
   );
-  renderSubjectChecks(subjectData.subjects);
+  renderCourseChecks(courseData.courses);
 }
 
 async function loadEnrolments() {
-  const termId = termSelect.value;
-  const data = await api(`/enrolments${termId ? `?termId=${encodeURIComponent(termId)}` : ""}`);
+  const semesterId = semesterSelect.value;
+  const data = await api(`/enrolments${semesterId ? `?semesterId=${encodeURIComponent(semesterId)}` : ""}`);
   renderEnrolments(data.enrolments);
 }
 
 form.addEventListener("submit", async (event) => {
   event.preventDefault();
-  const subjectIds = [...form.querySelectorAll("input[name='subjectIds']:checked")]
+  const courseIds = [...form.querySelectorAll("input[name='courseIds']:checked")]
     .map((checkbox) => checkbox.value);
 
   try {
     const data = await send("/enrolments", "POST", {
       studentId: form.studentId.value,
-      termId: form.termId.value,
-      subjectIds,
+      semesterId: form.semesterId.value,
+      courseIds,
     });
-    showToast(`${data.enrolments.length} subject enrolment(s) saved.`);
-    form.querySelectorAll("input[name='subjectIds']").forEach((checkbox) => {
+    showToast(`${data.enrolments.length} course enrolment(s) saved.`);
+    form.querySelectorAll("input[name='courseIds']").forEach((checkbox) => {
       checkbox.checked = false;
     });
     await loadEnrolments();
@@ -96,7 +96,7 @@ form.addEventListener("submit", async (event) => {
   }
 });
 
-termSelect.addEventListener("change", () => {
+semesterSelect.addEventListener("change", () => {
   loadEnrolments().catch((error) => showToast(error.message, "error"));
 });
 

@@ -9,13 +9,13 @@ const {
 const { allowRoles } = require("../src/middleware/roleMiddleware");
 
 test("requiredText trims a valid value", () => {
-  assert.equal(requiredText("  Mathematics  ", "Subject"), "Mathematics");
+  assert.equal(requiredText("  Mathematics  ", "Course"), "Mathematics");
 });
 
 test("requiredText rejects a blank value", () => {
   assert.throws(
-    () => requiredText("   ", "Subject"),
-    /Subject is required/,
+    () => requiredText("   ", "Course"),
+    /Course is required/,
   );
 });
 

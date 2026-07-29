@@ -1,6 +1,6 @@
 # StudySync
 
-StudySync is a beginner-friendly Student Course Registration System for a small private tutoring centre. It manages student records, subject enrolment, academic terms, instructors, and instructor-to-subject assignments.
+StudySync is a beginner-friendly Student Course Registration System for a university tutorial centre. It manages student records, course enrolment, semesters, instructors, and instructor-to-course assignments.
 
 The implementation is intentionally limited to the core workflow required by the Software Analysis and Design report, making it practical to explain and defend as a student project.
 
@@ -19,21 +19,21 @@ The frontend never receives the Supabase secret key. Every database request pass
 | Role | Core Responsibility |
 | --- | --- |
 | Administrator | Creates accounts, assigns roles, and deactivates accounts. |
-| Registration Officer | Registers students and enrols them in subjects. |
-| Centre Manager | Manages subjects, academic terms, instructors, assignments, and reports. |
-| Instructor | Views assigned subjects and class lists. |
+| Registration Officer | Registers students and enrols them in courses. |
+| Tutorial Centre Manager | Manages courses, semesters, instructors, assignments, and reports. |
+| Instructor | Views assigned courses and class lists. |
 
 ## Core Features
 
 - Secure email and password login.
 - Role-based page routing and API permissions.
 - Student registration and profile updates.
-- Subject and academic-term management.
-- Student enrolment in one or more subjects.
+- Course and academic-semester management.
+- Student enrolment in one or more courses.
 - Duplicate-enrolment prevention.
 - Instructor profile and login-account linking.
-- One active instructor assignment per subject and term.
-- Subject enrolment and instructor-assignment reports.
+- One active instructor assignment per course and semester.
+- Course enrolment and instructor-assignment reports.
 - Instructor class lists.
 - Audit logging for important changes.
 
@@ -142,10 +142,10 @@ http://localhost:5500
 ## Recommended Demo Order
 
 1. Sign in as the administrator and create registration officer, manager, and instructor accounts.
-2. Sign in as the manager and create an academic term and subjects.
+2. Sign in as the manager and create an semester and courses.
 3. Create an instructor profile and link the instructor account.
 4. Sign in as the registration officer and register students.
-5. Enrol the students in subjects.
+5. Enrol the students in courses.
 6. Sign in as the manager and assign instructors.
 7. Open the reports page.
 8. Sign in as an instructor and show the class list.
@@ -197,7 +197,7 @@ The UI has also been checked with Playwright at desktop and mobile sizes for:
 - Administrator login and account management.
 - Registration officer student management.
 - Manager assignments and reports.
-- Instructor subject and class-list view.
+- Instructor course and class-list view.
 
 ## Documentation
 

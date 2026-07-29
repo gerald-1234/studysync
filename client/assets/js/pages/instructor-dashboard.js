@@ -2,19 +2,19 @@ import { api } from "../api.js";
 import { requireUser } from "../auth.js";
 import { escapeHtml, showToast, tableEmpty } from "../ui.js";
 
-const subjectBody = document.querySelector("#instructor-subjects-body");
+const courseBody = document.querySelector("#instructor-courses-body");
 const rosterContainer = document.querySelector("#roster-container");
 
 function renderAssignments(assignments) {
-  subjectBody.innerHTML = assignments.length
+  courseBody.innerHTML = assignments.length
     ? assignments.map((assignment) => `
       <tr>
-        <td>${escapeHtml(assignment.subjects.subject_code)}</td>
-        <td>${escapeHtml(assignment.subjects.subject_name)}</td>
-        <td>${escapeHtml(`${assignment.academic_terms.term_name} ${assignment.academic_terms.academic_session}`)}</td>
+        <td>${escapeHtml(assignment.courses.course_code)}</td>
+        <td>${escapeHtml(assignment.courses.course_name)}</td>
+        <td>${escapeHtml(`${assignment.semesters.semester_name} ${assignment.semesters.academic_session}`)}</td>
       </tr>
     `).join("")
-    : tableEmpty(3, "No active subjects assigned.");
+    : tableEmpty(3, "No active courses assigned.");
 }
 
 function renderRosters(assignments) {
@@ -22,7 +22,7 @@ function renderRosters(assignments) {
     ? assignments.map((assignment) => `
       <section class="panel">
         <div class="panel-heading">
-          <h3>${escapeHtml(assignment.subjects.subject_code)} - ${escapeHtml(assignment.subjects.subject_name)}</h3>
+          <h3>${escapeHtml(assignment.courses.course_code)} - ${escapeHtml(assignment.courses.course_name)}</h3>
           <span class="status status-active">${assignment.students.length} student(s)</span>
         </div>
         <div class="table-wrap">
@@ -55,13 +55,13 @@ async function start() {
     await requireUser(["instructor"]);
     const [dashboardData, classData] = await Promise.all([
       api("/dashboard/instructor"),
-      api("/instructors/me/subjects"),
+      api("/instructors/me/courses"),
     ]);
-    document.querySelector("[data-current-term]").textContent = dashboardData.currentTerm
-      ? `${dashboardData.currentTerm.term_name} ${dashboardData.currentTerm.academic_session}`
-      : "No open academic term";
-    document.querySelector("[data-assigned-subjects]").textContent =
-      dashboardData.counts.assignedSubjects;
+    document.querySelector("[data-current-semester]").textContent = dashboardData.currentSemester
+      ? `${dashboardData.currentSemester.semester_name} ${dashboardData.currentSemester.academic_session}`
+      : "No open semester";
+    document.querySelector("[data-assigned-courses]").textContent =
+      dashboardData.counts.assignedCourses;
     document.querySelector("[data-enrolled-students]").textContent =
       dashboardData.counts.enrolledStudents;
     renderAssignments(dashboardData.assignments);

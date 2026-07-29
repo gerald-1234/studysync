@@ -27,7 +27,9 @@ create table if not exists public.students (
   gender varchar(20) not null check (gender in ('Female', 'Male', 'Other')),
   phone varchar(30) not null,
   email varchar(255),
-  guardian_phone varchar(30) not null,
+  faculty varchar(120) not null,
+  department varchar(120),
+  emergency_contact_phone varchar(30) not null,
   registration_date date not null default current_date,
   status varchar(20) not null default 'active' check (
     status in ('active', 'inactive')
@@ -52,10 +54,10 @@ create table if not exists public.instructors (
   updated_at timestamptz not null default now()
 );
 
-create table if not exists public.subjects (
+create table if not exists public.courses (
   id uuid primary key default gen_random_uuid(),
-  subject_code varchar(20) unique not null,
-  subject_name varchar(120) unique not null,
+  course_code varchar(20) unique not null,
+  course_name varchar(120) unique not null,
   description text,
   level varchar(50),
   status varchar(20) not null default 'active' check (
@@ -65,9 +67,9 @@ create table if not exists public.subjects (
   updated_at timestamptz not null default now()
 );
 
-create table if not exists public.academic_terms (
+create table if not exists public.semesters (
   id uuid primary key default gen_random_uuid(),
-  term_name varchar(80) not null,
+  semester_name varchar(80) not null,
   academic_session varchar(30) not null,
   start_date date not null,
   end_date date not null,
@@ -76,35 +78,35 @@ create table if not exists public.academic_terms (
   ),
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now(),
-  unique (term_name, academic_session),
+  unique (semester_name, academic_session),
   check (end_date >= start_date)
 );
 
 create table if not exists public.enrolments (
   id uuid primary key default gen_random_uuid(),
   student_id uuid not null references public.students(id),
-  subject_id uuid not null references public.subjects(id),
-  academic_term_id uuid not null references public.academic_terms(id),
+  course_id uuid not null references public.courses(id),
+  semester_id uuid not null references public.semesters(id),
   enrolled_at timestamptz not null default now(),
   status varchar(20) not null default 'active' check (
     status in ('active', 'cancelled')
   ),
-  unique (student_id, subject_id, academic_term_id)
+  unique (student_id, course_id, semester_id)
 );
 
 create table if not exists public.instructor_assignments (
   id uuid primary key default gen_random_uuid(),
   instructor_id uuid not null references public.instructors(id),
-  subject_id uuid not null references public.subjects(id),
-  academic_term_id uuid not null references public.academic_terms(id),
+  course_id uuid not null references public.courses(id),
+  semester_id uuid not null references public.semesters(id),
   assigned_at timestamptz not null default now(),
   status varchar(20) not null default 'active' check (
     status in ('active', 'cancelled')
   )
 );
 
-create unique index if not exists one_active_assignment_per_subject_term
-  on public.instructor_assignments (subject_id, academic_term_id)
+create unique index if not exists one_active_assignment_per_course_semester
+  on public.instructor_assignments (course_id, semester_id)
   where status = 'active';
 
 create table if not exists public.audit_logs (
@@ -116,10 +118,10 @@ create table if not exists public.audit_logs (
 );
 
 create index if not exists enrolments_student_index on public.enrolments (student_id);
-create index if not exists enrolments_subject_index on public.enrolments (subject_id);
-create index if not exists enrolments_term_index on public.enrolments (academic_term_id);
+create index if not exists enrolments_course_index on public.enrolments (course_id);
+create index if not exists enrolments_semester_index on public.enrolments (semester_id);
 create index if not exists assignments_instructor_index on public.instructor_assignments (instructor_id);
-create index if not exists assignments_term_index on public.instructor_assignments (academic_term_id);
+create index if not exists assignments_semester_index on public.instructor_assignments (semester_id);
 
 create or replace function public.set_updated_at()
 returns trigger
@@ -146,22 +148,22 @@ create trigger instructors_set_updated_at
 before update on public.instructors
 for each row execute function public.set_updated_at();
 
-drop trigger if exists subjects_set_updated_at on public.subjects;
-create trigger subjects_set_updated_at
-before update on public.subjects
+drop trigger if exists courses_set_updated_at on public.courses;
+create trigger courses_set_updated_at
+before update on public.courses
 for each row execute function public.set_updated_at();
 
-drop trigger if exists terms_set_updated_at on public.academic_terms;
-create trigger terms_set_updated_at
-before update on public.academic_terms
+drop trigger if exists semesters_set_updated_at on public.semesters;
+create trigger semesters_set_updated_at
+before update on public.semesters
 for each row execute function public.set_updated_at();
 
 -- The frontend must use the Express API. It must not query these tables directly.
 alter table public.users enable row level security;
 alter table public.students enable row level security;
 alter table public.instructors enable row level security;
-alter table public.subjects enable row level security;
-alter table public.academic_terms enable row level security;
+alter table public.courses enable row level security;
+alter table public.semesters enable row level security;
 alter table public.enrolments enable row level security;
 alter table public.instructor_assignments enable row level security;
 alter table public.audit_logs enable row level security;
