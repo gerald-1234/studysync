@@ -119,8 +119,7 @@ server/
 ### `database/`
 
 - `schema.sql` is the complete final schema for a fresh Supabase project.
-- `migrations/202607290001_initial_schema.sql` is the standalone initial migration.
-- `migrations/202607290002_course_title_and_student_profile.sql` upgrades the original `subjects` and `academic_terms` database without losing its rows.
+- `upgrade_legacy_schema.sql` upgrades the original `subjects` and `academic_terms` database without losing its rows.
 
 ## 5. Environment Variables
 
@@ -266,7 +265,7 @@ The database partial unique index provides a second protection layer.
 
 ### Database
 
-For a fresh Supabase project, run `database/schema.sql`. For the connected legacy project, run `database/migrations/202607290002_course_title_and_student_profile.sql` instead. The upgrade migration has been tested against the original schema with sample data and is safe to run more than once.
+For a fresh Supabase project, run `database/schema.sql`. For the connected legacy project, run `database/upgrade_legacy_schema.sql` instead. The upgrade migration has been tested against the original schema with sample data and is safe to run more than once.
 
 ### Server
 

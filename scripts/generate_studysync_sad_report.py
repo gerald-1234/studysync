@@ -18,6 +18,7 @@ LIGHT_BLUE = "D9EAF7"
 LIGHT_GRAY = "F2F2F2"
 WHITE = "FFFFFF"
 DARK_GRAY = "404040"
+BLACK = "000000"
 
 
 def set_cell_shading(cell, fill):
@@ -161,9 +162,9 @@ def add_diagram(doc, title, rows, column_widths=None):
         for col_index, value in enumerate(values):
             cell = table.rows[row_index].cells[col_index]
             if value:
-                fill = LIGHT_BLUE if value.startswith("[") else LIGHT_GRAY
+                fill = WHITE if value.startswith("[") else LIGHT_GRAY
                 if "STUDYSYNC" in value.upper() or "PROCESS" in value.upper():
-                    fill = BLUE
+                    fill = BLACK
                     set_cell_text(
                         cell,
                         value,
@@ -339,7 +340,7 @@ def set_diagram_box(cell, text, dark=False):
         size=8.2,
         align=WD_ALIGN_PARAGRAPH.CENTER,
     )
-    set_cell_shading(cell, BLUE if dark else LIGHT_BLUE)
+    set_cell_shading(cell, BLACK if dark else WHITE)
     tc_pr = cell._tc.get_or_add_tcPr()
     borders = tc_pr.first_child_found_in("w:tcBorders")
     if borders is None:
@@ -349,7 +350,7 @@ def set_diagram_box(cell, text, dark=False):
         node = OxmlElement(f"w:{edge}")
         node.set(qn("w:val"), "single")
         node.set(qn("w:sz"), "10")
-        node.set(qn("w:color"), BLUE)
+        node.set(qn("w:color"), BLACK)
         borders.append(node)
 
 
@@ -636,8 +637,6 @@ def chapter_three(doc):
         ],
         widths=[4.0, 1.3, 5.3, 1.3, 4.1],
     )
-    add_body(doc, "A USER may optionally link to one INSTRUCTOR profile through instructors.user_id. A USER may also create many AUDIT_LOG records. Foreign keys preserve referential integrity, while status values preserve historical records instead of deleting them.")
-    doc.add_page_break()
 
     add_heading(doc, "3.8 Data Dictionary", 2)
     add_table(
@@ -683,7 +682,7 @@ def chapter_four(doc):
         font_size=9,
     )
     add_heading(doc, "4.2 Repository Structure", 2)
-    add_body(doc, "The repository is divided into client/, server/, and database/. The client contains role folders and shared assets. The server contains routes, controllers, middleware, configuration, scripts, utilities, and tests. The database folder contains schema.sql and an identical initial migration.")
+    add_body(doc, "The repository is divided into client/, server/, and database/. The client contains role folders and shared assets. The server contains routes, controllers, middleware, configuration, scripts, utilities, and tests. The database folder contains schema.sql for a fresh Supabase project and upgrade_legacy_schema.sql for the connected project that still uses the former table and column names.")
     add_clean_diagram(
         doc,
         "Figure 4.1: Deployment request path",
@@ -692,7 +691,6 @@ def chapter_four(doc):
         ],
         widths=[2.6, 1.0, 4.0, 1.0, 4.0, 1.0, 3.0],
     )
-    doc.add_page_break()
 
     add_heading(doc, "4.3 API and Module Implementation", 2)
     add_table(
@@ -762,7 +760,8 @@ def chapter_five(doc):
             ["Wrong role", "Role middleware returns forbidden response.", "Passed"],
             ["Server JavaScript syntax", "Every server source file parses.", "Passed"],
             ["Frontend JavaScript syntax", "Every client script parses.", "Passed"],
-            ["Schema and migration", "Both SQL files are identical.", "Passed"],
+            ["Fresh schema inspection", "schema.sql matches the final API field names.", "Passed"],
+            ["Legacy upgrade migration", "Existing rows and UUID relationships are preserved while legacy names are updated.", "Passed"],
             ["API action loading", "Clicked button shows spinner and is disabled.", "Implemented"],
         ],
         widths=[5.2, 8.2, 2.6],
@@ -826,7 +825,7 @@ def references_and_guide(doc):
     for reference in references:
         add_body(doc, reference)
     add_heading(doc, "APPENDIX A: LUCIDCHART RECREATION GUIDE", 1)
-    add_body(doc, "Use standard rectangles for actors and processes, database/entity shapes for data stores, and crow's-foot connectors for the ERD. Turn on grid and snap. Place each entity in its own box, then route every relationship with elbow connectors through the empty gutters between boxes. Connector lines must enter the edge of a box and must never pass across the entity name or field list.")
+    add_body(doc, "Use standard rectangles for actors and processes, database/entity shapes for data stores, and crow's-foot connectors for the ERD. Keep the diagrams black and white: use white boxes with black borders and black text, with an optional black fill and white text for the central system or API box. Turn on grid and snap. Place each entity in its own box, then route every relationship with elbow connectors through the empty gutters between boxes. Connector lines must enter the edge of a box and must never pass across the entity name or field list.")
     add_table(
         doc,
         ["Diagram", "Lucidchart Layout"],

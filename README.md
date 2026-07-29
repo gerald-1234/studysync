@@ -50,9 +50,10 @@ StudySync/
     instructor/
     assets/
     index.html
+    404.html
   database/
-    migrations/
     schema.sql
+    upgrade_legacy_schema.sql
   server/
     src/
       config/
@@ -80,7 +81,7 @@ Each role has real HTML pages in its own folder. JavaScript handles API calls an
 1. Create or open the Supabase project.
 2. Open the Supabase SQL Editor.
 3. For a fresh empty project, run [`database/schema.sql`](database/schema.sql).
-4. For the existing legacy project with `subjects` and `academic_terms`, run [`database/migrations/202607290002_course_title_and_student_profile.sql`](database/migrations/202607290002_course_title_and_student_profile.sql) instead.
+4. For the existing legacy project with `subjects` and `academic_terms`, run [`database/upgrade_legacy_schema.sql`](database/upgrade_legacy_schema.sql) instead.
 5. Copy the project URL and backend secret key.
 
 Row Level Security is enabled without browser policies because the frontend must use the Express API. The legacy migration preserves existing UUIDs, enrolments, assignments, student contact numbers, courses, and semesters while renaming them to the final code contract.

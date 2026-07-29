@@ -9,7 +9,7 @@ The current project still uses the legacy names `subjects`, `academic_terms`, `g
 Run this file once:
 
 ```text
-database/migrations/202607290002_course_title_and_student_profile.sql
+database/upgrade_legacy_schema.sql
 ```
 
 It preserves existing rows and changes the schema to:

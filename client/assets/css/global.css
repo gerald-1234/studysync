@@ -76,6 +76,72 @@ a {
   padding: 32px;
 }
 
+.error-page {
+  display: grid;
+  min-height: 100vh;
+  place-items: center;
+  padding: 24px;
+  background:
+    radial-gradient(circle at top left, rgba(11, 116, 107, 0.12), transparent 34%),
+    radial-gradient(circle at right 18%, rgba(29, 95, 150, 0.08), transparent 32%),
+    var(--canvas);
+}
+
+.error-panel {
+  width: min(100%, 520px);
+  display: grid;
+  gap: 8px;
+}
+
+.error-code {
+  color: var(--teal);
+  font-size: 13px;
+  font-weight: 750;
+  letter-spacing: 0.24em;
+  margin: 10px 0 0;
+}
+
+.error-copy {
+  max-width: 34ch;
+}
+
+.error-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.error-actions .button {
+  width: fit-content;
+}
+
+.error-links {
+  border-top: 1px solid var(--line);
+  display: grid;
+  gap: 8px;
+  margin-top: 14px;
+  padding-top: 14px;
+}
+
+.error-links h2 {
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  margin: 0 0 4px;
+  text-transform: uppercase;
+}
+
+.error-links a {
+  color: var(--blue);
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.error-links a:hover {
+  text-decoration: underline;
+}
+
 .brand-mark,
 .brand {
   align-items: center;
@@ -677,5 +743,18 @@ tbody tr:hover {
 
   .login-panel {
     padding: 24px 20px;
+  }
+
+  .error-panel {
+    padding: 24px 20px;
+  }
+
+  .error-actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .error-actions .button {
+    width: 100%;
   }
 }
