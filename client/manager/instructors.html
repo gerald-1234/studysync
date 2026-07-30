@@ -25,31 +25,30 @@
     <div class="main-shell">
       <header class="topbar"><h1>Instructors</h1><button class="icon-button" type="button" title="Sign out" data-sign-out><i data-lucide="log-out"></i></button></header>
       <main class="page-content" id="main-content">
-        <div class="page-heading"><div><h2>Instructor records</h2><p>Maintain teaching profiles and link login accounts.</p></div></div>
-        <div class="notice">An administrator creates the instructor login account before the manager links it to the teaching profile.</div>
+        <div class="page-heading"><div><h2>Instructor records</h2><p>Review instructors and update their teaching information.</p></div></div>
+        <div class="notice">
+          The administrator creates each instructor's login account and teaching profile together. Select an instructor below to edit teaching details.
+        </div>
         <div class="work-grid">
           <section class="panel">
-            <div class="panel-heading"><h3>Instructor form</h3></div>
+            <div class="panel-heading"><h3>Edit teaching profile</h3></div>
             <div class="panel-body">
+              <p id="instructor-editor-help">Select the edit button beside an instructor to begin.</p>
               <form id="instructor-form" data-edit-id="">
                 <div class="form-grid">
+                  <div class="field"><label for="staffNumber">Staff number</label><input id="staffNumber" name="staffNumber" readonly disabled></div>
+                  <div class="field"><label for="qualification">Qualification</label><input id="qualification" name="qualification" disabled></div>
+                  <div class="field"><label for="firstName">First name</label><input id="firstName" name="firstName" readonly disabled></div>
+                  <div class="field"><label for="lastName">Last name</label><input id="lastName" name="lastName" readonly disabled></div>
+                  <div class="field"><label for="phone">Phone number</label><input id="phone" name="phone" inputmode="tel" required disabled></div>
+                  <div class="field"><label for="email">Email address</label><input id="email" name="email" type="email" readonly disabled></div>
                   <div class="field full">
-                    <label for="userId">Instructor login account</label>
-                    <select id="userId" name="userId"><option value="">Loading accounts...</option></select>
-                  </div>
-                  <div class="field"><label for="staffNumber">Staff number</label><input id="staffNumber" name="staffNumber" placeholder="INS-001" required></div>
-                  <div class="field"><label for="qualification">Qualification</label><input id="qualification" name="qualification"></div>
-                  <div class="field"><label for="firstName">First name</label><input id="firstName" name="firstName" required></div>
-                  <div class="field"><label for="lastName">Last name</label><input id="lastName" name="lastName" required></div>
-                  <div class="field"><label for="phone">Phone number</label><input id="phone" name="phone" inputmode="tel" required></div>
-                  <div class="field"><label for="email">Email address</label><input id="email" name="email" type="email" required></div>
-                  <div class="field full">
-                    <label for="status">Status</label>
-                    <select id="status" name="status"><option value="active">Active</option><option value="inactive">Inactive</option></select>
+                    <label for="status">Teaching status</label>
+                    <select id="status" name="status" disabled><option value="active">Active</option><option value="inactive">Inactive</option></select>
                   </div>
                 </div>
                 <div class="form-actions">
-                  <button class="button button-primary" type="submit"><i data-lucide="save"></i><span data-submit-label>Add instructor</span></button>
+                  <button class="button button-primary" type="submit" data-save-instructor disabled><i data-lucide="save"></i>Update profile</button>
                   <button class="button button-secondary" type="button" data-reset-form><i data-lucide="rotate-ccw"></i>Clear</button>
                 </div>
               </form>

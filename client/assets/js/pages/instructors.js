@@ -1,19 +1,32 @@
 import { api, send } from "../api.js";
 import { requireUser } from "../auth.js";
 import {
-  bindReset,
   escapeHtml,
-  populateSelect,
   showToast,
   statusBadge,
   tableEmpty,
 } from "../ui.js";
 
 const form = document.querySelector("#instructor-form");
-const accountSelect = form.userId;
 const tableBody = document.querySelector("#instructors-body");
+const editorHelp = document.querySelector("#instructor-editor-help");
+const saveButton = form.querySelector("[data-save-instructor]");
+const editableControls = [...form.querySelectorAll("input, select")];
 let instructors = [];
-let availableAccounts = [];
+
+function setEditorEnabled(enabled) {
+  for (const control of editableControls) {
+    control.disabled = !enabled;
+  }
+  saveButton.disabled = !enabled;
+}
+
+function resetEditor() {
+  form.reset();
+  form.dataset.editId = "";
+  setEditorEnabled(false);
+  editorHelp.textContent = "Select the edit button beside an instructor to begin.";
+}
 
 function renderInstructors() {
   tableBody.innerHTML = instructors.length
@@ -36,22 +49,13 @@ function renderInstructors() {
 }
 
 async function loadData() {
-  const [instructorData, accountData] = await Promise.all([
-    api("/instructors"),
-    api("/users/available-instructor-accounts"),
-  ]);
+  const instructorData = await api("/instructors");
   instructors = instructorData.instructors;
-  availableAccounts = accountData.users;
-  populateSelect(
-    accountSelect,
-    availableAccounts,
-    "No login account",
-    (user) => `${user.first_name} ${user.last_name} (${user.email})`,
-  );
   renderInstructors();
 }
 
 function fillForm(instructor) {
+  setEditorEnabled(true);
   form.dataset.editId = instructor.id;
   form.staffNumber.value = instructor.staff_number;
   form.firstName.value = instructor.first_name;
@@ -60,50 +64,44 @@ function fillForm(instructor) {
   form.email.value = instructor.email;
   form.qualification.value = instructor.qualification || "";
   form.status.value = instructor.status;
-
-  if (instructor.user_id) {
-    let option = [...accountSelect.options].find((item) => item.value === instructor.user_id);
-    if (!option) {
-      option = document.createElement("option");
-      option.value = instructor.user_id;
-      option.textContent = "Current linked login account";
-      accountSelect.append(option);
-    }
-    accountSelect.value = instructor.user_id;
-  } else {
-    accountSelect.value = "";
-  }
-
-  form.querySelector("[data-submit-label]").textContent = "Update instructor";
-}
-
-function resetLabel() {
-  form.querySelector("[data-submit-label]").textContent = "Add instructor";
+  editorHelp.textContent = `Editing ${instructor.staff_number} - ${instructor.first_name} ${instructor.last_name}.`;
 }
 
 form.addEventListener("submit", async (event) => {
   event.preventDefault();
   const editId = form.dataset.editId;
+  if (!editId) {
+    showToast("Select an instructor before editing.", "error");
+    return;
+  }
+
   try {
-    await send(editId ? `/instructors/${editId}` : "/instructors", editId ? "PATCH" : "POST", {
-      userId: form.userId.value || null,
-      staffNumber: form.staffNumber.value,
-      firstName: form.firstName.value,
-      lastName: form.lastName.value,
-      phone: form.phone.value,
-      email: form.email.value,
-      qualification: form.qualification.value,
-      status: form.status.value,
-    });
-    form.reset();
-    form.dataset.editId = "";
-    resetLabel();
-    showToast(editId ? "Instructor updated." : "Instructor added.");
+    await send(
+      `/instructors/${editId}`,
+      "PATCH",
+      {
+        staffNumber: form.staffNumber.value,
+        firstName: form.firstName.value,
+        lastName: form.lastName.value,
+        phone: form.phone.value,
+        email: form.email.value,
+        qualification: form.qualification.value,
+        status: form.status.value,
+      },
+      {
+        loadingButton: event.submitter,
+        loadingText: "Saving profile...",
+      },
+    );
+    resetEditor();
+    showToast("Instructor teaching profile updated.");
     await loadData();
   } catch (error) {
     showToast(error.message, "error");
   }
 });
+
+form.querySelector("[data-reset-form]").addEventListener("click", resetEditor);
 
 tableBody.addEventListener("click", (event) => {
   const button = event.target.closest("[data-edit-instructor]");
@@ -116,11 +114,10 @@ tableBody.addEventListener("click", (event) => {
   }
 });
 
-bindReset(form, resetLabel);
-
 async function start() {
   try {
     await requireUser(["manager"]);
+    resetEditor();
     await loadData();
   } catch (error) {
     showToast(error.message, "error");

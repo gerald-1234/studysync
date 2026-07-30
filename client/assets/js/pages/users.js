@@ -4,6 +4,26 @@ import { escapeHtml, showToast, statusBadge, tableEmpty } from "../ui.js";
 
 const form = document.querySelector("#user-form");
 const tableBody = document.querySelector("#users-body");
+const instructorFields = [...form.querySelectorAll("[data-instructor-field]")];
+
+function showInstructorFields() {
+  const isInstructor = form.role.value === "instructor";
+  for (const field of instructorFields) {
+    field.hidden = !isInstructor;
+  }
+
+  form.staffNumber.required = isInstructor;
+  form.phone.required = isInstructor;
+  form.querySelector("[data-submit-label]").textContent = isInstructor
+    ? "Create instructor"
+    : "Create account";
+
+  if (!isInstructor) {
+    form.staffNumber.value = "";
+    form.phone.value = "";
+    form.qualification.value = "";
+  }
+}
 
 function renderUsers(users) {
   tableBody.innerHTML = users.length
@@ -35,18 +55,43 @@ async function loadUsers() {
   renderUsers(data.users);
 }
 
+form.role.addEventListener("change", showInstructorFields);
+form.addEventListener("reset", () => {
+  window.setTimeout(showInstructorFields, 0);
+});
+
 form.addEventListener("submit", async (event) => {
   event.preventDefault();
+  const isInstructor = form.role.value === "instructor";
+
   try {
-    await send("/users", "POST", {
-      firstName: form.firstName.value,
-      lastName: form.lastName.value,
-      email: form.email.value,
-      password: form.password.value,
-      role: form.role.value,
-    });
+    await send(
+      "/users",
+      "POST",
+      {
+        firstName: form.firstName.value,
+        lastName: form.lastName.value,
+        email: form.email.value,
+        password: form.password.value,
+        role: form.role.value,
+        ...(isInstructor
+          ? {
+            staffNumber: form.staffNumber.value,
+            phone: form.phone.value,
+            qualification: form.qualification.value,
+          }
+          : {}),
+      },
+      {
+        loadingButton: event.submitter,
+        loadingText: isInstructor ? "Creating instructor..." : "Creating account...",
+      },
+    );
     form.reset();
-    showToast("User account created.");
+    showInstructorFields();
+    showToast(isInstructor
+      ? "Instructor account and teaching profile created."
+      : "User account created.");
     await loadUsers();
   } catch (error) {
     showToast(error.message, "error");
@@ -58,11 +103,18 @@ tableBody.addEventListener("click", async (event) => {
   if (!button) {
     return;
   }
+
   try {
     const isActive = button.dataset.active === "true";
-    await send(`/users/${button.dataset.toggleUser}/status`, "PATCH", {
-      isActive: !isActive,
-    });
+    await send(
+      `/users/${button.dataset.toggleUser}/status`,
+      "PATCH",
+      { isActive: !isActive },
+      {
+        loadingButton: button,
+        loadingText: isActive ? "Deactivating..." : "Activating...",
+      },
+    );
     showToast(`User account ${isActive ? "deactivated" : "activated"}.`);
     await loadUsers();
   } catch (error) {
@@ -73,6 +125,7 @@ tableBody.addEventListener("click", async (event) => {
 async function start() {
   try {
     await requireUser(["admin"]);
+    showInstructorFields();
     await loadUsers();
   } catch (error) {
     showToast(error.message, "error");

@@ -10,7 +10,6 @@ const {
 
 function instructorPayload(body) {
   return {
-    user_id: body.userId || null,
     staff_number: requiredText(body.staffNumber, "Staff number").toUpperCase(),
     first_name: requiredText(body.firstName, "First name"),
     last_name: requiredText(body.lastName, "Last name"),
@@ -35,31 +34,6 @@ async function listInstructors(request, response) {
   const { data, error } = await query;
   throwIfSupabaseError(error);
   return response.json({ instructors: data });
-}
-
-async function createInstructor(request, response) {
-  const payload = instructorPayload(request.body);
-
-  if (payload.user_id) {
-    const { data: account, error: accountError } = await supabase
-      .from("users")
-      .select("id, role, is_active")
-      .eq("id", payload.user_id)
-      .maybeSingle();
-    throwIfSupabaseError(accountError);
-    if (!account || account.role !== "instructor" || !account.is_active) {
-      throw createHttpError("Select an active user account with the instructor role.");
-    }
-  }
-
-  const { data, error } = await supabase
-    .from("instructors")
-    .insert(payload)
-    .select()
-    .single();
-  throwIfSupabaseError(error);
-  await writeAuditLog(request.user.id, "CREATE_INSTRUCTOR", `Created instructor ${data.staff_number}.`);
-  return response.status(201).json({ instructor: data });
 }
 
 async function updateInstructor(request, response) {
@@ -129,7 +103,6 @@ async function myCourses(request, response) {
 }
 
 module.exports = {
-  createInstructor,
   listInstructors,
   myCourses,
   updateInstructor,

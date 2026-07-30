@@ -33,8 +33,11 @@
         <div class="page-heading">
           <div>
             <h2>Access management</h2>
-            <p>Create accounts and assign one role to each user.</p>
+            <p>Create staff accounts and their required system profiles.</p>
           </div>
+        </div>
+        <div class="notice">
+          Selecting Instructor creates the login account and linked teaching profile together.
         </div>
         <div class="work-grid">
           <section class="panel">
@@ -68,9 +71,24 @@
                     <label for="password">Temporary password</label>
                     <input id="password" name="password" type="password" minlength="8" required>
                   </div>
+                  <div class="field" data-instructor-field hidden>
+                    <label for="staffNumber">Staff number</label>
+                    <input id="staffNumber" name="staffNumber" placeholder="INS-001">
+                  </div>
+                  <div class="field" data-instructor-field hidden>
+                    <label for="phone">Phone number</label>
+                    <input id="phone" name="phone" inputmode="tel">
+                  </div>
+                  <div class="field full" data-instructor-field hidden>
+                    <label for="qualification">Qualification</label>
+                    <input id="qualification" name="qualification" placeholder="For example: B.Sc. Mathematics">
+                  </div>
                 </div>
                 <div class="form-actions">
-                  <button class="button button-primary" type="submit"><i data-lucide="user-plus"></i>Create account</button>
+                  <button class="button button-primary" type="submit">
+                    <i data-lucide="user-plus"></i>
+                    <span data-submit-label>Create account</span>
+                  </button>
                   <button class="button button-secondary" type="reset"><i data-lucide="rotate-ccw"></i>Clear</button>
                 </div>
               </form>

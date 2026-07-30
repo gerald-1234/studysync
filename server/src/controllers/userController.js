@@ -3,6 +3,7 @@ const supabase = require("../config/supabase");
 const { writeAuditLog } = require("../utils/audit");
 const {
   createHttpError,
+  optionalText,
   requiredText,
   throwIfSupabaseError,
   validEmail,
@@ -31,6 +32,18 @@ async function createUser(request, response) {
     throw createHttpError("Role must be admin, registration_officer, manager, or instructor.");
   }
 
+  const instructorProfile = role === "instructor"
+    ? {
+      staff_number: requiredText(request.body.staffNumber, "Staff number").toUpperCase(),
+      first_name: firstName,
+      last_name: lastName,
+      phone: requiredText(request.body.phone, "Phone number"),
+      email,
+      qualification: optionalText(request.body.qualification),
+      status: "active",
+    }
+    : null;
+
   const passwordHash = await bcrypt.hash(password, 12);
   const { data, error } = await supabase
     .from("users")
@@ -45,8 +58,39 @@ async function createUser(request, response) {
     .single();
   throwIfSupabaseError(error);
 
-  await writeAuditLog(request.user.id, "CREATE_USER", `Created ${role} account: ${email}.`);
-  return response.status(201).json({ user: data });
+  let instructor = null;
+  if (instructorProfile) {
+    const { data: createdInstructor, error: instructorError } = await supabase
+      .from("instructors")
+      .insert({
+        ...instructorProfile,
+        user_id: data.id,
+      })
+      .select()
+      .single();
+
+    if (instructorError) {
+      const { error: cleanupError } = await supabase
+        .from("users")
+        .delete()
+        .eq("id", data.id);
+
+      if (cleanupError) {
+        console.error("Could not remove incomplete instructor account:", cleanupError.message);
+      }
+      throwIfSupabaseError(instructorError);
+    }
+
+    instructor = createdInstructor;
+  }
+
+  const action = instructor ? "CREATE_INSTRUCTOR_ACCOUNT" : "CREATE_USER";
+  const details = instructor
+    ? `Created and linked instructor ${instructor.staff_number}: ${email}.`
+    : `Created ${role} account: ${email}.`;
+  await writeAuditLog(request.user.id, action, details);
+
+  return response.status(201).json({ user: data, instructor });
 }
 
 async function updateUserStatus(request, response) {
@@ -75,32 +119,7 @@ async function updateUserStatus(request, response) {
   return response.json({ user: data });
 }
 
-async function availableInstructorAccounts(_request, response) {
-  const { data: instructorProfiles, error: profileError } = await supabase
-    .from("instructors")
-    .select("user_id")
-    .not("user_id", "is", null);
-  throwIfSupabaseError(profileError);
-
-  const linkedUserIds = instructorProfiles.map((profile) => profile.user_id);
-  let query = supabase
-    .from("users")
-    .select("id, email, first_name, last_name")
-    .eq("role", "instructor")
-    .eq("is_active", true)
-    .order("last_name");
-
-  if (linkedUserIds.length) {
-    query = query.not("id", "in", `(${linkedUserIds.join(",")})`);
-  }
-
-  const { data, error } = await query;
-  throwIfSupabaseError(error);
-  return response.json({ users: data });
-}
-
 module.exports = {
-  availableInstructorAccounts,
   createUser,
   listUsers,
   updateUserStatus,

@@ -147,7 +147,7 @@ Never commit `server/.env`.
 | --- | --- |
 | `users` | Login account, hashed password, role, lock status. |
 | `students` | Student identity, faculty, optional department, and contact details. |
-| `instructors` | Instructor profile linked optionally to a user account. |
+| `instructors` | Teaching profile linked one-to-one to an instructor login account. |
 | `courses` | Course code, course title, level, and status. |
 | `semesters` | Semester name, session, dates, and open/closed status. |
 | `enrolments` | Student-course selection for a semester. |
@@ -172,7 +172,7 @@ Cancelled enrolments and assignments are retained by status instead of being del
 | Manage students | API permission | Yes | API permission | No |
 | Enrol students | API permission | Yes | API permission | No |
 | Manage courses and semesters | API permission | No | Yes | No |
-| Manage instructor profiles | API permission | No | Yes | No |
+| Manage instructor profiles | Creates with account | No | Updates | No |
 | Assign instructors | API permission | No | Yes | No |
 | View management reports | API permission | No | Yes | No |
 | View own class list | No | No | No | Yes |
@@ -193,7 +193,7 @@ The current HTML interface separates responsibilities clearly: administrators ha
 
 | Method | Route | Purpose |
 | --- | --- | --- |
-| GET/POST | `/api/users` | List or create login accounts. |
+| GET/POST | `/api/users` | List or create accounts; instructor creation also creates its teaching profile. |
 | PATCH | `/api/users/:id/status` | Activate or deactivate an account. |
 | GET/POST | `/api/students` | List or create students. |
 | GET/PATCH | `/api/students/:id` | View or update a student. |
@@ -201,7 +201,7 @@ The current HTML interface separates responsibilities clearly: administrators ha
 | PATCH | `/api/courses/:id` | Update a course. |
 | GET/POST | `/api/semesters` | List or create semesters. |
 | PATCH | `/api/semesters/:id` | Update a semester. |
-| GET/POST | `/api/instructors` | List or create instructor profiles. |
+| GET | `/api/instructors` | List instructor teaching profiles. |
 | PATCH | `/api/instructors/:id` | Update an instructor profile. |
 
 ### Registration and allocation

@@ -31,7 +31,7 @@ The frontend never receives the Supabase secret key. Every database request pass
 - Course and academic-semester management.
 - Student enrolment in one or more courses.
 - Duplicate-enrolment prevention.
-- Instructor profile and login-account linking.
+- Instructor login account and teaching profile created together.
 - One active instructor assignment per course and semester.
 - Course enrolment and instructor-assignment reports.
 - Instructor class lists.
@@ -143,14 +143,13 @@ http://localhost:5500
 
 ## Recommended Demo Order
 
-1. Sign in as the administrator and create registration officer, manager, and instructor accounts.
+1. Sign in as the administrator and create registration officer, manager, and instructor accounts. Creating an instructor also creates the linked teaching profile.
 2. Sign in as the manager and create a semester and courses.
-3. Create an instructor profile and link the instructor account.
-4. Sign in as the registration officer and register students.
-5. Enrol the students in courses.
-6. Sign in as the manager and assign instructors.
-7. Open the reports page.
-8. Sign in as an instructor and show the class list.
+3. Sign in as the registration officer and register students.
+4. Enrol the students in courses.
+5. Sign in as the manager and assign instructors.
+6. Open the reports page.
+7. Sign in as an instructor and show the class list.
 
 Use fictional student information during the defence.
 
