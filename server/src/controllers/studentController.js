@@ -9,8 +9,8 @@ const {
 
 function studentPayload(body) {
   const gender = requiredText(body.gender, "Gender");
-  if (!["Female", "Male", "Other"].includes(gender)) {
-    throw createHttpError("Gender must be Female, Male, or Other.");
+  if (!["Female", "Male"].includes(gender)) {
+    throw createHttpError("Gender must be Female or Male.");
   }
 
   return {

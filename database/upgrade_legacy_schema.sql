@@ -351,6 +351,39 @@ for each row execute function public.set_updated_at();
 alter table public.courses enable row level security;
 alter table public.semesters enable row level security;
 
+-- Restrict student gender values to the two options supported by the application.
+do $$
+declare
+  gender_constraint record;
+begin
+  if exists (
+    select 1
+    from public.students
+    where gender not in ('Female', 'Male')
+  ) then
+    raise exception
+      'Some students have unsupported gender values. Update those rows to Female or Male before running this migration.';
+  end if;
+
+  for gender_constraint in
+    select conname
+    from pg_constraint
+    where conrelid = 'public.students'::regclass
+      and contype = 'c'
+      and pg_get_constraintdef(oid) ilike '%gender%'
+  loop
+    execute format(
+      'alter table public.students drop constraint %I',
+      gender_constraint.conname
+    );
+  end loop;
+
+  alter table public.students
+    add constraint students_gender_check
+    check (gender in ('Female', 'Male'));
+end;
+$$;
+
 -- Ask PostgREST to refresh its table and column cache immediately.
 notify pgrst, 'reload schema';
 

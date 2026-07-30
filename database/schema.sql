@@ -24,7 +24,7 @@ create table if not exists public.students (
   registration_number varchar(30) unique not null,
   first_name varchar(80) not null,
   last_name varchar(80) not null,
-  gender varchar(20) not null check (gender in ('Female', 'Male', 'Other')),
+  gender varchar(20) not null check (gender in ('Female', 'Male')),
   phone varchar(30) not null,
   email varchar(255),
   faculty varchar(120) not null,

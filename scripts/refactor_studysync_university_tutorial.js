@@ -177,12 +177,6 @@ replaceRequired(
 
 replaceRequired(
   "client/registration/students.html",
-  `<input id="registrationNumber" name="registrationNumber" placeholder="SS-2026-001" required>`,
-  `<input id="registrationNumber" name="registrationNumber" placeholder="FUTO/2026/001" required>`,
-);
-
-replaceRequired(
-  "client/registration/students.html",
   `<tr><th>Reg. number</th><th>Name</th><th>Phone</th><th>Emergency contact</th><th>Status</th><th></th></tr>`,
   `<tr><th>Reg. number</th><th>Name</th><th>Faculty</th><th>Department</th><th>Phone</th><th>Status</th><th></th></tr>`,
 );

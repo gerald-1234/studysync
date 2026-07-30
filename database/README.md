@@ -23,8 +23,19 @@ It preserves existing rows and changes the schema to:
 - `subject_id` -> `course_id`
 - `academic_term_id` -> `semester_id`
 - Adds required `faculty` and optional `department` student fields
+- Restricts student gender to `Female` or `Male`
 
 The migration was tested against the original schema with sample enrolment and instructor-assignment records. It can be run again safely after a successful first run.
+
+## Existing Current Project
+
+If the database already uses the current table names, run:
+
+```text
+database/migrations/20260730_limit_student_gender.sql
+```
+
+The migration stops with a clear message if an existing student still has a gender value other than `Female` or `Male`. Correct that record before rerunning it.
 
 ## Fresh Supabase Project
 
