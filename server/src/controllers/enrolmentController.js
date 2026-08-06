@@ -32,7 +32,11 @@ async function listEnrolments(request, response) {
 async function createEnrolments(request, response) {
   const studentId = requiredId(request.body.studentId, "Student");
   const semesterId = requiredId(request.body.semesterId, "Semester");
-  const courseIds = [...new Set(request.body.courseIds || [])].filter(Boolean);
+
+  if (!Array.isArray(request.body.courseIds)) {
+    throw createHttpError("courseIds must be an array of course IDs.");
+  }
+  const courseIds = [...new Set(request.body.courseIds)].filter(Boolean);
 
   if (!courseIds.length) {
     throw createHttpError("Select at least one course.");

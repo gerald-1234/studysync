@@ -45,10 +45,19 @@ app.use(
   }),
 );
 
+const loginLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  limit: 20,
+  standardHeaders: "draft-8",
+  legacyHeaders: false,
+  message: { message: "Too many login attempts. Please try again later." },
+});
+
 app.get("/api/health", (_request, response) => {
   response.json({ status: "ok", service: "studysync-api" });
 });
 
+app.use("/api/auth/login", loginLimiter);
 app.use("/api/auth", authRoutes);
 app.use("/api/users", authenticate, userRoutes);
 app.use("/api/students", authenticate, studentRoutes);

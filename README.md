@@ -8,7 +8,7 @@ The implementation is intentionally limited to the core workflow required by the
 
 | Part | Technology | Deployment |
 | --- | --- | --- |
-| Frontend | Separate HTML pages, CSS, vanilla JavaScript | Vercel |
+| Frontend | Separate HTML pages, CSS, vanilla JavaScript | Cloudflare Pages |
 | Backend | Node.js, Express, JWT authentication | Render |
 | Database | PostgreSQL through Supabase | Supabase |
 
@@ -53,7 +53,7 @@ StudySync/
     404.html
   database/
     schema.sql
-    upgrade_legacy_schema.sql
+    README.md
   server/
     src/
       config/
@@ -67,9 +67,10 @@ StudySync/
     package.json
     server.js
   render.yaml
-  vercel.json
+  wrangler.toml
   README.md
   DEVELOPERS.md
+  LICENSE
 ```
 
 Each role has real HTML pages in its own folder. JavaScript handles API calls and fills existing tables and form controls; it does not generate the page structure.
@@ -80,11 +81,10 @@ Each role has real HTML pages in its own folder. JavaScript handles API calls an
 
 1. Create or open the Supabase project.
 2. Open the Supabase SQL Editor.
-3. For a fresh empty project, run [`database/schema.sql`](database/schema.sql).
-4. For the existing legacy project with `subjects` and `academic_terms`, run [`database/upgrade_legacy_schema.sql`](database/upgrade_legacy_schema.sql) instead.
-5. Copy the project URL and backend secret key.
+3. Run [`database/schema.sql`](database/schema.sql).
+4. Copy the project URL and backend secret key.
 
-Row Level Security is enabled without browser policies because the frontend must use the Express API. The legacy migration preserves existing UUIDs, enrolments, assignments, student contact numbers, courses, and semesters while renaming them to the final code contract.
+Row Level Security is enabled without browser policies because the frontend must use the Express API.
 
 ### 2. Configure the server
 
@@ -173,14 +173,19 @@ If Render gives the service a different address, update:
 
 - `client/assets/js/config.js`
 - `client/_headers`
-- `vercel.json`
 
-### Vercel frontend
+### Cloudflare Pages frontend
 
-1. Import the same GitHub repository into Vercel.
-2. Keep the repository root as the project root.
-3. Vercel reads [`vercel.json`](vercel.json) and publishes `client/`.
-4. Copy the Vercel URL into Render's `CLIENT_URL`.
+The repository includes [`wrangler.toml`](wrangler.toml), which deploys the `client/` folder to Cloudflare Pages.
+
+1. From the repository root, run:
+
+   ```bash
+   npx wrangler pages deploy client
+   ```
+
+   Alternatively, connect the repository in the Cloudflare dashboard and set the output directory to `client`.
+2. Copy the Cloudflare Pages URL into Render's `CLIENT_URL`.
 
 ## Verification
 
@@ -203,5 +208,3 @@ The UI has also been checked with Playwright at desktop and mobile sizes for:
 ## Documentation
 
 - [`DEVELOPERS.md`](DEVELOPERS.md) contains the detailed implementation and defence guide.
-- `C:\Users\hp\Documents\StudySync_SAD_Report.docx` contains the SAD report.
-- [`scripts/generate_studysync_sad_report.py`](scripts/generate_studysync_sad_report.py) regenerates the report.

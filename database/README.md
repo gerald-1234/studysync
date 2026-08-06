@@ -1,51 +1,21 @@
 # StudySync Database Setup
 
-Use the Supabase SQL Editor for these files.
+Use the Supabase SQL Editor for this file.
 
-## Existing Connected Project
+## Set Up the Database
 
-The current project still uses the legacy names `subjects`, `academic_terms`, `guardian_phone`, `subject_id`, and `academic_term_id`.
-
-Run this file once:
-
-```text
-database/upgrade_legacy_schema.sql
-```
-
-It preserves existing rows and changes the schema to:
-
-- `subjects` -> `courses`
-- `subject_code` -> `course_code`
-- `subject_name` -> `course_title`
-- `academic_terms` -> `semesters`
-- `term_name` -> `semester_name`
-- `guardian_phone` -> `emergency_contact_phone`
-- `subject_id` -> `course_id`
-- `academic_term_id` -> `semester_id`
-- Adds required `faculty` and optional `department` student fields
-- Restricts student gender to `Female` or `Male`
-
-The migration was tested against the original schema with sample enrolment and instructor-assignment records. It can be run again safely after a successful first run.
-
-## Existing Current Project
-
-If the database already uses the current table names, run:
-
-```text
-database/migrations/20260730_limit_student_gender.sql
-```
-
-The migration stops with a clear message if an existing student still has a gender value other than `Female` or `Male`. Correct that record before rerunning it.
-
-## Fresh Supabase Project
-
-For a completely empty project, run:
+Run the full schema on your Supabase project:
 
 ```text
 database/schema.sql
 ```
 
-Do not run the legacy upgrade first on an empty project.
+This creates all tables, constraints, and Row Level Security policies. Row Level
+Security is enabled without browser policies because the frontend must go through
+the Express API, which uses the backend-only secret key.
+
+If you are re-running the schema against a project that already has data, back up
+the database first, because the script recreates the tables.
 
 ## After the SQL Succeeds
 

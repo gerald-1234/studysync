@@ -64,7 +64,7 @@ async function login(request, response) {
       email: user.email,
     },
     process.env.JWT_SECRET,
-    { expiresIn: process.env.JWT_EXPIRES_IN || "8h" },
+    { expiresIn: process.env.JWT_EXPIRES_IN || "8h", algorithm: "HS256" },
   );
 
   await writeAuditLog(user.id, "LOGIN", "User signed in.");

@@ -758,3 +758,9 @@ tbody tr:hover {
     width: 100%;
   }
 }
+
+.check-list input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--teal);
+}

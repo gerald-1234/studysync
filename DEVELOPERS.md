@@ -18,7 +18,7 @@ Do not add fees, results, attendance, timetables, SMS, or parent portals until t
 - **Database:** Supabase PostgreSQL.
 - **Database access:** `@supabase/supabase-js` using a backend-only secret key.
 - **Authentication:** JWT bearer tokens and `bcryptjs` password hashing.
-- **Frontend hosting:** Vercel.
+- **Frontend hosting:** Cloudflare Pages.
 - **Backend hosting:** Render.
 
 This stack is straightforward to defend:
@@ -26,12 +26,12 @@ This stack is straightforward to defend:
 - HTML documents make every page visible in the repository.
 - Express routes show where each request is handled.
 - PostgreSQL tables match the report's ERD.
-- Render, Supabase, and Vercel each have one clear responsibility.
+- Render, Supabase, and Cloudflare Pages each have one clear responsibility.
 
 ## 3. Application Flow
 
 ```text
-Browser on Vercel
+Browser on Cloudflare Pages
       |
       | HTTPS + JWT
       v
@@ -48,7 +48,7 @@ The browser must not query Supabase directly. Row Level Security is enabled with
 
 ### `client/`
 
-Static pages deployed to Vercel.
+Static pages deployed to Cloudflare Pages.
 
 ```text
 client/
@@ -119,7 +119,6 @@ server/
 ### `database/`
 
 - `schema.sql` is the complete final schema for a fresh Supabase project.
-- `upgrade_legacy_schema.sql` upgrades the original `subjects` and `academic_terms` database without losing its rows.
 
 ## 5. Environment Variables
 
@@ -265,7 +264,7 @@ The database partial unique index provides a second protection layer.
 
 ### Database
 
-For a fresh Supabase project, run `database/schema.sql`. For the connected legacy project, run `database/upgrade_legacy_schema.sql` instead. The upgrade migration has been tested against the original schema with sample data and is safe to run more than once.
+Run `database/schema.sql` in the Supabase SQL Editor to create the full schema.
 
 ### Server
 
@@ -305,9 +304,9 @@ Set these Render secrets:
 
 Render generates `JWT_SECRET`.
 
-### Vercel
+### Cloudflare Pages
 
-The root `vercel.json` publishes `client/` and applies security headers.
+The root `wrangler.toml` deploys `client/` to Cloudflare Pages. Run `npx wrangler pages deploy client` from the repository root, or connect the repository in the Cloudflare dashboard with the output directory set to `client`. The `client/_headers` file applies security headers.
 
 The expected API URL is configured in:
 
@@ -315,11 +314,10 @@ The expected API URL is configured in:
 client/assets/js/config.js
 ```
 
-If the Render URL changes, also update the `connect-src` entries in:
+If the Render URL changes, also update the `connect-src` entry in:
 
 ```text
 client/_headers
-vercel.json
 ```
 
 ## 13. Testing

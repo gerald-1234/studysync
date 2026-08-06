@@ -2,13 +2,14 @@ const supabase = require("../config/supabase");
 const { writeAuditLog } = require("../utils/audit");
 const {
   createHttpError,
+  isoDate,
   requiredText,
   throwIfSupabaseError,
 } = require("../utils/helpers");
 
 function semesterPayload(body) {
-  const startDate = requiredText(body.startDate, "Start date");
-  const endDate = requiredText(body.endDate, "End date");
+  const startDate = isoDate(body.startDate, "Start date");
+  const endDate = isoDate(body.endDate, "End date");
   if (startDate > endDate) {
     throw createHttpError("Start date cannot be after end date.");
   }

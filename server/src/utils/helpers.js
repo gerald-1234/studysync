@@ -38,6 +38,17 @@ function validPassword(value, fieldName = "Password") {
   return password;
 }
 
+function isoDate(value, fieldName) {
+  const text = requiredText(value, fieldName);
+  const isValidFormat = /^\d{4}-\d{2}-\d{2}$/.test(text);
+  const isRealDate = isValidFormat && !Number.isNaN(new Date(`${text}T00:00:00Z`).getTime());
+  if (!isRealDate) {
+    throw createHttpError(`${fieldName} must be a valid date in YYYY-MM-DD format.`);
+  }
+
+  return text;
+}
+
 function throwIfSupabaseError(error, fallbackMessage = "The database request failed.") {
   if (!error) {
     return;
@@ -56,6 +67,7 @@ function asyncHandler(handler) {
 module.exports = {
   asyncHandler,
   createHttpError,
+  isoDate,
   optionalText,
   requiredId,
   requiredText,
