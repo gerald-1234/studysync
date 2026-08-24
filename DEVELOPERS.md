@@ -21,7 +21,7 @@ Do not add fees, results, attendance, timetables, SMS, or parent portals until t
 - **Frontend hosting:** Cloudflare Pages.
 - **Backend hosting:** Render.
 
-This stack is straightforward to defend:
+This stack is straightforward to understand:
 
 - HTML documents make every page visible in the repository.
 - Express routes show where each request is handled.
@@ -340,25 +340,10 @@ The browser verification covers login and core pages for all four roles at deskt
 
 Integration testing against Supabase requires valid values in `server/.env`.
 
-## 14. Defence Explanation
-
-Use these short explanations:
-
-- **Why separate HTML pages?** They make each role and workflow visible and easy to trace without a frontend framework.
-- **Why Supabase?** It provides a hosted PostgreSQL database while preserving the relational schema in the report.
-- **Why is Supabase not called from the frontend?** The secret key must remain private, and the Express API enforces business rules and roles.
-- **Why JWT?** The frontend and backend are deployed on different services, so bearer tokens keep authentication simple.
-- **How are duplicate enrolments prevented?** The controller validates data and PostgreSQL has a unique student-course-semester constraint.
-- **How is double instructor assignment prevented?** The controller checks existing assignments and PostgreSQL has a partial unique index.
-- **Why retain cancelled records?** Status changes preserve history and support auditability.
-- **Why exclude fees and results?** The first version stays focused, testable, and easy for centre staff to learn.
-
-## 15. Safe Demo Data
+## 16. Safe Demo Data
 
 - Semester: `First Semester`, session `2026/2027`.
 - Courses: Mathematics, English Language, Physics, Chemistry.
 - Four to six fictional students.
 - Two fictional instructors.
 - Two or three course enrolments per student.
-
-Do not use real student passwords, phone numbers, or personal data in the repository or defence screenshots.

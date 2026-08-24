@@ -2,8 +2,6 @@
 
 StudySync is a beginner-friendly Student Course Registration System for a university tutorial centre. It manages student records, course enrolment, semesters, instructors, and instructor-to-course assignments.
 
-The implementation is intentionally limited to the core workflow required by the Software Analysis and Design report, making it practical to explain and defend as a student project.
-
 ## Architecture
 
 | Part | Technology | Deployment |
@@ -151,8 +149,6 @@ http://localhost:5500
 6. Open the reports page.
 7. Sign in as an instructor and show the class list.
 
-Use fictional student information during the defence.
-
 ## Deployment
 
 ### Render backend
@@ -207,4 +203,4 @@ The UI has also been checked with Playwright at desktop and mobile sizes for:
 
 ## Documentation
 
-- [`DEVELOPERS.md`](DEVELOPERS.md) contains the detailed implementation and defence guide.
+- [`DEVELOPERS.md`](DEVELOPERS.md) contains the detailed implementation.
