@@ -76,16 +76,18 @@ async function instructorDashboard(request, response) {
   const { data: assignments, error: assignmentError } = await query;
   throwIfSupabaseError(assignmentError);
 
-  let classSize = 0;
-  for (const assignment of assignments) {
-    classSize += await countRows(
-      "enrolments",
-      (enrolmentQuery) =>
-        enrolmentQuery
-          .eq("course_id", assignment.course_id)
-          .eq("semester_id", assignment.semester_id)
-          .eq("status", "active"),
-    );
+  let enrolledStudents = 0;
+  if (assignments.length > 0) {
+    const courseIds = assignments.map((assignment) => assignment.course_id);
+    const semesterIds = [...new Set(assignments.map((assignment) => assignment.semester_id))];
+    const { count, error: countError } = await supabase
+      .from("enrolments")
+      .select("id", { count: "exact", head: true })
+      .in("course_id", courseIds)
+      .in("semester_id", semesterIds)
+      .eq("status", "active");
+    throwIfSupabaseError(countError);
+    enrolledStudents = count || 0;
   }
 
   return response.json({
@@ -93,7 +95,7 @@ async function instructorDashboard(request, response) {
     instructor,
     counts: {
       assignedCourses: assignments.length,
-      enrolledStudents: classSize,
+      enrolledStudents,
     },
     assignments,
   });

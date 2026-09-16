@@ -91,6 +91,9 @@ tableBody.addEventListener("click", async (event) => {
     return;
   }
   try {
+    if (!window.confirm("Cancel this instructor assignment? The course will no longer be assigned.")) {
+      return;
+    }
     await send(`/assignments/${button.dataset.cancelAssignment}/cancel`, "PATCH", {});
     showToast("Instructor assignment cancelled.");
     await loadAssignments();

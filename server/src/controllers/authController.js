@@ -17,7 +17,7 @@ async function login(request, response) {
   const password = validPassword(request.body.password);
   const { data: user, error } = await supabase
     .from("users")
-    .select("*")
+    .select("id, email, first_name, last_name, role, is_active, password_hash, failed_login_attempts, locked_until")
     .eq("email", email)
     .maybeSingle();
 

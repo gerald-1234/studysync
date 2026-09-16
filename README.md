@@ -105,7 +105,7 @@ JWT_EXPIRES_IN=8h
 ADMIN_FIRST_NAME=System
 ADMIN_LAST_NAME=Administrator
 ADMIN_EMAIL=admin@studysync.local
-ADMIN_PASSWORD=ChangeMe123
+ADMIN_PASSWORD=Encrypted.01
 ```
 
 Never place `SUPABASE_SECRET_KEY` in `client/`.
@@ -138,6 +138,16 @@ Open:
 ```text
 http://localhost:5500
 ```
+
+## Default Admin Credentials
+
+`npm run create-admin` creates the administrator account below so the system can be accessed right after setup:
+
+| Role | Email | Password |
+| --- | --- | --- |
+| Administrator | `admin@studysync.local` | `Encrypted.01` |
+
+Change the `ADMIN_*` values in `server/.env` before any real deployment.
 
 ## Recommended Demo Order
 

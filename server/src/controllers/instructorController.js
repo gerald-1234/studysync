@@ -84,19 +84,33 @@ async function myCourses(request, response) {
   throwIfSupabaseError(assignmentError);
 
   const result = [];
-  for (const assignment of assignments) {
+  if (assignments.length > 0) {
+    const courseIds = assignments.map((assignment) => assignment.course_id);
+    const semesterIds = [...new Set(assignments.map((assignment) => assignment.semester_id))];
     const { data: enrolments, error: enrolmentError } = await supabase
       .from("enrolments")
-      .select("students(registration_number, first_name, last_name)")
-      .eq("course_id", assignment.course_id)
-      .eq("semester_id", assignment.semester_id)
+      .select("course_id, semester_id, students(registration_number, first_name, last_name)")
+      .in("course_id", courseIds)
+      .in("semester_id", semesterIds)
       .eq("status", "active")
       .order("enrolled_at");
     throwIfSupabaseError(enrolmentError);
-    result.push({
-      ...assignment,
-      students: enrolments.map((enrolment) => enrolment.students),
-    });
+
+    const studentsByAssignment = new Map();
+    for (const enrolment of enrolments) {
+      const key = `${enrolment.course_id}|${enrolment.semester_id}`;
+      if (!studentsByAssignment.has(key)) {
+        studentsByAssignment.set(key, []);
+      }
+      studentsByAssignment.get(key).push(enrolment.students);
+    }
+
+    for (const assignment of assignments) {
+      result.push({
+        ...assignment,
+        students: studentsByAssignment.get(`${assignment.course_id}|${assignment.semester_id}`) || [],
+      });
+    }
   }
 
   return response.json({ instructor, assignments: result });

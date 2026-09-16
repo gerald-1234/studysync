@@ -106,6 +106,9 @@ tableBody.addEventListener("click", async (event) => {
     return;
   }
   try {
+    if (!window.confirm("Cancel this enrolment? The student will no longer be enrolled in the course.")) {
+      return;
+    }
     await send(`/enrolments/${button.dataset.cancelEnrolment}/cancel`, "PATCH", {});
     showToast("Enrolment cancelled.");
     await loadEnrolments();

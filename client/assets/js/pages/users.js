@@ -106,6 +106,12 @@ tableBody.addEventListener("click", async (event) => {
 
   try {
     const isActive = button.dataset.active === "true";
+    const message = isActive
+      ? "Deactivate this account? The user will not be able to sign in."
+      : "Activate this account?";
+    if (!window.confirm(message)) {
+      return;
+    }
     await send(
       `/users/${button.dataset.toggleUser}/status`,
       "PATCH",
