@@ -54,8 +54,11 @@ function throwIfSupabaseError(error, fallbackMessage = "The database request fai
     return;
   }
 
-  const statusCode = error.code === "23505" ? 409 : 400;
-  throw createHttpError(error.message || fallbackMessage, statusCode);
+  if (error.code === "23505") {
+    throw createHttpError("A record with those details already exists.", 409);
+  }
+
+  throw createHttpError(fallbackMessage, 400);
 }
 
 function asyncHandler(handler) {

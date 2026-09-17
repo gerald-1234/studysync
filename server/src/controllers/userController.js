@@ -94,7 +94,11 @@ async function createUser(request, response) {
 }
 
 async function updateUserStatus(request, response) {
-  const isActive = Boolean(request.body.isActive);
+  if (typeof request.body.isActive !== "boolean") {
+    throw createHttpError("isActive must be a boolean.");
+  }
+
+  const isActive = request.body.isActive;
   if (request.params.id === request.user.id && !isActive) {
     throw createHttpError("You cannot deactivate your own account.");
   }

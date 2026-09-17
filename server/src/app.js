@@ -35,6 +35,12 @@ app.use(
   }),
 );
 app.use(express.json({ limit: "200kb" }));
+app.use((request, _response, next) => {
+  if (request.body === undefined) {
+    request.body = {};
+  }
+  next();
+});
 app.use(
   "/api",
   rateLimit({

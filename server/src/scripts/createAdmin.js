@@ -2,6 +2,7 @@ require("dotenv").config();
 
 const bcrypt = require("bcryptjs");
 const supabase = require("../config/supabase");
+const { validEmail, validPassword } = require("../utils/helpers");
 
 async function createAdmin() {
   const required = [
@@ -16,7 +17,8 @@ async function createAdmin() {
     }
   }
 
-  const email = process.env.ADMIN_EMAIL.trim().toLowerCase();
+  const email = validEmail(process.env.ADMIN_EMAIL);
+  validPassword(process.env.ADMIN_PASSWORD, "ADMIN_PASSWORD");
   const { data: existing, error: lookupError } = await supabase
     .from("users")
     .select("id")
