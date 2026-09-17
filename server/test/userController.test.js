@@ -189,3 +189,76 @@ test("a failed teaching-profile insert removes the incomplete login account", as
     loaded.restore();
   }
 });
+
+test("deactivating the last active admin is rejected", async () => {
+  const originalSupabase = require.cache[supabasePath];
+  const originalAudit = require.cache[auditPath];
+  let updateCalled = false;
+
+  require.cache[supabasePath] = {
+    id: supabasePath,
+    filename: supabasePath,
+    loaded: true,
+    exports: {
+      from() {
+        const builder = {
+          select() {
+            return builder;
+          },
+          eq() {
+            return builder;
+          },
+          neq() {
+            return builder;
+          },
+          update() {
+            updateCalled = true;
+            return builder;
+          },
+          async maybeSingle() {
+            return { data: { id: "admin-2", role: "admin", is_active: true }, error: null };
+          },
+          then(resolve) {
+            resolve({ data: [], error: null });
+          },
+        };
+        return builder;
+      },
+    },
+  };
+  require.cache[auditPath] = {
+    id: auditPath,
+    filename: auditPath,
+    loaded: true,
+    exports: { writeAuditLog: async () => {} },
+  };
+  delete require.cache[controllerPath];
+
+  try {
+    const controller = require(controllerPath);
+    await assert.rejects(
+      () => controller.updateUserStatus(
+        { params: { id: "admin-2" }, user: { id: "admin-1" }, body: { isActive: false } },
+        fakeResponse(),
+      ),
+      (error) => {
+        assert.equal(error.statusCode, 400);
+        assert.match(error.message, /at least one active admin/i);
+        return true;
+      },
+    );
+    assert.equal(updateCalled, false);
+  } finally {
+    delete require.cache[controllerPath];
+    if (originalSupabase) {
+      require.cache[supabasePath] = originalSupabase;
+    } else {
+      delete require.cache[supabasePath];
+    }
+    if (originalAudit) {
+      require.cache[auditPath] = originalAudit;
+    } else {
+      delete require.cache[auditPath];
+    }
+  }
+});

@@ -9,10 +9,5 @@ router.get("/", allowRoles(...staffRoles), asyncHandler(studentController.listSt
 router.post("/", allowRoles(...staffRoles), asyncHandler(studentController.createStudent));
 router.get("/:id", allowRoles(...staffRoles), asyncHandler(studentController.getStudent));
 router.patch("/:id", allowRoles(...staffRoles), asyncHandler(studentController.updateStudent));
-router.get(
-  "/:id/enrolments",
-  allowRoles(...staffRoles),
-  asyncHandler(studentController.getStudentEnrolments),
-);
 
 module.exports = router;

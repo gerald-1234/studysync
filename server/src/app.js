@@ -17,6 +17,9 @@ const semesterRoutes = require("./routes/semesterRoutes");
 const userRoutes = require("./routes/userRoutes");
 
 const app = express();
+// Trust exactly one proxy hop (Render) so rate limiting sees the real client
+// IP from X-Forwarded-For instead of the proxy's address.
+app.set("trust proxy", 1);
 const allowedOrigins = (process.env.CLIENT_URL || "http://localhost:5500")
   .split(",")
   .map((origin) => origin.trim())

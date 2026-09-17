@@ -87,20 +87,9 @@ async function updateStudent(request, response) {
   return response.json({ student: data });
 }
 
-async function getStudentEnrolments(request, response) {
-  const { data, error } = await supabase
-    .from("enrolments")
-    .select("id, status, enrolled_at, courses(course_code, course_title), semesters(semester_name, academic_session)")
-    .eq("student_id", request.params.id)
-    .order("enrolled_at", { ascending: false });
-  throwIfSupabaseError(error);
-  return response.json({ enrolments: data });
-}
-
 module.exports = {
   createStudent,
   getStudent,
-  getStudentEnrolments,
   listStudents,
   updateStudent,
 };

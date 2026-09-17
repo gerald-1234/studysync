@@ -12,6 +12,11 @@ const {
 const MAX_FAILED_ATTEMPTS = 5;
 const LOCK_MINUTES = 15;
 
+// A real bcrypt hash compared against when the account is unknown or inactive,
+// so every login attempt spends the same time hashing and the response cannot
+// be used to discover which emails are registered.
+const DUMMY_PASSWORD_HASH = bcrypt.hashSync("studysync-invalid-credential", 12);
+
 async function login(request, response) {
   const email = validEmail(request.body.email);
   const password = validPassword(request.body.password);
@@ -25,11 +30,13 @@ async function login(request, response) {
 
   const now = new Date();
   const currentlyLocked = user?.locked_until && new Date(user.locked_until) > now;
-  const passwordMatches = user && user.is_active && !currentlyLocked
-    ? await bcrypt.compare(password, user.password_hash)
-    : false;
+  const passwordMatches = await bcrypt.compare(
+    password,
+    user?.password_hash || DUMMY_PASSWORD_HASH,
+  );
+  const canSignIn = Boolean(user) && user.is_active && !currentlyLocked && passwordMatches;
 
-  if (!passwordMatches) {
+  if (!canSignIn) {
     if (user && !currentlyLocked) {
       const failedAttempts = user.failed_login_attempts + 1;
       const lockedUntil = failedAttempts >= MAX_FAILED_ATTEMPTS

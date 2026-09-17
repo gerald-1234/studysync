@@ -132,8 +132,8 @@ JWT_SECRET=replace-this-with-at-least-32-random-characters
 JWT_EXPIRES_IN=8h
 ADMIN_FIRST_NAME=System
 ADMIN_LAST_NAME=Administrator
-ADMIN_EMAIL=admin@example.com
-ADMIN_PASSWORD=choose-a-strong-password
+ADMIN_EMAIL=admin@studysync.local
+ADMIN_PASSWORD=Encrypted.01
 ```
 
 `JWT_SECRET` must be at least 32 characters. Never place `SUPABASE_SECRET_KEY` in `client/`.
@@ -159,9 +159,15 @@ python -m http.server 5500 --directory client
 
 Then open `http://localhost:5500`.
 
-## Administrator account
+## Default admin credentials
 
-`npm run create-admin` creates the administrator account from the `ADMIN_*` values in `server/.env`. Choose a strong `ADMIN_PASSWORD` before running it; the account cannot log in unless the password is at least 8 characters. Change the `ADMIN_*` values before any real deployment.
+`npm run create-admin` creates the administrator account below from the `ADMIN_*` values in `server/.env`, so the system can be accessed right after setup:
+
+| Role | Email | Password |
+| --- | --- | --- |
+| Administrator | `admin@studysync.local` | `Encrypted.01` |
+
+These are demo credentials for trying the app. Change the `ADMIN_*` values in `server/.env` (and re-run `npm run create-admin`) before any real deployment.
 
 ## Recommended demo order
 

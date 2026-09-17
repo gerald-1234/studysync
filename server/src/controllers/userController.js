@@ -103,6 +103,31 @@ async function updateUserStatus(request, response) {
     throw createHttpError("You cannot deactivate your own account.");
   }
 
+  const { data: target, error: targetError } = await supabase
+    .from("users")
+    .select("id, role, is_active")
+    .eq("id", request.params.id)
+    .maybeSingle();
+  throwIfSupabaseError(targetError);
+
+  if (!target) {
+    throw createHttpError("User account was not found.", 404);
+  }
+
+  if (target.role === "admin" && target.is_active && !isActive) {
+    const { data: otherAdmins, error: otherAdminsError } = await supabase
+      .from("users")
+      .select("id")
+      .eq("role", "admin")
+      .eq("is_active", true)
+      .neq("id", request.params.id);
+    throwIfSupabaseError(otherAdminsError);
+
+    if (!otherAdmins || otherAdmins.length === 0) {
+      throw createHttpError("At least one active admin must remain.");
+    }
+  }
+
   const { data, error } = await supabase
     .from("users")
     .update({ is_active: isActive })
