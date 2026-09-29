@@ -19,5 +19,5 @@
   <text x="888" y="50" text-anchor="middle" font-family="ui-sans-serif, system-ui, sans-serif" font-size="13" font-weight="600" fill="#14b8a6">Node / Express</text>
   <text x="176" y="104" font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, sans-serif" font-size="38" font-weight="800" fill="#e8eef7">StudySync</text>
   <text x="178" y="138" font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, sans-serif" font-size="16" fill="#9fb3c8">Student course registration system with role-based access and REST API</text>
-  <text x="178" y="176" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="13" fill="#6b7f95">Gerald-Mathew  |  github.com/gerald-mathew/StudySync</text>
+  <text x="178" y="176" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="13" fill="#6b7f95">Mathew Gerald Chukwudera  |  github.com/gerald-mathew/StudySync</text>
 </svg>
