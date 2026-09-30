@@ -5,6 +5,10 @@
 </p>
 
 <p align="center">
+  <a href="https://github.com/gerald-mathew/studysync/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/gerald-mathew/studysync/actions/workflows/ci.yml/badge.svg"></a>
+</p>
+
+<p align="center">
   <strong>A beginner-friendly Student Course Registration System for a university tutorial centre.</strong>
 </p>
 
